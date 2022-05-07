@@ -2,6 +2,7 @@ package carlo.api;
 
 import com.smartcar.sdk.AuthClient;
 import com.smartcar.sdk.Smartcar;
+import com.smartcar.sdk.Vehicle;
 import com.smartcar.sdk.data.Auth;
 import com.smartcar.sdk.data.VehicleIds;
 import org.springframework.boot.SpringApplication;
@@ -38,14 +39,29 @@ public class ApiApplication {
 
         Auth auth = authClient.exchangeCode(code);
         VehicleIds response = Smartcar.getVehicles(auth.getAccessToken());
+        Vehicle vehicle = new Vehicle(response.getVehicleIds()[0],auth.getAccessToken());
         String[] vehicleIds = response.getVehicleIds();
-        output.setResult(vehicleIds[0]);
+        output.setResult(auth.getAccessToken());
+
+
 
 
         return output;
 
     }
 
+    @GetMapping("/attributes")
+    public DeferredResult<String> attributes(@RequestParam(value = "code", defaultValue = "null") String code) throws Exception {
+        DeferredResult<String> output = new DeferredResult<>();
+        // Setup
+        VehicleIds response = Smartcar.getVehicles(code);
+        String[] vehicleIds = response.getVehicleIds();
+        Vehicle vehicle =new Vehicle(vehicleIds[0],code);
+        output.setResult(vehicle.attributes().toString() + " " + vehicle.odometer().getDistance());
+
+        return output;
+
+    }
     //@RequestMapping(
     //        value = CONSTANT_MESSAGE_SEND_URL,
     //        method = RequestMethod.POST)
