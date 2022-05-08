@@ -17,16 +17,13 @@ public class ApiApplication {
     public static void main(String[] args) {
         SpringApplication.run(ApiApplication.class, args);
     }
-    @RequestMapping(
-                    value = "/exchange",
-                    method = RequestMethod.GET)
+    @GetMapping("/exchange")
     public DeferredResult<String> exchangeAuthCode(@RequestParam(value = "code", defaultValue = "null") String code) {
         DeferredResult<String> output = new DeferredResult<>();
         // Setup
         String clientId = "3b683bb7-48a3-4b4c-8a2f-7337a8a0ee19";
         String clientSecret = "bdefd1ee-de23-4df5-aa61-c9ef1d6ac724";
         String redirectUri = "sc3b683bb7-48a3-4b4c-8a2f-7337a8a0ee19://myapp.com/callback";
-        String[] scope = {"read_vehicle_info", "read_odometer"};
         boolean testMode = true;
 
 // Initialize a new AuthClient with your credentials.
@@ -55,9 +52,7 @@ public class ApiApplication {
 
     }
 
-    @RequestMapping(
-                    value = "/attributes",
-                    method = RequestMethod.GET)
+    @GetMapping("/attributes")
     public DeferredResult<String> attributes(@RequestParam(value = "code", defaultValue = "null") String code) throws Exception {
         DeferredResult<String> output = new DeferredResult<>();
         // Setup
