@@ -46,6 +46,7 @@ public class ApiApplication {
 
         } catch (Exception e) {
             e.printStackTrace();
+            output.setResult(e.getMessage());
         }
 
         return output;
