@@ -7,9 +7,7 @@ import com.smartcar.sdk.data.Auth;
 import com.smartcar.sdk.data.VehicleIds;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.context.request.async.DeferredResult;
 
 @RestController
@@ -19,7 +17,9 @@ public class ApiApplication {
     public static void main(String[] args) {
         SpringApplication.run(ApiApplication.class, args);
     }
-    @GetMapping("/exchange")
+    @RequestMapping(
+                    value = "/exchange",
+                    method = RequestMethod.GET)
     public DeferredResult<String> exchangeAuthCode(@RequestParam(value = "code", defaultValue = "null") String code) throws Exception {
         DeferredResult<String> output = new DeferredResult<>();
         // Setup
@@ -50,7 +50,9 @@ public class ApiApplication {
 
     }
 
-    @GetMapping("/attributes")
+    @RequestMapping(
+                    value = "/attributes",
+                    method = RequestMethod.GET)
     public DeferredResult<String> attributes(@RequestParam(value = "code", defaultValue = "null") String code) throws Exception {
         DeferredResult<String> output = new DeferredResult<>();
         // Setup
