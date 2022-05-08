@@ -17,6 +17,10 @@ public class ApiApplication {
     public static void main(String[] args) {
         SpringApplication.run(ApiApplication.class, args);
     }
+    @GetMapping("/")//Done
+    public String start(@RequestParam(value = "name", defaultValue = "World") String name) {
+        return String.format("Hello %s!", name);
+    }
     @GetMapping("/exchange")
     public DeferredResult<String> exchangeAuthCode(@RequestParam(value = "code", defaultValue = "null") String code) {
         DeferredResult<String> output = new DeferredResult<>();
