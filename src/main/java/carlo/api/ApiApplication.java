@@ -120,6 +120,7 @@ public class ApiApplication {
             jsonObject.addProperty("msg", e.getMessage());
 
         }
+        System.out.println(jsonObject);
         return jsonObject;
     }
     @GetMapping("/odometer")
