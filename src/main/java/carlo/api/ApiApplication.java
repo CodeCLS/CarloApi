@@ -116,6 +116,7 @@ public class ApiApplication {
 
         }
         catch (Exception e){
+            System.out.println(e.getMessage());
             jsonObject.addProperty("isValid", "false");
             jsonObject.addProperty("msg", e.getMessage());
 
