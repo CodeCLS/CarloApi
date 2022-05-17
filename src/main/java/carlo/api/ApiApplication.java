@@ -93,7 +93,7 @@ public class ApiApplication {
         VehicleIds response = Smartcar.getVehicles(code);
         String[] vehicleIds = response.getVehicleIds();
         Vehicle vehicle =new Vehicle(vehicleIds[0],code);
-        String[] paths = {"odometer" , "location" , "attributes", "battery" , "charge","fuel"};
+        String[] paths = {"/odometer" , "/location" , "/attributes", "/battery" , "/charge","/fuel"};
         BatchResponse responses = vehicle.batch(paths);
         JsonObject jsonObject1 = new JsonObject();
         jsonObject1.get(responses.attributes().toString());
