@@ -90,22 +90,19 @@ public class ApiApplication {
     }
     @GetMapping("/all_attributes")
     public String attributes(@RequestParam(value = "code", defaultValue = "null") String code) throws Exception {
-        VehicleIds response = Smartcar.getVehicles(code);
-        String[] vehicleIds = response.getVehicleIds();
-        Vehicle vehicle =new Vehicle(vehicleIds[0],code);
-        String[] paths = {"/odometer" , "/location"};
-        BatchResponse responses = vehicle.batch(paths);
-        JsonObject jsonObject1 = new JsonObject();
-        jsonObject1.get(responses.attributes().toString());
-        jsonObject1.get(responses.odometer().toString());
-        jsonObject1.get(responses.location().toString());
-        jsonObject1.get(responses.battery().toString());
-        jsonObject1.get(responses.charge().toString());
-        jsonObject1.get(responses.fuel().toString());
-        jsonObject1 = new JsonObject().getAsJsonObject(jsonObject1.toString().replace("{" , ""));
-        jsonObject1 = new JsonObject().getAsJsonObject(jsonObject1.toString().replace("}" , ""));
-        String json = "{"  + jsonObject1 + "}";
-        return new JsonObject().getAsJsonObject(json).toString();
+        String odometer = odometer(code);
+        String location = location(code);
+        String vehicleInfo = vehicleInformation(code);
+        String charge = charge(code);
+        String battery = battery(code);
+        String fuel = fuel(code);
+
+        String combined = odometer + location +vehicleInfo +charge + battery + fuel;
+        combined = combined.replace("{","");
+        combined = combined.replace("}","");
+        combined = "{" + combined + "}";
+
+        return combined;
     }
     @GetMapping("/validate")
     public String validate(@RequestParam(value = "code", defaultValue = "null") String code) {
