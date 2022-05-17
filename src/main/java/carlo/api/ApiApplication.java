@@ -58,7 +58,7 @@ public class ApiApplication {
     }
 
     @GetMapping("/location")
-    public JsonObject location(@RequestParam(value = "code", defaultValue = "null") String code) throws Exception {
+    public String location(@RequestParam(value = "code", defaultValue = "null") String code) throws Exception {
         VehicleIds response = Smartcar.getVehicles(code);
         String[] vehicleIds = response.getVehicleIds();
         Vehicle vehicle =new Vehicle(vehicleIds[0],code);
@@ -68,10 +68,10 @@ public class ApiApplication {
         jsonObject.addProperty("longitude",location.getLongitude());
 
 
-        return jsonObject;
+        return jsonObject.toString();
     }
     @GetMapping("/vehicle_info")
-    public JsonObject vehicleInformation(@RequestParam(value = "code", defaultValue = "null") String code) throws Exception {
+    public String vehicleInformation(@RequestParam(value = "code", defaultValue = "null") String code) throws Exception {
         VehicleIds response = Smartcar.getVehicles(code);
         String[] vehicleIds = response.getVehicleIds();
         Vehicle vehicle =new Vehicle(vehicleIds[0],code);
@@ -86,10 +86,10 @@ public class ApiApplication {
         jsonObject.addProperty("vehicleMake",vehicleMake);
         jsonObject.addProperty("vehicleYear",""+vehicleYear);
         jsonObject.addProperty("vehicleModel",vehicleModel);
-        return jsonObject;
+        return jsonObject.toString();
     }
     @GetMapping("/all_attributes")
-    public JsonObject attributes(@RequestParam(value = "code", defaultValue = "null") String code) throws Exception {
+    public String attributes(@RequestParam(value = "code", defaultValue = "null") String code) throws Exception {
         VehicleIds response = Smartcar.getVehicles(code);
         String[] vehicleIds = response.getVehicleIds();
         Vehicle vehicle =new Vehicle(vehicleIds[0],code);
@@ -105,10 +105,10 @@ public class ApiApplication {
         jsonObject1 = new JsonObject().getAsJsonObject(jsonObject1.toString().replace("{" , ""));
         jsonObject1 = new JsonObject().getAsJsonObject(jsonObject1.toString().replace("}" , ""));
         String json = "{"  + jsonObject1 + "}";
-        return new JsonObject().getAsJsonObject(json);
+        return new JsonObject().getAsJsonObject(json).toString();
     }
     @GetMapping("/validate")
-    public JsonObject validate(@RequestParam(value = "code", defaultValue = "null") String code) {
+    public String validate(@RequestParam(value = "code", defaultValue = "null") String code) {
         JsonObject jsonObject = new JsonObject();
         try {
             jsonObject.addProperty("id", Smartcar.getUser(code).getId());
@@ -122,10 +122,10 @@ public class ApiApplication {
 
         }
         System.out.println(jsonObject);
-        return jsonObject;
+        return jsonObject.toString();
     }
     @GetMapping("/odometer")
-    public JsonObject odometer(@RequestParam(value = "code", defaultValue = "null") String code) throws Exception {
+    public String odometer(@RequestParam(value = "code", defaultValue = "null") String code) throws Exception {
         VehicleIds response = Smartcar.getVehicles(code);
         String[] vehicleIds = response.getVehicleIds();
         Vehicle vehicle =new Vehicle(vehicleIds[0],code);
@@ -134,10 +134,10 @@ public class ApiApplication {
 
         jsonObject.addProperty("odometer",""+odometer.getDistance());
 
-        return jsonObject;
+        return jsonObject.toString();
     }
     @GetMapping("/battery")
-    public JsonObject battery(@RequestParam(value = "code", defaultValue = "null") String code) throws Exception {
+    public String battery(@RequestParam(value = "code", defaultValue = "null") String code) throws Exception {
         VehicleIds response = Smartcar.getVehicles(code);
         String[] vehicleIds = response.getVehicleIds();
         Vehicle vehicle =new Vehicle(vehicleIds[0],code);
@@ -147,10 +147,10 @@ public class ApiApplication {
         jsonObject.addProperty("battery_percent",""+battery.getPercentRemaining());
         jsonObject.addProperty("battery_range",""+battery.getRange());
 
-        return jsonObject;
+        return jsonObject.toString();
     }
     @GetMapping("/lock")
-    public JsonObject lock(@RequestParam(value = "code", defaultValue = "null") String code) throws Exception {
+    public String lock(@RequestParam(value = "code", defaultValue = "null") String code) throws Exception {
         VehicleIds response = Smartcar.getVehicles(code);
         String[] vehicleIds = response.getVehicleIds();
         Vehicle vehicle =new Vehicle(vehicleIds[0],code);
@@ -160,10 +160,10 @@ public class ApiApplication {
         jsonObject.addProperty("lock_status",""+lock.getStatus());
         jsonObject.addProperty("lock_msg",""+lock.getStatus());
 
-        return jsonObject;
+        return jsonObject.toString();
     }
     @GetMapping("/unlock")
-    public JsonObject unlock(@RequestParam(value = "code", defaultValue = "null") String code) throws Exception {
+    public String unlock(@RequestParam(value = "code", defaultValue = "null") String code) throws Exception {
         VehicleIds response = Smartcar.getVehicles(code);
         String[] vehicleIds = response.getVehicleIds();
         Vehicle vehicle =new Vehicle(vehicleIds[0],code);
@@ -173,10 +173,10 @@ public class ApiApplication {
         jsonObject.addProperty("unlock_status",""+unlock.getStatus());
         jsonObject.addProperty("unlock_msg",""+unlock.getStatus());
 
-        return jsonObject;
+        return jsonObject.toString();
     }
     @GetMapping("/fuel")
-    public JsonObject fuel(@RequestParam(value = "code", defaultValue = "null") String code) throws Exception {
+    public String fuel(@RequestParam(value = "code", defaultValue = "null") String code) throws Exception {
         VehicleIds response = Smartcar.getVehicles(code);
         String[] vehicleIds = response.getVehicleIds();
         Vehicle vehicle =new Vehicle(vehicleIds[0],code);
@@ -187,10 +187,10 @@ public class ApiApplication {
         jsonObject.addProperty("fuel_range",""+fuel.getRange());
         jsonObject.addProperty("fuel_amount",""+fuel.getAmountRemaining());
 
-        return jsonObject;
+        return jsonObject.toString();
     }
     @GetMapping("/charge")
-    public JsonObject charge(@RequestParam(value = "code", defaultValue = "null") String code) throws Exception {
+    public String charge(@RequestParam(value = "code", defaultValue = "null") String code) throws Exception {
         VehicleIds response = Smartcar.getVehicles(code);
         String[] vehicleIds = response.getVehicleIds();
         Vehicle vehicle =new Vehicle(vehicleIds[0],code);
@@ -200,7 +200,7 @@ public class ApiApplication {
         jsonObject.addProperty("charge_state",""+charge.getState());
         jsonObject.addProperty("charge_plugged_in",""+charge.getIsPluggedIn());
 
-        return jsonObject;
+        return jsonObject.toString();
     }
 
     //@RequestMapping(
