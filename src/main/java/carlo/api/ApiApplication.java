@@ -64,7 +64,7 @@ public class ApiApplication {
         VehicleIds response = Smartcar.getVehicles(code);
         String[] vehicleIds = response.getVehicleIds();
         Vehicle vehicle =new Vehicle(vehicleIds[0],code);
-        output.setResult("{"+ vehicle.attributes() + "," + vehicle.location() + " " + vehicle.odometer()+ " }");
+        output.setResult("{"+ vehicle+ " }");
 
         return output;
 
