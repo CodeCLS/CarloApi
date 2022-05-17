@@ -88,6 +88,38 @@ public class ApiApplication {
         jsonObject.addProperty("vehicleModel",vehicleModel);
         return jsonObject;
     }
+    @GetMapping("/all_attributes")
+    public JsonObject attributes(@RequestParam(value = "code", defaultValue = "null") String code) throws Exception {
+        VehicleIds response = Smartcar.getVehicles(code);
+        String[] vehicleIds = response.getVehicleIds();
+        Vehicle vehicle =new Vehicle(vehicleIds[0],code);
+        String[] paths = {"odometer" , "location" , "attributes", "battery" , "charge","fuel"};
+        BatchResponse responses = vehicle.batch(paths);
+        JsonObject jsonObject1 = new JsonObject();
+        jsonObject1.get(responses.attributes().toString());
+        jsonObject1.get(responses.odometer().toString());
+        jsonObject1.get(responses.location().toString());
+        jsonObject1.get(responses.battery().toString());
+        jsonObject1.get(responses.charge().toString());
+        jsonObject1.get(responses.fuel().toString());
+        jsonObject1 = new JsonObject().getAsJsonObject(jsonObject1.toString().replace("{" , ""));
+        jsonObject1 = new JsonObject().getAsJsonObject(jsonObject1.toString().replace("}" , ""));
+        String json = "{"  + jsonObject1 + "}";
+        return new JsonObject().getAsJsonObject(json);
+    }
+    @GetMapping("/validate")
+    public JsonObject validate(@RequestParam(value = "code", defaultValue = "null") String code) {
+        JsonObject jsonObject = new JsonObject();
+        try {
+            jsonObject.addProperty("id", Smartcar.getUser(code).getId());
+            jsonObject.addProperty("isValid", "true");
+
+        }
+        catch (Exception e){
+            jsonObject.addProperty("isValid", "false");
+        }
+        return jsonObject;
+    }
     @GetMapping("/odometer")
     public JsonObject odometer(@RequestParam(value = "code", defaultValue = "null") String code) throws Exception {
         VehicleIds response = Smartcar.getVehicles(code);
