@@ -93,9 +93,6 @@ public class ApiApplication {
         String odometer = "";
         String location = "";
         String vehicleInfo = "";
-        String charge = "";
-        String battery = "";
-        String fuel = "";
 
         try {
             odometer = odometer(code);
@@ -105,15 +102,6 @@ public class ApiApplication {
         }catch (Exception e){};
         try {
             vehicleInfo = vehicleInformation(code);
-        }catch (Exception e){};
-        try {
-            charge = charge(code);
-        }catch (Exception e){};
-        try {
-            battery = battery(code);
-        }catch (Exception e){};
-        try {
-            fuel = fuel(code);
         }catch (Exception e){};
 
 
