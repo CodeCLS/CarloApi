@@ -90,28 +90,26 @@ public class ApiApplication {
     }
     @GetMapping("/all_attributes")
     public String attributes(@RequestParam(value = "code", defaultValue = "null") String code) throws Exception {
-        String odometer = "";
-        String location = "";
-        String vehicleInfo = "";
+        JsonObject odometer = new JsonObject();
+        JsonObject location = new JsonObject();
+        JsonObject vehicleInfo = new JsonObject();
 
         try {
-            odometer = odometer(code);
+            odometer = new JsonObject().getAsJsonObject(odometer(code));
         }catch (Exception e){};
         try {
-            location = location(code);
+            location = new JsonObject().getAsJsonObject(location(code));
         }catch (Exception e){};
         try {
-            vehicleInfo = vehicleInformation(code);
+            vehicleInfo = new JsonObject().getAsJsonObject(vehicleInfo(code));
         }catch (Exception e){};
 
 
-        String combined = odometer+"," + location+"," +vehicleInfo+"," +charge+"," + battery+"," + fuel;
-        combined = combined.replace("{","");
-        combined = combined.replace("}","");
-        combined = "{" + combined + "}";
-        System.out.println("All_ATTRIBUTES RESPONSE: " + combined);
 
-        return combined;
+
+        odometer.add("",location);
+        odometer.add("",vehicleInfo);
+        return odometer.toString();
     }
     @GetMapping("/validate")
     public String validate(@RequestParam(value = "code", defaultValue = "null") String code) {
