@@ -90,17 +90,38 @@ public class ApiApplication {
     }
     @GetMapping("/all_attributes")
     public String attributes(@RequestParam(value = "code", defaultValue = "null") String code) throws Exception {
-        String odometer = odometer(code);
-        String location = location(code);
-        String vehicleInfo = vehicleInformation(code);
-        String charge = charge(code);
-        String battery = battery(code);
-        String fuel = fuel(code);
+        String odometer = "";
+        String location = "";
+        String vehicleInfo = "";
+        String charge = "";
+        String battery = "";
+        String fuel = "";
 
-        String combined = odometer + location +vehicleInfo +charge + battery + fuel;
+        try {
+            odometer = odometer(code);
+        }catch (Exception e){};
+        try {
+            location = location(code);
+        }catch (Exception e){};
+        try {
+            vehicleInfo = vehicleInformation(code);
+        }catch (Exception e){};
+        try {
+            charge = charge(code);
+        }catch (Exception e){};
+        try {
+            battery = battery(code);
+        }catch (Exception e){};
+        try {
+            fuel = fuel(code);
+        }catch (Exception e){};
+
+
+        String combined = odometer+"," + location+"," +vehicleInfo+"," +charge+"," + battery+"," + fuel;
         combined = combined.replace("{","");
         combined = combined.replace("}","");
         combined = "{" + combined + "}";
+        System.out.println("All_ATTRIBUTES RESPONSE: " + combined);
 
         return combined;
     }
@@ -131,6 +152,16 @@ public class ApiApplication {
 
         jsonObject.addProperty("odometer",""+odometer.getDistance());
 
+        return jsonObject.toString();
+    }
+    @GetMapping("/vin")
+    public String vin(@RequestParam(value = "code", defaultValue = "null") String code) throws Exception {
+        VehicleIds response = Smartcar.getVehicles(code);
+        String[] vehicleIds = response.getVehicleIds();
+        Vehicle vehicle =new Vehicle(vehicleIds[0],code);
+        JsonObject jsonObject = new JsonObject();
+
+        jsonObject.addProperty("vin",""+vehicle.vin());
         return jsonObject.toString();
     }
     @GetMapping("/battery")
