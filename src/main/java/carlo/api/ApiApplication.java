@@ -101,7 +101,7 @@ public class ApiApplication {
             location = new JsonObject().getAsJsonObject(location(code));
         }catch (Exception e){};
         try {
-            vehicleInfo = new JsonObject().getAsJsonObject(vehicleInfo(code));
+            vehicleInfo = new JsonObject().getAsJsonObject(vehicleInformation(code));
         }catch (Exception e){};
 
 
