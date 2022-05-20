@@ -1,8 +1,10 @@
 package carlo.api;
 
+import com.google.gson.Gson;
 import com.google.gson.JsonObject;
 import com.smartcar.sdk.AuthClient;
 import com.smartcar.sdk.Smartcar;
+import com.smartcar.sdk.SmartcarAuthOptions;
 import com.smartcar.sdk.Vehicle;
 import com.smartcar.sdk.data.*;
 import org.springframework.boot.SpringApplication;
@@ -43,9 +45,18 @@ public class ApiApplication {
 
             Auth auth = authClient.exchangeCode(code);
             VehicleIds response = Smartcar.getVehicles(auth.getAccessToken());
-            Vehicle vehicle = new Vehicle(response.getVehicleIds()[0],auth.getAccessToken());
-            String[] vehicleIds = response.getVehicleIds();
-            output.setResult(auth.getAccessToken());
+
+
+            Gson gson = new Gson();
+            String jsonStringClient = gson.toJson(authClient);
+            String jsonStringAuth = gson.toJson(authClient);
+
+            JsonObject jsonObject = new JsonObject();
+            jsonObject.addProperty("accessCode" , auth.getAccessToken());
+            jsonObject.addProperty("client" , jsonStringClient);
+            jsonObject.addProperty("auth" , jsonStringAuth);
+
+            output.setResult(jsonObject.toString());
 
 
         } catch (Exception e) {
@@ -110,6 +121,16 @@ public class ApiApplication {
         odometer.add("",location);
         odometer.add("",vehicleInfo);
         return odometer.toString();
+    }
+    @GetMapping("/refresh")
+    public String refresh(@RequestParam(value = "client", defaultValue = "null") String client,@RequestParam(value = "auth", defaultValue = "null") String auth) throws Exception {
+        Gson gson = new Gson();
+        AuthClient authClient = gson.fromJson(client,AuthClient.class);
+        Auth access = gson.fromJson(auth,Auth.class);
+        if (Smartcar.isExpired(access.getExpiration())) {
+            access = authClient.exchangeRefreshToken(access.getRefreshToken());
+        }
+        return "";
     }
     @GetMapping("/validate")
     public String validate(@RequestParam(value = "code", defaultValue = "null") String code) {
