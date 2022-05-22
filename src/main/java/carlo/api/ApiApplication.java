@@ -49,7 +49,7 @@ public class ApiApplication {
 
             Gson gson = new Gson();
             String jsonStringClient = gson.toJson(authClient);
-            String jsonStringAuth = gson.toJson(authClient);
+            String jsonStringAuth = gson.toJson(auth);
 
             JsonObject jsonObject = new JsonObject();
             jsonObject.addProperty("accessCode" , auth.getAccessToken());
