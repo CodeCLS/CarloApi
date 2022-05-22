@@ -81,6 +81,7 @@ public class ApiApplication {
 
         return jsonObject.toString();
     }
+
     @GetMapping("/vehicle_info")
     public String vehicleInformation(@RequestParam(value = "code", defaultValue = "null") String code) throws Exception {
         VehicleIds response = Smartcar.getVehicles(code);
@@ -126,6 +127,7 @@ public class ApiApplication {
     public String refresh(@RequestParam(value = "client", defaultValue = "null") String client,@RequestParam(value = "auth", defaultValue = "null") String auth) throws Exception {
         Gson gson = new Gson();
         AuthClient authClient = gson.fromJson(client,AuthClient.class);
+        System.out.println("access: " + client + " " + auth);
         Auth access = gson.fromJson(auth,Auth.class);
         if (Smartcar.isExpired(access.getExpiration())) {
             access = authClient.exchangeRefreshToken(access.getRefreshToken());
