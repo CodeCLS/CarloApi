@@ -243,7 +243,7 @@ public class ApiApplication {
         VehicleFuel fuel = null;
         try {
             vehicle.fuel();
-            jsonObject.addProperty("is_electric","true");
+            jsonObject.addProperty("is_electric","false");
             return jsonObject.toString();
 
 
@@ -251,7 +251,7 @@ public class ApiApplication {
             e.printStackTrace();
         }
 
-        jsonObject.addProperty("is_electric","false");
+        jsonObject.addProperty("is_electric","true");
 
         return jsonObject.toString();
     }
