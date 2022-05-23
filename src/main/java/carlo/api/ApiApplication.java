@@ -123,7 +123,7 @@ public class ApiApplication {
         odometer.add("",vehicleInfo);
         return odometer.toString();
     }
-    @GetMapping("/refresh")
+    @RequestMapping(value = "/refresh",method = RequestMethod.POST)
     public String refresh(@RequestParam(value = "client", defaultValue = "null") String client,@RequestParam(value = "auth", defaultValue = "null") String auth) throws Exception {
         Gson gson = new Gson();
         AuthClient authClient = gson.fromJson(client,AuthClient.class);
