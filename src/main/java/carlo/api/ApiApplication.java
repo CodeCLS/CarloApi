@@ -2,10 +2,7 @@ package carlo.api;
 
 import com.google.gson.Gson;
 import com.google.gson.JsonObject;
-import com.smartcar.sdk.AuthClient;
-import com.smartcar.sdk.Smartcar;
-import com.smartcar.sdk.SmartcarAuthOptions;
-import com.smartcar.sdk.Vehicle;
+import com.smartcar.sdk.*;
 import com.smartcar.sdk.data.*;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
@@ -234,6 +231,27 @@ public class ApiApplication {
         jsonObject.addProperty("fuel_percent",""+fuel.getPercentRemaining());
         jsonObject.addProperty("fuel_range",""+fuel.getRange());
         jsonObject.addProperty("fuel_amount",""+fuel.getAmountRemaining());
+
+        return jsonObject.toString();
+    }
+    @GetMapping("/vehicle/is_electric")
+    public String isElectric(@RequestParam(value = "code", defaultValue = "null") String code) throws Exception{
+        VehicleIds response = Smartcar.getVehicles(code);
+        String[] vehicleIds = response.getVehicleIds();
+        Vehicle vehicle =new Vehicle(vehicleIds[0],code);
+        JsonObject jsonObject = new JsonObject();
+        VehicleFuel fuel = null;
+        try {
+            vehicle.fuel();
+            jsonObject.addProperty("is_electric","true");
+            return jsonObject.toString();
+
+
+        } catch (SmartcarException e) {
+            e.printStackTrace();
+        }
+
+        jsonObject.addProperty("is_electric","false");
 
         return jsonObject.toString();
     }
