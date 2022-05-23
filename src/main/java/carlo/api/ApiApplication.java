@@ -68,7 +68,7 @@ public class ApiApplication {
 
     }
 
-    @GetMapping("/location")
+    @GetMapping("/vehicle/location")
     public String location(@RequestParam(value = "code", defaultValue = "null") String code) throws Exception {
         VehicleIds response = Smartcar.getVehicles(code);
         String[] vehicleIds = response.getVehicleIds();
@@ -82,7 +82,7 @@ public class ApiApplication {
         return jsonObject.toString();
     }
 
-    @GetMapping("/vehicle_info")
+    @GetMapping("/vehicle/info")
     public String vehicleInformation(@RequestParam(value = "code", defaultValue = "null") String code) throws Exception {
         VehicleIds response = Smartcar.getVehicles(code);
         String[] vehicleIds = response.getVehicleIds();
@@ -134,6 +134,17 @@ public class ApiApplication {
         }
         return "";
     }
+    @GetMapping("/vehicle/charge_in_percent")
+    public String chargeInPercent(@RequestParam(value = "client", defaultValue = "null") String client,@RequestParam(value = "auth", defaultValue = "null") String auth) throws Exception {
+        Gson gson = new Gson();
+        AuthClient authClient = gson.fromJson(client,AuthClient.class);
+        System.out.println("access: " + client + " " + auth);
+        Auth access = gson.fromJson(auth,Auth.class);
+        if (Smartcar.isExpired(access.getExpiration())) {
+            access = authClient.exchangeRefreshToken(access.getRefreshToken());
+        }
+        return "";
+    }
     @GetMapping("/validate")
     public String validate(@RequestParam(value = "code", defaultValue = "null") String code) {
         JsonObject jsonObject = new JsonObject();
@@ -151,7 +162,7 @@ public class ApiApplication {
         System.out.println(jsonObject);
         return jsonObject.toString();
     }
-    @GetMapping("/odometer")
+    @GetMapping("/vehicle/odometer")
     public String odometer(@RequestParam(value = "code", defaultValue = "null") String code) throws Exception {
         VehicleIds response = Smartcar.getVehicles(code);
         String[] vehicleIds = response.getVehicleIds();
@@ -186,7 +197,7 @@ public class ApiApplication {
 
         return jsonObject.toString();
     }
-    @GetMapping("/lock")
+    @GetMapping("/vehicle/lock")
     public String lock(@RequestParam(value = "code", defaultValue = "null") String code) throws Exception {
         VehicleIds response = Smartcar.getVehicles(code);
         String[] vehicleIds = response.getVehicleIds();
@@ -199,7 +210,7 @@ public class ApiApplication {
 
         return jsonObject.toString();
     }
-    @GetMapping("/unlock")
+    @GetMapping("/vehicle/unlock")
     public String unlock(@RequestParam(value = "code", defaultValue = "null") String code) throws Exception {
         VehicleIds response = Smartcar.getVehicles(code);
         String[] vehicleIds = response.getVehicleIds();
