@@ -171,7 +171,7 @@ public class ApiApplication {
 
         return jsonObject.toString();
     }
-    @GetMapping("/vin")
+    @GetMapping("vehicle/vin")
     public String vin(@RequestParam(value = "code", defaultValue = "null") String code) throws Exception {
         VehicleIds response = Smartcar.getVehicles(code);
         String[] vehicleIds = response.getVehicleIds();
@@ -181,7 +181,7 @@ public class ApiApplication {
         jsonObject.addProperty("vin",""+vehicle.vin());
         return jsonObject.toString();
     }
-    @GetMapping("/battery")
+    @GetMapping("vehicle/battery")
     public String battery(@RequestParam(value = "code", defaultValue = "null") String code) throws Exception {
         VehicleIds response = Smartcar.getVehicles(code);
         String[] vehicleIds = response.getVehicleIds();
@@ -220,7 +220,7 @@ public class ApiApplication {
 
         return jsonObject.toString();
     }
-    @GetMapping("/fuel")
+    @GetMapping("/vehicle/fuel")
     public String fuel(@RequestParam(value = "code", defaultValue = "null") String code) throws Exception {
         VehicleIds response = Smartcar.getVehicles(code);
         String[] vehicleIds = response.getVehicleIds();
@@ -255,7 +255,7 @@ public class ApiApplication {
 
         return jsonObject.toString();
     }
-    @GetMapping("/charge")
+    @GetMapping("/vehicle/charge")
     public String charge(@RequestParam(value = "code", defaultValue = "null") String code) throws Exception {
         VehicleIds response = Smartcar.getVehicles(code);
         String[] vehicleIds = response.getVehicleIds();
