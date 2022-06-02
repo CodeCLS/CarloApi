@@ -194,6 +194,19 @@ public class ApiApplication {
 
         return jsonObject.toString();
     }
+    @GetMapping("vehicle/range/non_electric")
+    public String rangeNonElectric(@RequestParam(value = "code", defaultValue = "null") String code) throws Exception {
+        VehicleIds response = Smartcar.getVehicles(code);
+        String[] vehicleIds = response.getVehicleIds();
+        Vehicle vehicle =new Vehicle(vehicleIds[0],code);
+        JsonObject jsonObject = new JsonObject();
+        VehicleFuel fuel = vehicle.fuel();
+
+        jsonObject.addProperty("percent",""+fuel.getPercentRemaining());
+        jsonObject.addProperty("range",""+fuel.getRange());
+
+        return jsonObject.toString();
+    }
     @GetMapping("/vehicle/lock")
     public String lock(@RequestParam(value = "code", defaultValue = "null") String code) throws Exception {
         VehicleIds response = Smartcar.getVehicles(code);
