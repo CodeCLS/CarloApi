@@ -70,11 +70,11 @@ public class ApiApplication {
 
     @GetMapping("/vehicle/location")
     public String location(@RequestParam(value = "code", defaultValue = "null") String code,@RequestParam(value = "id", defaultValue = "null") String id) throws Exception {
-        VehicleIds response = Smartcar.getVehicles(code);
-        String[] vehicleIds = response.getVehicleIds();
-        Vehicle vehicle =new Vehicle(vehicleIds[0],code);
+        //VehicleIds response = Smartcar.getVehicles(code);
+        //String[] vehicleIds = response.getVehicleIds();
+        //Vehicle vehicle =new Vehicle(vehicleIds[0],code);
         JsonObject jsonObject = new JsonObject();
-        VehicleLocation location = vehicle.location();
+        //VehicleLocation location = vehicle.location();
         jsonObject.addProperty("latitude", new Random().nextInt(100));
         jsonObject.addProperty("longitude", new Random().nextInt(100));
 
