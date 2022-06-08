@@ -10,6 +10,8 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.context.request.async.DeferredResult;
 
+import java.util.Random;
+
 @RestController
 @SpringBootApplication
 public class ApiApplication {
@@ -73,8 +75,8 @@ public class ApiApplication {
         Vehicle vehicle =new Vehicle(vehicleIds[0],code);
         JsonObject jsonObject = new JsonObject();
         VehicleLocation location = vehicle.location();
-        jsonObject.addProperty("latitude",""+location.getLatitude());
-        jsonObject.addProperty("longitude",location.getLongitude());
+        jsonObject.addProperty("latitude", new Random().nextInt(100));
+        jsonObject.addProperty("longitude", new Random().nextInt(100));
 
 
         return jsonObject.toString();
