@@ -99,6 +99,16 @@ public class ApiApplication {
         jsonObject.addProperty("vehicleModel",vehicleModel);
         return jsonObject.toString();
     }
+    @GetMapping("/vehicle/delete")
+    public String deleteVehicle(@RequestParam(value = "code", defaultValue = "null") String code,@RequestParam(value = "id", defaultValue = "null") String id) throws Exception {
+        VehicleIds response = Smartcar.getVehicles(code);
+        Vehicle vehicle =new Vehicle(id,code);
+        JsonObject jsonObject = new JsonObject();
+        jsonObject.addProperty("status",vehicle.disconnect().getMessage());
+
+        return jsonObject.toString();
+    }
+
     @GetMapping("/user/vehicles")
 
     public String allVehicleIds(@RequestParam(value = "code", defaultValue = "null") String code) throws Exception{
