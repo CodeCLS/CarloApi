@@ -210,13 +210,16 @@ public class ApiApplication {
     }
     @GetMapping("vehicle/range/non_electric")
     public String rangeNonElectric(@RequestParam(value = "code", defaultValue = "null") String code,@RequestParam(value = "id", defaultValue = "null") String id) throws Exception {
-        VehicleIds response = Smartcar.getVehicles(code);
-        Vehicle vehicle =new Vehicle(id,code);
+        //VehicleIds response = Smartcar.getVehicles(code);
+        //Vehicle vehicle =new Vehicle(id,code);
         JsonObject jsonObject = new JsonObject();
-        VehicleFuel fuel = vehicle.fuel();
+        //VehicleFuel fuel = vehicle.fuel();
 
-        jsonObject.addProperty("percent",""+fuel.getPercentRemaining());
-        jsonObject.addProperty("range",""+fuel.getRange());
+        //jsonObject.addProperty("percent",""+fuel.getPercentRemaining());
+        //jsonObject.addProperty("range",""+fuel.getRange());
+
+        jsonObject.addProperty("percent",""+ new Random().nextInt(100));
+        jsonObject.addProperty("range",""+ new Random().nextInt(100));
 
         return jsonObject.toString();
     }
@@ -252,9 +255,9 @@ public class ApiApplication {
         JsonObject jsonObject = new JsonObject();
         VehicleFuel fuel = vehicle.fuel();
 
-        jsonObject.addProperty("fuel_percent",""+fuel.getPercentRemaining());
-        jsonObject.addProperty("fuel_range",""+fuel.getRange());
-        jsonObject.addProperty("fuel_amount",""+fuel.getAmountRemaining());
+        jsonObject.addProperty("fuel_percent",""+ new Random().nextDouble());
+        jsonObject.addProperty("fuel_range",""+ new Random().nextInt(100));
+        jsonObject.addProperty("fuel_amount",""+ new Random().nextInt(100));
 
         return jsonObject.toString();
     }
