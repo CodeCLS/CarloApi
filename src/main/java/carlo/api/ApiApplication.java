@@ -291,8 +291,8 @@ public class ApiApplication {
         JsonObject jsonObject = new JsonObject();
         //VehicleCharge charge = vehicle.charge();
 
-        jsonObject.addProperty("charge_state",""+charge.getState());
-        jsonObject.addProperty("charge_plugged_in",""+charge.getIsPluggedIn());
+        //jsonObject.addProperty("charge_state",""+charge.getState());
+        //jsonObject.addProperty("charge_plugged_in",""+charge.getIsPluggedIn());
 
         return jsonObject.toString();
     }
