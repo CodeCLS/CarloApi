@@ -5,14 +5,22 @@ import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 import com.smartcar.sdk.*;
 import com.smartcar.sdk.data.*;
+import com.sun.xml.internal.ws.api.message.Message;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.context.request.async.DeferredResult;
 
+import javax.xml.bind.JAXBException;
+import javax.xml.stream.XMLStreamException;
+
 @RestController
 @SpringBootApplication
 public class ApiApplication {
+
+    private ApiHelper apiHelper = new ApiHelper();
+    private SmartCarRepository smartCarRepository = new SmartCarRepository();
+    private FirebaseRepository firebaseRepository = new FirebaseRepository();
 
     public static void main(String[] args) {
         SpringApplication.run(ApiApplication.class, args);
@@ -21,6 +29,42 @@ public class ApiApplication {
     public String start(@RequestParam(value = "name", defaultValue = "World") String name) {
         return String.format("Hello %s!", name);
     }
+    @RequestMapping(value = "/user/{uid}/vehicle/{id}/attributes",method = RequestMethod.GET)
+    public DeferredResult<String> getVehicleAttributes(
+            @RequestHeader("api-code") String apiCode,
+            @RequestHeader("access-token-smart-car") String token,
+            @PathVariable String uid,
+            @PathVariable String id)
+    {
+        ResponseBuilder responseBuilder = new ResponseBuilder();
+        DeferredResult<String> result = new DeferredResult<>();
+        if(manageApiCode(apiCode, responseBuilder)) {
+            result.setResult(responseBuilder.create());
+            return result;
+        }
+        firebaseRepository.updateUserApiCall();
+
+
+
+        VehicleAttributes vehicleAttributes = smartCarRepository.getVehicleAttributes(token,id);
+        responseBuilder.add(ApiManager.VEHICLE_ID,vehicleAttributes.getId());
+        responseBuilder.add(ApiManager.VEHICLE_MAKE,vehicleAttributes.getMake());
+        responseBuilder.add(ApiManager.VEHICLE_MODEL,vehicleAttributes.getModel());
+        responseBuilder.add(ApiManager.VEHICLE_YEAR,vehicleAttributes.getYear());
+        return result;
+    }
+
+    private Boolean manageApiCode(String apiCode, ResponseBuilder responseBuilder) {
+        if(!apiHelper.isValid(apiCode)){
+            responseBuilder.setSuccessfulAction(false);
+            responseBuilder.setErrorCode(ErrorManager.INVALID_API_KEY_CODE);
+            responseBuilder.setErrorMsg(ErrorManager.INVALID_API_KEY_MSG);
+            return false;
+
+        }
+        return true;
+    }
+
     @GetMapping("/exchange")
     public DeferredResult<String> exchangeAuthCode(@RequestParam(value = "code", defaultValue = "null") String code) {
         DeferredResult<String> output = new DeferredResult<>();
