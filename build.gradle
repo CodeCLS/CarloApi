@@ -34,6 +34,8 @@ dependencies {
     testImplementation 'org.springframework.boot:spring-boot-starter-test:2.5.4'
     implementation 'com.segment.analytics.java:analytics:3.1.3'
     implementation 'com.squareup.retrofit2:retrofit:2.3.0'
+    implementation "com.smartcar.sdk:java-sdk:3.2.1"
+
     implementation 'com.squareup.retrofit2:converter-gson:2.3.0'
     implementation fileTree(dir: 'src/libs', include: '*.jar')
 

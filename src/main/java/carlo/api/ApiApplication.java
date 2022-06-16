@@ -46,6 +46,7 @@ public class ApiApplication {
 
 
 
+
         VehicleAttributes vehicleAttributes = smartCarRepository.getVehicleAttributes(token,id);
         responseBuilder.add(ApiManager.VEHICLE_ID,vehicleAttributes.getId());
         responseBuilder.add(ApiManager.VEHICLE_MAKE,vehicleAttributes.getMake());

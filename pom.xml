@@ -23,6 +23,13 @@
             <version>20210307</version>
         </dependency>
         <dependency>
+            <groupId>com.smartcar.sdk</groupId>
+            <artifactId>java-sdk</artifactId>
+            <version>3.2.1</version>
+        </dependency>
+
+
+        <dependency>
             <groupId>com.google.firebase</groupId>
             <artifactId>firebase-admin</artifactId>
             <version>8.0.1</version>
