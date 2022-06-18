@@ -13,6 +13,8 @@ import org.springframework.web.context.request.async.DeferredResult;
 
 import javax.xml.bind.JAXBException;
 import javax.xml.stream.XMLStreamException;
+import java.util.ArrayList;
+import java.util.List;
 
 @RestController
 @SpringBootApplication
@@ -21,6 +23,9 @@ public class ApiApplication {
     private ApiHelper apiHelper = new ApiHelper();
     private SmartCarRepository smartCarRepository = new SmartCarRepository();
     private FirebaseRepository firebaseRepository = new FirebaseRepository();
+
+
+
 
     public static void main(String[] args) {
         SpringApplication.run(ApiApplication.class, args);
@@ -36,6 +41,8 @@ public class ApiApplication {
             @PathVariable String uid,
             @PathVariable String id)
     {
+        //TODO do something with uid
+
         ResponseBuilder responseBuilder = new ResponseBuilder();
         DeferredResult<String> result = new DeferredResult<>();
         if(manageApiCode(apiCode, responseBuilder)) {
@@ -43,192 +50,176 @@ public class ApiApplication {
             return result;
         }
         firebaseRepository.updateUserApiCall();
-
-
-
-
         VehicleAttributes vehicleAttributes = smartCarRepository.getVehicleAttributes(token,id);
         responseBuilder.add(ApiManager.VEHICLE_ID,vehicleAttributes.getId());
         responseBuilder.add(ApiManager.VEHICLE_MAKE,vehicleAttributes.getMake());
         responseBuilder.add(ApiManager.VEHICLE_MODEL,vehicleAttributes.getModel());
         responseBuilder.add(ApiManager.VEHICLE_YEAR,vehicleAttributes.getYear());
+        responseBuilder.setSuccessfulAction(true);
+
+        result.setResult(responseBuilder.create());
         return result;
     }
 
-    private Boolean manageApiCode(String apiCode, ResponseBuilder responseBuilder) {
-        if(!apiHelper.isValid(apiCode)){
-            responseBuilder.setSuccessfulAction(false);
-            responseBuilder.setErrorCode(ErrorManager.INVALID_API_KEY_CODE);
-            responseBuilder.setErrorMsg(ErrorManager.INVALID_API_KEY_MSG);
-            return false;
 
+    @RequestMapping(value = "user/{uid}/exchange/auth",method = RequestMethod.GET)
+    public DeferredResult<String> exchangeAuthCode(@RequestHeader("api-code") String apiCode,
+                                                   @RequestHeader("access-token-smart-car") String token,
+                                                   @PathVariable String uid) {
+        ResponseBuilder responseBuilder = new ResponseBuilder();
+        DeferredResult<String> result = new DeferredResult<>();
+        if(manageApiCode(apiCode, responseBuilder)) {
+            result.setResult(responseBuilder.create());
+            return result;
         }
-        return true;
+        AuthClient authClient = smartCarRepository.createAuthClient();
+        Auth auth = smartCarRepository.exchangeAuth(token,authClient);
+        ParserTool<AuthClient> parserToolClient = new Converter();
+        String authClientJson = parserToolClient.doTask(authClient);
+        ParserTool<Auth> parserToolAuth = new Converter();
+        String authJson = parserToolAuth.doTask(auth);
+        responseBuilder.add(ApiManager.ACCESS_TOKEN,auth.getAccessToken());
+        responseBuilder.add(ApiManager.AUTH_CLIENT,authClientJson);
+        responseBuilder.add(ApiManager.AUTH,authJson);
+        responseBuilder.setSuccessfulAction(true);
+
+        result.setResult(responseBuilder.create());
+        return result;
+
     }
 
-    @GetMapping("/exchange")
-    public DeferredResult<String> exchangeAuthCode(@RequestParam(value = "code", defaultValue = "null") String code) {
-        DeferredResult<String> output = new DeferredResult<>();
-        // Setup
-        String clientId = "3b683bb7-48a3-4b4c-8a2f-7337a8a0ee19";
-        String clientSecret = "bdefd1ee-de23-4df5-aa61-c9ef1d6ac724";
-        String redirectUri = "sc3b683bb7-48a3-4b4c-8a2f-7337a8a0ee19://myapp.com/callback";
-        boolean testMode = true;
+    @RequestMapping(value = "/user/{uid}/vehicle/{id}/location",method = RequestMethod.GET)
+    public DeferredResult<String> getLocation(
+            @RequestHeader("api-code") String apiCode,
+            @RequestHeader("access-token-smart-car") String token,
+            @PathVariable String uid,
+            @PathVariable String id)
+    {
+        //TODO do something with uid
 
-// Initialize a new AuthClient with your credentials.
-        AuthClient authClient = null;
-        try {
-            authClient = new AuthClient.Builder()
-                    .clientId(clientId)
-                    .clientSecret(clientSecret)
-                    .redirectUri(redirectUri)
-                    .testMode(testMode).build();
-
-
-
-            Auth auth = authClient.exchangeCode(code);
-            VehicleIds response = Smartcar.getVehicles(auth.getAccessToken());
-
-
-            Gson gson = new Gson();
-            String jsonStringClient = gson.toJson(authClient);
-            String jsonStringAuth = gson.toJson(auth);
-
-            JsonObject jsonObject = new JsonObject();
-            jsonObject.addProperty("accessCode" , auth.getAccessToken());
-            jsonObject.addProperty("client" , jsonStringClient);
-            jsonObject.addProperty("auth" , jsonStringAuth);
-
-            output.setResult(jsonObject.toString());
-
-
-        } catch (Exception e) {
-            e.printStackTrace();
-            output.setResult(e.getMessage());
+        ResponseBuilder responseBuilder = new ResponseBuilder();
+        DeferredResult<String> result = new DeferredResult<>();
+        if(manageApiCode(apiCode, responseBuilder)) {
+            result.setResult(responseBuilder.create());
+            return result;
         }
+        firebaseRepository.updateUserApiCall();
+        VehicleLocation vehicleLocation = smartCarRepository.getVehicleLocation(token,id);
+        responseBuilder.add(ApiManager.LATITUDE,vehicleLocation.getLatitude());
+        responseBuilder.add(ApiManager.LONGITUDE,vehicleLocation.getLongitude());
+        responseBuilder.setSuccessfulAction(true);
 
-        return output;
-
+        result.setResult(responseBuilder.create());
+        return result;
     }
+    @RequestMapping(value = "/user/{uid}/vehicle/",method = RequestMethod.GET)
+    public DeferredResult<String> getLocation(
+            @RequestHeader("api-code") String apiCode,
+            @RequestHeader("access-token-smart-car") String token,
+            @PathVariable String uid)
+    {
+        //TODO do something with uid
 
-    @GetMapping("/vehicle/location")
-    public String location(@RequestParam(value = "code", defaultValue = "null") String code,@RequestParam(value = "id", defaultValue = "null") String id) throws Exception {
-        VehicleIds response = Smartcar.getVehicles(code);
-        String[] vehicleIds = response.getVehicleIds();
-        Vehicle vehicle =new Vehicle(vehicleIds[0],code);
-        JsonObject jsonObject = new JsonObject();
-        VehicleLocation location = vehicle.location();
-        jsonObject.addProperty("latitude",""+location.getLatitude());
-        jsonObject.addProperty("longitude",location.getLongitude());
-
-
-        return jsonObject.toString();
-    }
-
-    @GetMapping("/vehicle/info")
-    public String vehicleInformation(@RequestParam(value = "code", defaultValue = "null") String code,@RequestParam(value = "id", defaultValue = "null") String id) throws Exception {
-        VehicleIds response = Smartcar.getVehicles(code);
-        Vehicle vehicle =new Vehicle(id,code);
-        JsonObject jsonObject = new JsonObject();
-        VehicleAttributes vehicleInfo = vehicle.attributes();
-        String vehicleId = vehicleInfo.getId();
-        String vehicleMake = vehicleInfo.getMake();
-        String vehicleYear = ""+vehicleInfo.getYear();
-        String vehicleModel = vehicleInfo.getModel();
-
-        jsonObject.addProperty("vehicleId",""+vehicleId);
-        jsonObject.addProperty("vehicleMake",vehicleMake);
-        jsonObject.addProperty("vehicleYear",""+vehicleYear);
-        jsonObject.addProperty("vehicleModel",vehicleModel);
-        return jsonObject.toString();
-    }
-    @GetMapping("/user/vehicles")
-
-    public String allVehicleIds(@RequestParam(value = "code", defaultValue = "null") String code) throws Exception{
-        VehicleIds response = Smartcar.getVehicles(code);
-
-        JsonArray jsonObject = new JsonArray();
-        String[] vehicleIds = response.getVehicleIds();
-        for(String s : vehicleIds){
-            JsonObject jsonObject1 = new JsonObject();
-            jsonObject1.addProperty("id",s);
-            jsonObject.add(jsonObject1);
+        ResponseBuilder responseBuilder = new ResponseBuilder();
+        DeferredResult<String> result = new DeferredResult<>();
+        if(manageApiCode(apiCode, responseBuilder)) {
+            result.setResult(responseBuilder.create());
+            return result;
         }
-        return jsonObject.toString();
-
+        firebaseRepository.updateUserApiCall();
+        VehicleIds vehicleIds = smartCarRepository.getVehicles(token);
+        responseBuilder.add(ApiManager.VEHICLE_IDS,vehicleIds.getVehicleIds());
+        responseBuilder.setSuccessfulAction(true);
+        result.setResult(responseBuilder.create());
+        return result;
     }
-    @GetMapping("/all_attributes")
-    public String attributes(@RequestParam(value = "code", defaultValue = "null") String code,@RequestParam(value = "id", defaultValue = "null") String id) throws Exception {
-        JsonObject odometer = new JsonObject();
-        JsonObject location = new JsonObject();
-        JsonObject vehicleInfo = new JsonObject();
+    @RequestMapping(value = "/user/{uid}/refresh/",method = RequestMethod.GET)
+    public DeferredResult<String> refresh(
+            @RequestHeader("api-code") String apiCode,
+            @RequestHeader("access-token-smart-car") String token,
+            @PathVariable String uid,
+            @RequestParam(value = "client", defaultValue = "null") String client,
+            @RequestParam(value = "auth", defaultValue = "null") String auth)
+    {
+        //TODO do something with uid
 
-        try {
-            odometer = new JsonObject().getAsJsonObject(odometer(code,id));
-        }catch (Exception e){};
-        try {
-            location = new JsonObject().getAsJsonObject(location(code,id));
-        }catch (Exception e){};
-        try {
-            vehicleInfo = new JsonObject().getAsJsonObject(vehicleInformation(code,id));
-        }catch (Exception e){};
-
-
-
-
-        odometer.add("",location);
-        odometer.add("",vehicleInfo);
-        return odometer.toString();
-    }
-    @RequestMapping(value = "/refresh",method = RequestMethod.POST)
-    public String refresh(@RequestParam(value = "client", defaultValue = "null") String client,@RequestParam(value = "auth", defaultValue = "null") String auth) throws Exception {
+        ResponseBuilder responseBuilder = new ResponseBuilder();
+        DeferredResult<String> result = new DeferredResult<>();
+        if(manageApiCode(apiCode, responseBuilder)) {
+            result.setResult(responseBuilder.create());
+            return result;
+        }
+        firebaseRepository.updateUserApiCall();
         Gson gson = new Gson();
         AuthClient authClient = gson.fromJson(client,AuthClient.class);
-        System.out.println("access: " + client + " " + auth);
         Auth access = gson.fromJson(auth,Auth.class);
-        if (Smartcar.isExpired(access.getExpiration())) {
-            access = authClient.exchangeRefreshToken(access.getRefreshToken());
+        Auth newAuth = smartCarRepository.refreshToken(authClient,access);
+        responseBuilder.setSuccessfulAction(true);
+        responseBuilder.add(ApiManager.AUTH,gson.toJson(newAuth));
+        result.setResult(responseBuilder.create());
+        return result;
+    }
+    @RequestMapping(value = "/user/{uid}/validate/smartcar_token",method = RequestMethod.GET)
+    public DeferredResult<String> validateSmartCarToken(
+            @RequestHeader("api-code") String apiCode,
+            @RequestHeader("access-token-smart-car") String token,
+            @PathVariable String uid)
+    {
+        //TODO do something with uid
+        ResponseBuilder responseBuilder = new ResponseBuilder();
+        DeferredResult<String> result = new DeferredResult<>();
+        if(manageApiCode(apiCode, responseBuilder)) {
+            result.setResult(responseBuilder.create());
+            return result;
         }
-        return "";
+        return result;
     }
+    @RequestMapping(value = "/user/{uid}/vehicle/{id}/odometer",method = RequestMethod.GET)
+    public DeferredResult<String> getOdometer(
+            @RequestHeader("api-code") String apiCode,
+            @RequestHeader("access-token-smart-car") String token,
+            @PathVariable String uid,
+            @PathVariable String id)
+    {
+        //TODO do something with uid
 
-    @GetMapping("/validate")
-    public String validate(@RequestParam(value = "code", defaultValue = "null") String code) {
-        JsonObject jsonObject = new JsonObject();
-        try {
-            jsonObject.addProperty("id", Smartcar.getUser(code).getId());
-            jsonObject.addProperty("isValid", "true");
-
+        ResponseBuilder responseBuilder = new ResponseBuilder();
+        DeferredResult<String> result = new DeferredResult<>();
+        if(manageApiCode(apiCode, responseBuilder)) {
+            result.setResult(responseBuilder.create());
+            return result;
         }
-        catch (Exception e){
-            System.out.println(e.getMessage());
-            jsonObject.addProperty("isValid", "false");
-            jsonObject.addProperty("msg", e.getMessage());
+        firebaseRepository.updateUserApiCall();
+        VehicleOdometer vehicleOdometer = smartCarRepository.getVehicleOdometer(token,id);
+        responseBuilder.add(ApiManager.ODOMETER,vehicleOdometer.getDistance());
+        responseBuilder.setSuccessfulAction(true);
+        result.setResult(responseBuilder.create());
+        return result;
+    }
 
+    @RequestMapping(value = "/user/{uid}/vehicle/{id}/vin",method = RequestMethod.GET)
+    public DeferredResult<String> getVin(
+            @RequestHeader("api-code") String apiCode,
+            @RequestHeader("access-token-smart-car") String token,
+            @PathVariable String uid,
+            @PathVariable String id)
+    {
+        //TODO do something with uid
+
+        ResponseBuilder responseBuilder = new ResponseBuilder();
+        DeferredResult<String> result = new DeferredResult<>();
+        if(manageApiCode(apiCode, responseBuilder)) {
+            result.setResult(responseBuilder.create());
+            return result;
         }
-        System.out.println(jsonObject);
-        return jsonObject.toString();
+        firebaseRepository.updateUserApiCall();
+        String vin = smartCarRepository.getVehicleVin(token,id);
+        responseBuilder.add(ApiManager.VIN,vin);
+        responseBuilder.setSuccessfulAction(true);
+        result.setResult(responseBuilder.create());
+        return result;
     }
-    @GetMapping("/vehicle/odometer")
-    public String odometer(@RequestParam(value = "code", defaultValue = "null") String code,@RequestParam(value = "id", defaultValue = "null") String id) throws Exception {
-        VehicleIds response = Smartcar.getVehicles(code);
-        Vehicle vehicle =new Vehicle(id,code);
-        JsonObject jsonObject = new JsonObject();
-        VehicleOdometer odometer = vehicle.odometer();
 
-        jsonObject.addProperty("odometer",""+odometer.getDistance());
-
-        return jsonObject.toString();
-    }
-    @GetMapping("vehicle/vin")
-    public String vin(@RequestParam(value = "code", defaultValue = "null") String code,@RequestParam(value = "id", defaultValue = "null") String id) throws Exception {
-        VehicleIds response = Smartcar.getVehicles(code);
-        Vehicle vehicle =new Vehicle(id,code);
-        JsonObject jsonObject = new JsonObject();
-
-        jsonObject.addProperty("vin",""+vehicle.vin());
-        return jsonObject.toString();
-    }
     @GetMapping("vehicle/battery")
     public String battery(@RequestParam(value = "code", defaultValue = "null") String code,@RequestParam(value = "id", defaultValue = "null") String id) throws Exception {
         VehicleIds response = Smartcar.getVehicles(code);
@@ -349,4 +340,14 @@ public class ApiApplication {
 
 
 
+    private Boolean manageApiCode(String apiCode, ResponseBuilder responseBuilder) {
+        if(!apiHelper.isValid(apiCode)){
+            responseBuilder.setSuccessfulAction(false);
+            responseBuilder.setErrorCode(ErrorManager.INVALID_API_KEY_CODE);
+            responseBuilder.setErrorMsg(ErrorManager.INVALID_API_KEY_MSG);
+            return false;
+
+        }
+        return true;
+    }
 }
