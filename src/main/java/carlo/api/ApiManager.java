@@ -21,4 +21,5 @@ public class ApiManager {
     public static final String SUCCESSFUL_ACTION = "successful_action";
     public static final String ERROR_MSG = "error_msg";
     public static final String ERROR_CODE = "error_code";
+    public static final String USER = "user";
 }

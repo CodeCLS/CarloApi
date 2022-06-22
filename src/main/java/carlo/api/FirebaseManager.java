@@ -14,6 +14,16 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
 public class FirebaseManager {
+    public static final String UID = "uid";
+    public static final String FIRST_NAME = "first_name";
+    public static final String SECOND_NAME = "second_name";
+    public static final String EMAIL = "email";
+    public static final String PHONE = "phone";
+    public static final String BIRTHDAY = "birthday";
+    public static final String BILLING_TYPE = "billing_type";
+    public static final String VEHICLE_IDS = "vehicle_ids";
+    public static final String SMARTCAR_ID = "smartcar_id";
+
     FirebaseOptions optionsUserDatabase = null;
     FirebaseApp defaultApp;
     FirebaseAuth userAuth;
@@ -42,7 +52,7 @@ public class FirebaseManager {
 
     }
 
-    public UserRecord createUser(String email, String firstName, String secondName, Callback<Boolean> callback){
+    public UserRecord createUserAuth(String email, String firstName, String secondName, Callback<String> callback){
         UserRecord.CreateRequest request = new UserRecord.CreateRequest()
                 .setEmail(email)
                 .setEmailVerified(false)
@@ -52,10 +62,10 @@ public class FirebaseManager {
         UserRecord userRecord = null;
         try {
             userRecord = FirebaseAuth.getInstance().createUser(request);
-            callback.value(true);
+            callback.value(userRecord.getUid());
         } catch (FirebaseAuthException e) {
             e.printStackTrace();
-            callback.value(false);
+            callback.value(userRecord.getUid());
         }
         return userRecord;
 
@@ -163,6 +173,21 @@ public class FirebaseManager {
             public void onCancelled(DatabaseError error) {
                 callback.value(null);
 
+            }
+        });
+
+    }
+
+    public void createUserDb(User convertJson, Callback<User> callback) {
+        userRef.child(convertJson.getUid()).setValue(convertJson.toJson(), new DatabaseReference.CompletionListener() {
+            @Override
+            public void onComplete(DatabaseError error, DatabaseReference ref) {
+                if (error == null){
+                    callback.value(convertJson);
+                }
+                else{
+                    callback.value(null);
+                }
             }
         });
 

@@ -13,4 +13,8 @@ public class Converter {
     }
 
 
+    public static Object convertJson(String body, Class<?> userClass) {
+        Gson gson = new Gson();
+        return gson.fromJson(body,userClass);
+    }
 }
