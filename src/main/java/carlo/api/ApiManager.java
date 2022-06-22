@@ -18,4 +18,7 @@ public class ApiManager {
     public static final String RANGE_AMOUNT = "product_amount";
     public static final String ACTION_MSG = "status_msg";
     public static final String IS_ELECTRIC = "is_electric";
+    public static final String SUCCESSFUL_ACTION = "successful_action";
+    public static final String ERROR_MSG = "error_msg";
+    public static final String ERROR_CODE = "error_code";
 }

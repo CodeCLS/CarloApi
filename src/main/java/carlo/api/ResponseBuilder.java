@@ -121,33 +121,17 @@ public class ResponseBuilder {
                 jsonObject.add(key,(JsonArray) val);
             }
         }
-        String key = getKey(isSuccessfulAction);
-        jsonObject.addProperty(key, isSuccessfulAction);
+        jsonObject.addProperty(ApiManager.SUCCESSFUL_ACTION, isSuccessfulAction);
 
         if (!isSuccessfulAction) {
-            String errorCodeKey = getKey(errorCode);
-            String errorMsgKey = getKey(errorMsg);
 
-            jsonObject.addProperty(errorCodeKey, errorCode);
-            jsonObject.addProperty(errorMsgKey, errorMsg);
+            jsonObject.addProperty(ApiManager.ERROR_CODE, errorCode);
+            jsonObject.addProperty(ApiManager.ERROR_MSG, errorMsg);
         }
 
 
         return jsonObject.toString();
     }
 
-    private String getKey(Object obj) {
-        System.out.println("obj"+ obj + " " + obj.getClass() + " " + Arrays.toString(obj.getClass().getFields()));
-        Field[] fields = obj.getClass().getFields();
-        for (Field field : fields) {
-            if (field.isAnnotationPresent(Key.class)) {
-                Key myAnn = field.getAnnotation(Key.class);
-                return myAnn.value();
-            }
-
-
-        }
-        return obj.getClass().getSimpleName();
-    }
 }
 
