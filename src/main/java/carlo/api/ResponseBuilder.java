@@ -137,6 +137,7 @@ public class ResponseBuilder {
     }
 
     private String getKey(Object obj) {
+        System.out.println("obj"+ obj + " " + obj.getClass() + " " + Arrays.toString(obj.getClass().getFields()));
         Field[] fields = obj.getClass().getFields();
         for (Field field : fields) {
             if (field.isAnnotationPresent(Key.class)) {
