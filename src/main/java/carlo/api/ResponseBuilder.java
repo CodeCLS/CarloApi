@@ -12,7 +12,7 @@ import java.util.HashMap;
 
 public class ResponseBuilder {
     @Key("is_successful_action")
-    private Boolean isSuccessfulAction = false;
+    private Boolean isSuccessfulAction = true;
     @Key("error_code")
     private Integer errorCode;
     @Key("error_msg")
@@ -99,7 +99,7 @@ public class ResponseBuilder {
         JsonObject jsonObject = new JsonObject();
         for (String key : values.keySet()){
             if (values.get(key) == null || values.get(key).equals("")){
-                System.out.println("Valu is null --> Unsuccessful Action");
+                System.out.println("Value is null --> Unsuccessful Action");
                 isSuccessfulAction = false;
                 errorCode = ErrorManager.INVALID_API_KEY_CODE;
                 errorMsg = ErrorManager.INVALID_API_KEY_MSG;
