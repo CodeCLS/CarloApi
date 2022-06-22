@@ -12,7 +12,7 @@ public class SmartCarRepository {
     String redirectUri = "sc3b683bb7-48a3-4b4c-8a2f-7337a8a0ee19://myapp.com/callback";
     boolean testMode = true;
 
-}
+
     public SmartCarRepository() {
     }
 
@@ -100,4 +100,35 @@ public class SmartCarRepository {
             return null;
         }
 }
+
+    public Object getVehicleRange(String token, String id) {
+        try {
+            return getVehicle(token,id).fuel();
+        } catch (SmartcarException e) {
+            try{
+                return getVehicle(token,id).battery();
+            }
+            catch (Exception e2){
+                e2.printStackTrace();
+            }
+            return null;
+        }
+    }
+
+    public ActionResponse lock(String token, String id) {
+        try {
+            return getVehicle(token,id).lock();
+        } catch (SmartcarException e) {
+            e.printStackTrace();
+            return null;
+        }
+    }
+    public ActionResponse unlock(String token, String id) {
+        try {
+            return getVehicle(token,id).unlock();
+        } catch (SmartcarException e) {
+            e.printStackTrace();
+            return null;
+        }
+    }
 }

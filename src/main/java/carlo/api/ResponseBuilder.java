@@ -99,6 +99,12 @@ public class ResponseBuilder {
     public String create(){
         JsonObject jsonObject = new JsonObject();
         for (String key : values.keySet()){
+            if (values.get(key) == null || values.get(key).equals("")){
+                isSuccessfulAction = false;
+                errorCode = ErrorManager.INVALID_API_KEY_CODE;
+                errorMsg = ErrorManager.INVALID_API_KEY_MSG;
+                break;
+            }
             Object val = values.get(key);
             if (val instanceof Boolean){
                 jsonObject.addProperty(key,(Boolean)val);
@@ -116,11 +122,12 @@ public class ResponseBuilder {
                 jsonObject.add(key,(JsonArray) val);
             }
         }
+
         jsonObject.addProperty(isSuccessfulAction.getClass().getDeclaredAnnotation(Key.class).value(),isSuccessfulAction);
 
         if (!isSuccessfulAction) {
             jsonObject.addProperty(errorCode.getClass().getDeclaredAnnotation(Key.class).value(), errorCode);
-            jsonObject.addProperty(errorCode.getClass().getDeclaredAnnotation(Key.class).value(), errorCode);
+            jsonObject.addProperty(errorMsg.getClass().getDeclaredAnnotation(Key.class).value(), errorMsg);
         }
 
 

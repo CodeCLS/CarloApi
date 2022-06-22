@@ -13,4 +13,9 @@ public class ApiManager {
     public static final String VEHICLE_IDS = "vehicle_ids";
     public static final String ODOMETER = "odometer";
     public static final String VIN = "vin";
+    public static final String RANGE_PERCENT = "range_percent";
+    public static final String RANGE_RADIUS = "radius";
+    public static final String RANGE_AMOUNT = "product_amount";
+    public static final String ACTION_MSG = "status_msg";
+    public static final String IS_ELECTRIC = "is_electric";
 }

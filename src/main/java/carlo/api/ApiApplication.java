@@ -219,126 +219,109 @@ public class ApiApplication {
         result.setResult(responseBuilder.create());
         return result;
     }
+    @RequestMapping(value = "/user/{uid}/vehicle/{id}/range",method = RequestMethod.GET)
+    public DeferredResult<String> getElectricRange(
+            @RequestHeader("api-code") String apiCode,
+            @RequestHeader("access-token-smart-car") String token,
+            @PathVariable String uid,
+            @PathVariable String id)
+    {
+        //TODO do something with uid
 
-    @GetMapping("vehicle/battery")
-    public String battery(@RequestParam(value = "code", defaultValue = "null") String code,@RequestParam(value = "id", defaultValue = "null") String id) throws Exception {
-        VehicleIds response = Smartcar.getVehicles(code);
-        Vehicle vehicle =new Vehicle(id,code);
-        JsonObject jsonObject = new JsonObject();
-        VehicleBattery battery = vehicle.battery();
-
-        jsonObject.addProperty("battery_percent",""+battery.getPercentRemaining());
-        jsonObject.addProperty("battery_range",""+battery.getRange());
-
-        return jsonObject.toString();
-    }
-    @GetMapping("vehicle/range/non_electric")
-    public String rangeNonElectric(@RequestParam(value = "code", defaultValue = "null") String code,@RequestParam(value = "id", defaultValue = "null") String id) throws Exception {
-        VehicleIds response = Smartcar.getVehicles(code);
-        Vehicle vehicle =new Vehicle(id,code);
-        JsonObject jsonObject = new JsonObject();
-        VehicleFuel fuel = vehicle.fuel();
-
-        jsonObject.addProperty("percent",""+fuel.getPercentRemaining());
-        jsonObject.addProperty("range",""+fuel.getRange());
-
-        return jsonObject.toString();
-    }
-    @GetMapping("/vehicle/lock")
-    public String lock(@RequestParam(value = "code", defaultValue = "null") String code,@RequestParam(value = "id", defaultValue = "null") String id) throws Exception {
-        VehicleIds response = Smartcar.getVehicles(code);
-        Vehicle vehicle =new Vehicle(id,code);
-        JsonObject jsonObject = new JsonObject();
-        ActionResponse lock = vehicle.lock();
-
-        jsonObject.addProperty("lock_status",""+lock.getStatus());
-        jsonObject.addProperty("lock_msg",""+lock.getStatus());
-
-        return jsonObject.toString();
-    }
-    @GetMapping("/vehicle/unlock")
-    public String unlock(@RequestParam(value = "code", defaultValue = "null") String code,@RequestParam(value = "id", defaultValue = "null") String id) throws Exception {
-        VehicleIds response = Smartcar.getVehicles(code);
-        String[] vehicleIds = response.getVehicleIds();
-        Vehicle vehicle =new Vehicle(id,code);
-        JsonObject jsonObject = new JsonObject();
-        ActionResponse unlock = vehicle.unlock();
-
-        jsonObject.addProperty("unlock_status",""+unlock.getStatus());
-        jsonObject.addProperty("unlock_msg",""+unlock.getStatus());
-
-        return jsonObject.toString();
-    }
-    @GetMapping("/vehicle/fuel")
-    public String fuel(@RequestParam(value = "code", defaultValue = "null") String code,@RequestParam(value = "id", defaultValue = "null") String id) throws Exception {
-        VehicleIds response = Smartcar.getVehicles(code);
-        Vehicle vehicle =new Vehicle(id,code);
-        JsonObject jsonObject = new JsonObject();
-        VehicleFuel fuel = vehicle.fuel();
-
-        jsonObject.addProperty("fuel_percent",""+fuel.getPercentRemaining());
-        jsonObject.addProperty("fuel_range",""+fuel.getRange());
-        jsonObject.addProperty("fuel_amount",""+fuel.getAmountRemaining());
-
-        return jsonObject.toString();
-    }
-    @GetMapping("/vehicle/is_electric")
-    public String isElectric(@RequestParam(value = "code", defaultValue = "null") String code,@RequestParam(value = "id", defaultValue = "null") String id) throws Exception{
-        VehicleIds response = Smartcar.getVehicles(code);
-        String[] vehicleIds = response.getVehicleIds();
-        Vehicle vehicle =new Vehicle(id,code);
-        JsonObject jsonObject = new JsonObject();
-        VehicleFuel fuel = null;
-        try {
-            vehicle.fuel();
-            jsonObject.addProperty("is_electric","false");
-            return jsonObject.toString();
-
-
-        } catch (SmartcarException e) {
-            e.printStackTrace();
+        ResponseBuilder responseBuilder = new ResponseBuilder();
+        DeferredResult<String> result = new DeferredResult<>();
+        if(manageApiCode(apiCode, responseBuilder)) {
+            result.setResult(responseBuilder.create());
+            return result;
         }
-
-        jsonObject.addProperty("is_electric","true");
-
-        return jsonObject.toString();
+        firebaseRepository.updateUserApiCall();
+        Object range = smartCarRepository.getVehicleRange(token,id);
+        if (range instanceof VehicleBattery){
+            responseBuilder.add(ApiManager.RANGE_PERCENT,((VehicleBattery) range).getPercentRemaining());
+            responseBuilder.add(ApiManager.RANGE_RADIUS,((VehicleBattery) range).getRange());
+            responseBuilder.add(ApiManager.RANGE_AMOUNT,"Unavailable");
+        }else if(range instanceof VehicleFuel){
+            responseBuilder.add(ApiManager.RANGE_PERCENT,((VehicleFuel) range).getPercentRemaining());
+            responseBuilder.add(ApiManager.RANGE_RADIUS,((VehicleFuel) range).getRange());
+            responseBuilder.add(ApiManager.RANGE_AMOUNT,((VehicleFuel) range).getAmountRemaining());
+        }
+        responseBuilder.setSuccessfulAction(true);
+        result.setResult(responseBuilder.create());
+        return result;
     }
-    @GetMapping("/vehicle/charge")
-    public String charge(@RequestParam(value = "code", defaultValue = "null") String code,@RequestParam(value = "id", defaultValue = "null") String id) throws Exception {
-        VehicleIds response = Smartcar.getVehicles(code);
-        Vehicle vehicle =new Vehicle(id,code);
-        JsonObject jsonObject = new JsonObject();
-        VehicleCharge charge = vehicle.charge();
+    @RequestMapping(value = "/user/{uid}/vehicle/{id}/lock",method = RequestMethod.GET)
+    public DeferredResult<String> lock(
+            @RequestHeader("api-code") String apiCode,
+            @RequestHeader("access-token-smart-car") String token,
+            @PathVariable String uid,
+            @PathVariable String id)
+    {
+        //TODO do something with uid
 
-        jsonObject.addProperty("charge_state",""+charge.getState());
-        jsonObject.addProperty("charge_plugged_in",""+charge.getIsPluggedIn());
-
-        return jsonObject.toString();
+        ResponseBuilder responseBuilder = new ResponseBuilder();
+        DeferredResult<String> result = new DeferredResult<>();
+        if(manageApiCode(apiCode, responseBuilder)) {
+            result.setResult(responseBuilder.create());
+            return result;
+        }
+        firebaseRepository.updateUserApiCall();
+        ActionResponse actionResponse = smartCarRepository.lock(token,id);
+        responseBuilder.add(ApiManager.ACTION_MSG,actionResponse.getMessage());
+        responseBuilder.setSuccessfulAction(actionResponse.getStatus().equals("success"));
+        result.setResult(responseBuilder.create());
+        return result;
     }
 
-    //@RequestMapping(
-    //        value = CONSTANT_MESSAGE_SEND_URL,
-    //        method = RequestMethod.POST)
-    //public DeferredResult<String> verifyMessage(@RequestBody String body){
-//
-    //    DeferredResult<String> output = new DeferredResult<>();
-    //    new JSONUtil().createMessageFromJSON(body, new FirebaseManager.OnActionListener<ChatrApiMessage>() {
-    //        @Override
-    //        public void success(ChatrApiMessage message) {
-    //            ApiRepository.getInstance().verifyMessage(message,output);
-    //        }
-//
-    //        @Override
-    //        public void failure(BaseException e) {
-    //            System.out.println(e.getMessage());
-//
-    //        }
-    //    });
-    //    return output;
-    //}
+    @RequestMapping(value = "/user/{uid}/vehicle/{id}/unlock",method = RequestMethod.GET)
+    public DeferredResult<String> unlock(
+            @RequestHeader("api-code") String apiCode,
+            @RequestHeader("access-token-smart-car") String token,
+            @PathVariable String uid,
+            @PathVariable String id)
+    {
+        //TODO do something with uid
 
+        ResponseBuilder responseBuilder = new ResponseBuilder();
+        DeferredResult<String> result = new DeferredResult<>();
+        if(manageApiCode(apiCode, responseBuilder)) {
+            result.setResult(responseBuilder.create());
+            return result;
+        }
+        firebaseRepository.updateUserApiCall();
+        ActionResponse actionResponse = smartCarRepository.unlock(token,id);
+        responseBuilder.add(ApiManager.ACTION_MSG,actionResponse.getMessage());
+        responseBuilder.setSuccessfulAction(actionResponse.getStatus().equals("success"));
+        result.setResult(responseBuilder.create());
+        return result;
+    }
+    @RequestMapping(value = "/user/{uid}/vehicle/{id}/is_electric",method = RequestMethod.GET)
+    public DeferredResult<String> isElectric(
+            @RequestHeader("api-code") String apiCode,
+            @RequestHeader("access-token-smart-car") String token,
+            @PathVariable String uid,
+            @PathVariable String id)
+    {
+        //TODO do something with uid
 
+        ResponseBuilder responseBuilder = new ResponseBuilder();
+        DeferredResult<String> result = new DeferredResult<>();
+        if(manageApiCode(apiCode, responseBuilder)) {
+            result.setResult(responseBuilder.create());
+            return result;
+        }
+        firebaseRepository.updateUserApiCall();
+        Object range = smartCarRepository.getVehicleRange(token,id);
+        if (range instanceof VehicleBattery){
+            responseBuilder.add(ApiManager.IS_ELECTRIC,true);
 
+        }else if(range instanceof VehicleFuel){
+            responseBuilder.add(ApiManager.IS_ELECTRIC,false);
+
+        }
+        responseBuilder.setSuccessfulAction(true);
+        result.setResult(responseBuilder.create());
+        return result;
+    }
 
     private Boolean manageApiCode(String apiCode, ResponseBuilder responseBuilder) {
         if(!apiHelper.isValid(apiCode)){
