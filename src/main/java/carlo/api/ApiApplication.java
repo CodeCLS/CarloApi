@@ -60,8 +60,8 @@ public class ApiApplication {
         }
         else{
             result.setResult(ErrorManager.createErrorResponse(
-                    ErrorManager.INVALID_API_KEY_CODE,
-                    ErrorManager.INVALID_API_KEY_MSG));
+                    ErrorManager.INTERNAL_ERROR_KEY_CODE,
+                    ErrorManager.INTERNAL_ERROR_KEY_MSG));
         }
         return result;
     }
@@ -116,8 +116,8 @@ public class ApiApplication {
         }
         else{
             result.setResult(ErrorManager.createErrorResponse(
-                    ErrorManager.INVALID_API_KEY_CODE,
-                    ErrorManager.INVALID_API_KEY_MSG));
+                    ErrorManager.INTERNAL_ERROR_KEY_CODE,
+                    ErrorManager.INTERNAL_ERROR_KEY_MSG));
         }
 
         return result;
@@ -145,8 +145,8 @@ public class ApiApplication {
         }
         else{
             result.setResult(ErrorManager.createErrorResponse(
-                    ErrorManager.INVALID_API_KEY_CODE,
-                    ErrorManager.INVALID_API_KEY_MSG));
+                    ErrorManager.INTERNAL_ERROR_KEY_CODE,
+                    ErrorManager.INTERNAL_ERROR_KEY_MSG));
         }
         return result;
     }
@@ -171,9 +171,17 @@ public class ApiApplication {
         AuthClient authClient = gson.fromJson(client,AuthClient.class);
         Auth access = gson.fromJson(auth,Auth.class);
         Auth newAuth = smartCarRepository.refreshToken(authClient,access);
-        responseBuilder.setSuccessfulAction(true);
-        responseBuilder.add(ApiManager.AUTH,gson.toJson(newAuth));
-        result.setResult(responseBuilder.create());
+        if (auth != null) {
+            responseBuilder.setSuccessfulAction(true);
+            responseBuilder.add(ApiManager.AUTH, gson.toJson(newAuth));
+            result.setResult(responseBuilder.create());
+        }
+        else{
+            result.setResult(ErrorManager.createErrorResponse(
+                    ErrorManager.INTERNAL_ERROR_KEY_CODE,
+                    ErrorManager.INTERNAL_ERROR_KEY_MSG));
+        }
+
         return result;
     }
     @RequestMapping(value = "/user/{uid}/validate/smartcar_token",method = RequestMethod.GET)
@@ -215,8 +223,8 @@ public class ApiApplication {
         }
         else{
             result.setResult(ErrorManager.createErrorResponse(
-                    ErrorManager.INVALID_API_KEY_CODE,
-                    ErrorManager.INVALID_API_KEY_MSG));
+                    ErrorManager.INTERNAL_ERROR_KEY_CODE,
+                    ErrorManager.INTERNAL_ERROR_KEY_MSG));
         }
         return result;
     }
@@ -245,8 +253,8 @@ public class ApiApplication {
         }
         else{
             result.setResult(ErrorManager.createErrorResponse(
-                    ErrorManager.INVALID_API_KEY_CODE,
-                    ErrorManager.INVALID_API_KEY_MSG));
+                    ErrorManager.INTERNAL_ERROR_KEY_CODE,
+                    ErrorManager.INTERNAL_ERROR_KEY_MSG));
         }
         return result;
     }
@@ -282,8 +290,8 @@ public class ApiApplication {
         }
         else{
             result.setResult(ErrorManager.createErrorResponse(
-                    ErrorManager.INVALID_API_KEY_CODE,
-                    ErrorManager.INVALID_API_KEY_MSG));
+                    ErrorManager.INTERNAL_ERROR_KEY_CODE,
+                    ErrorManager.INTERNAL_ERROR_KEY_MSG));
         }
         return result;
     }
@@ -311,8 +319,8 @@ public class ApiApplication {
         }
         else{
             result.setResult(ErrorManager.createErrorResponse(
-                    ErrorManager.INVALID_API_KEY_CODE,
-                    ErrorManager.INVALID_API_KEY_MSG));
+                    ErrorManager.INTERNAL_ERROR_KEY_CODE,
+                    ErrorManager.INTERNAL_ERROR_KEY_MSG));
         }
         return result;
     }
@@ -341,8 +349,8 @@ public class ApiApplication {
         }
         else{
             result.setResult(ErrorManager.createErrorResponse(
-                    ErrorManager.INVALID_API_KEY_CODE,
-                    ErrorManager.INVALID_API_KEY_MSG));
+                    ErrorManager.INTERNAL_ERROR_KEY_CODE,
+                    ErrorManager.INTERNAL_ERROR_KEY_MSG));
         }
         return result;
     }
@@ -376,8 +384,8 @@ public class ApiApplication {
         }
         else{
             result.setResult(ErrorManager.createErrorResponse(
-                    ErrorManager.INVALID_API_KEY_CODE,
-                    ErrorManager.INVALID_API_KEY_MSG));
+                    ErrorManager.INTERNAL_ERROR_KEY_CODE,
+                    ErrorManager.INTERNAL_ERROR_KEY_MSG));
         }
         return result;
     }
