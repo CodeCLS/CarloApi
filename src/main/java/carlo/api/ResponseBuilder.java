@@ -6,6 +6,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 import java.lang.annotation.*;
+import java.util.Arrays;
 import java.util.HashMap;
 
 public class ResponseBuilder {
@@ -119,6 +120,7 @@ public class ResponseBuilder {
                 jsonObject.add(key,(JsonArray) val);
             }
         }
+        System.out.println("YELLO: " + isSuccessfulAction + " " + isSuccessfulAction.getClass() + " " + Arrays.toString(isSuccessfulAction.getClass().getAnnotations()));
         String annotation = isSuccessfulAction.getClass().getAnnotation(Key.class).value();
         jsonObject.addProperty(annotation,isSuccessfulAction);
 
