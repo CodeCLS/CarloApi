@@ -134,8 +134,6 @@ public class ResponseBuilder {
     }
 }
 @Retention(RetentionPolicy.RUNTIME)
-@Documented
-@Target(ElementType.FIELD)
 @interface Key {
     String value() default "key";
 
