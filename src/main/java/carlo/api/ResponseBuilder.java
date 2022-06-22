@@ -98,12 +98,12 @@ public class ResponseBuilder {
     public String create(){
         JsonObject jsonObject = new JsonObject();
         for (String key : values.keySet()){
+            System.out.println("reponse: " + values);
             if (values.get(key) == null || values.get(key).equals("")){
                 System.out.println("Value is null --> Unsuccessful Action");
                 isSuccessfulAction = false;
                 errorCode = ErrorManager.INVALID_API_KEY_CODE;
                 errorMsg = ErrorManager.INVALID_API_KEY_MSG;
-                break;
             }
             Object val = values.get(key);
             if (val instanceof Boolean){
