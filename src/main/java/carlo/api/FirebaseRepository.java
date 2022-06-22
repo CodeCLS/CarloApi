@@ -31,4 +31,8 @@ public class FirebaseRepository {
         });
 
     }
+
+    public void updateUser(User convertJson, Callback<User> callback) {
+        manager.updateUserDb(convertJson,callback);
+    }
 }

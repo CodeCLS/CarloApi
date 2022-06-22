@@ -5,9 +5,11 @@ import com.google.gson.Gson;
 import com.google.gson.JsonObject;
 
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.function.Consumer;
 
-public class User implements JsonAble {
+public class User implements JsonAble, HashAble {
     private String uid;
     private String firstName;
     private String secondName;
@@ -127,5 +129,20 @@ public class User implements JsonAble {
     @Override
     public String toJson() {
         return Converter.doTask(this);
+    }
+    @Override
+    public HashMap<String, Object> toHash() {
+        HashMap<String,Object> hashMap = new HashMap<>();
+        hashMap.put(FirebaseManager.UID,uid);
+        hashMap.put(FirebaseManager.FIRST_NAME,firstName);
+        hashMap.put(FirebaseManager.SECOND_NAME,secondName);
+        hashMap.put(FirebaseManager.EMAIL,email);
+        hashMap.put(FirebaseManager.PHONE,phone);
+        hashMap.put(FirebaseManager.BIRTHDAY,birthday);
+        hashMap.put(FirebaseManager.BILLING_TYPE,billingType);
+        hashMap.put(FirebaseManager.VEHICLE_IDS,vehicleIds);
+        hashMap.put(FirebaseManager.SMARTCAR_ID,smartCarId);
+
+        return hashMap;
     }
 }

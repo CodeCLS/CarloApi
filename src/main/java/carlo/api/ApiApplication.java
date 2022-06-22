@@ -454,6 +454,41 @@ public class ApiApplication {
         });
         return result;
     }
+    @RequestMapping(value = "/user/{uid}/update",method = RequestMethod.POST)
+    public DeferredResult<String> updateUser(
+            @RequestHeader("api-code") String apiCode,
+            @RequestHeader("access-token-smart-car") String token,
+            @PathVariable("uid") String uid,
+            @RequestBody String body)
+    {
+        //TODO do something with uid
+
+        ResponseBuilder responseBuilder = new ResponseBuilder();
+        DeferredResult<String> result = new DeferredResult<>();
+        if(manageApiCode(apiCode, responseBuilder)) {
+            result.setResult(responseBuilder.create());
+            return result;
+        }
+        firebaseRepository.updateUserApiCall();
+        firebaseRepository.updateUser((User)Converter.convertJson(body,User.class), new Callback<User>() {
+            @Override
+            public void value(User value) {
+                if (value != null){
+                    responseBuilder.add(ApiManager.USER,value.toJson());
+                    responseBuilder.setSuccessfulAction(true);
+                    result.setResult(responseBuilder.create());
+                }
+                else{
+                    result.setResult(ErrorManager.createErrorResponse(
+                            ErrorManager.INTERNAL_ERROR_KEY_CODE,
+                            ErrorManager.INTERNAL_ERROR_KEY_MSG));
+                }
+            }
+        });
+        return result;
+    }
+
+
 
     private Boolean manageApiCode(String apiCode, ResponseBuilder responseBuilder) {
         if(!apiHelper.isValid(apiCode)){
