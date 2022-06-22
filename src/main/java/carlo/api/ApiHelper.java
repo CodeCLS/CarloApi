@@ -1,7 +1,12 @@
 package carlo.api;
 
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
+
 public class ApiHelper {
-    private String[] apiCodes = {"oaiu3490S=?n´´03´´ß094ßn´´0"};
+    private ArrayList<String> apiCodes = new ArrayList<String>(Collections.singletonList("oaiu3490S=?n´´03´´ß094ßn´´0"));
+
     public boolean isValid(String apiCode) {
         return apiCodes.contains(apiCode);
     }
