@@ -73,10 +73,8 @@ public class ApiApplication {
         }
         AuthClient authClient = smartCarRepository.createAuthClient();
         Auth auth = smartCarRepository.exchangeAuth(token,authClient);
-        ParserTool<AuthClient> parserToolClient = new Converter();
-        String authClientJson = parserToolClient.doTask(authClient);
-        ParserTool<Auth> parserToolAuth = new Converter();
-        String authJson = parserToolAuth.doTask(auth);
+        String authClientJson = Converter.doTask(authClient);
+        String authJson = Converter.doTask(auth);
         responseBuilder.add(ApiManager.ACCESS_TOKEN,auth.getAccessToken());
         responseBuilder.add(ApiManager.AUTH_CLIENT,authClientJson);
         responseBuilder.add(ApiManager.AUTH,authJson);

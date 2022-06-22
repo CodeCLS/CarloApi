@@ -122,13 +122,14 @@ public class ResponseBuilder {
                 jsonObject.add(key,(JsonArray) val);
             }
         }
-        jsonObject.addProperty(ApiManager.SUCCESSFUL_ACTION, isSuccessfulAction);
 
         if (!isSuccessfulAction) {
-
+            jsonObject = new JsonObject();
             jsonObject.addProperty(ApiManager.ERROR_CODE, errorCode);
             jsonObject.addProperty(ApiManager.ERROR_MSG, errorMsg);
         }
+        jsonObject.addProperty(ApiManager.SUCCESSFUL_ACTION, isSuccessfulAction);
+
 
 
         return jsonObject.toString();
