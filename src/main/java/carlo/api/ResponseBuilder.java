@@ -6,6 +6,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 import java.lang.annotation.*;
+import java.lang.reflect.Field;
 import java.util.Arrays;
 import java.util.HashMap;
 
@@ -120,19 +121,35 @@ public class ResponseBuilder {
                 jsonObject.add(key,(JsonArray) val);
             }
         }
-        System.out.println("YELLO: " + isSuccessfulAction + " " + isSuccessfulAction.getClass() + " " + Arrays.toString(isSuccessfulAction.getClass().getAnnotations()));
-        String annotation = isSuccessfulAction.getClass().getAnnotation(Key.class).value();
-        jsonObject.addProperty(annotation,isSuccessfulAction);
+        String key = getKey(isSuccessfulAction);
+        jsonObject.addProperty(key, isSuccessfulAction);
 
         if (!isSuccessfulAction) {
-            jsonObject.addProperty(errorCode.getClass().getAnnotation(Key.class).value(), errorCode);
-            jsonObject.addProperty(errorMsg.getClass().getAnnotation(Key.class).value(), errorMsg);
+            String errorCodeKey = getKey(errorCode);
+            String errorMsgKey = getKey(errorMsg);
+
+            jsonObject.addProperty(errorCodeKey, errorCode);
+            jsonObject.addProperty(errorMsgKey, errorMsg);
         }
 
 
         return jsonObject.toString();
     }
+
+    private String getKey(Object obj) {
+        Field[] fields = obj.getClass().getFields();
+        for (Field field : fields) {
+            if (field.isAnnotationPresent(Key.class)) {
+                Key myAnn = field.getAnnotation(Key.class);
+                return myAnn.value();
+            }
+
+
+        }
+        return obj.getClass().getSimpleName();
+    }
 }
+@Target(ElementType.FIELD)
 @Retention(RetentionPolicy.RUNTIME)
 @interface Key {
     String value() default "key";
