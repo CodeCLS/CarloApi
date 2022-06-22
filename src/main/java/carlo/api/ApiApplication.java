@@ -50,13 +50,19 @@ public class ApiApplication {
         }
         firebaseRepository.updateUserApiCall();
         VehicleAttributes vehicleAttributes = smartCarRepository.getVehicleAttributes(token,id);
-        responseBuilder.add(ApiManager.VEHICLE_ID,vehicleAttributes.getId());
-        responseBuilder.add(ApiManager.VEHICLE_MAKE,vehicleAttributes.getMake());
-        responseBuilder.add(ApiManager.VEHICLE_MODEL,vehicleAttributes.getModel());
-        responseBuilder.add(ApiManager.VEHICLE_YEAR,vehicleAttributes.getYear());
-        responseBuilder.setSuccessfulAction(true);
-
-        result.setResult(responseBuilder.create());
+        if (vehicleAttributes != null) {
+            responseBuilder.add(ApiManager.VEHICLE_ID, vehicleAttributes.getId());
+            responseBuilder.add(ApiManager.VEHICLE_MAKE, vehicleAttributes.getMake());
+            responseBuilder.add(ApiManager.VEHICLE_MODEL, vehicleAttributes.getModel());
+            responseBuilder.add(ApiManager.VEHICLE_YEAR, vehicleAttributes.getYear());
+            responseBuilder.setSuccessfulAction(true);
+            result.setResult(responseBuilder.create());
+        }
+        else{
+            result.setResult(ErrorManager.createErrorResponse(
+                    ErrorManager.INVALID_API_KEY_CODE,
+                    ErrorManager.INVALID_API_KEY_MSG));
+        }
         return result;
     }
 
@@ -102,11 +108,18 @@ public class ApiApplication {
         }
         firebaseRepository.updateUserApiCall();
         VehicleLocation vehicleLocation = smartCarRepository.getVehicleLocation(token,id);
-        responseBuilder.add(ApiManager.LATITUDE,vehicleLocation.getLatitude());
-        responseBuilder.add(ApiManager.LONGITUDE,vehicleLocation.getLongitude());
-        responseBuilder.setSuccessfulAction(true);
+        if (vehicleLocation != null) {
+            responseBuilder.add(ApiManager.LATITUDE, vehicleLocation.getLatitude());
+            responseBuilder.add(ApiManager.LONGITUDE, vehicleLocation.getLongitude());
+            responseBuilder.setSuccessfulAction(true);
+            result.setResult(responseBuilder.create());
+        }
+        else{
+            result.setResult(ErrorManager.createErrorResponse(
+                    ErrorManager.INVALID_API_KEY_CODE,
+                    ErrorManager.INVALID_API_KEY_MSG));
+        }
 
-        result.setResult(responseBuilder.create());
         return result;
     }
     @RequestMapping(value = "/user/{uid}/vehicle/",method = RequestMethod.GET)
@@ -125,9 +138,16 @@ public class ApiApplication {
         }
         firebaseRepository.updateUserApiCall();
         VehicleIds vehicleIds = smartCarRepository.getVehicles(token);
-        responseBuilder.add(ApiManager.VEHICLE_IDS,vehicleIds.getVehicleIds());
-        responseBuilder.setSuccessfulAction(true);
-        result.setResult(responseBuilder.create());
+        if (vehicleIds != null) {
+            responseBuilder.add(ApiManager.VEHICLE_IDS, vehicleIds.getVehicleIds());
+            responseBuilder.setSuccessfulAction(true);
+            result.setResult(responseBuilder.create());
+        }
+        else{
+            result.setResult(ErrorManager.createErrorResponse(
+                    ErrorManager.INVALID_API_KEY_CODE,
+                    ErrorManager.INVALID_API_KEY_MSG));
+        }
         return result;
     }
     @RequestMapping(value = "/user/{uid}/refresh/",method = RequestMethod.GET)
@@ -188,9 +208,16 @@ public class ApiApplication {
         }
         firebaseRepository.updateUserApiCall();
         VehicleOdometer vehicleOdometer = smartCarRepository.getVehicleOdometer(token,id);
-        responseBuilder.add(ApiManager.ODOMETER,vehicleOdometer.getDistance());
-        responseBuilder.setSuccessfulAction(true);
-        result.setResult(responseBuilder.create());
+        if (vehicleOdometer != null) {
+            responseBuilder.add(ApiManager.ODOMETER, vehicleOdometer.getDistance());
+            responseBuilder.setSuccessfulAction(true);
+            result.setResult(responseBuilder.create());
+        }
+        else{
+            result.setResult(ErrorManager.createErrorResponse(
+                    ErrorManager.INVALID_API_KEY_CODE,
+                    ErrorManager.INVALID_API_KEY_MSG));
+        }
         return result;
     }
 
@@ -211,9 +238,16 @@ public class ApiApplication {
         }
         firebaseRepository.updateUserApiCall();
         String vin = smartCarRepository.getVehicleVin(token,id);
-        responseBuilder.add(ApiManager.VIN,vin);
-        responseBuilder.setSuccessfulAction(true);
-        result.setResult(responseBuilder.create());
+        if (vin != null) {
+            responseBuilder.add(ApiManager.VIN, vin);
+            responseBuilder.setSuccessfulAction(true);
+            result.setResult(responseBuilder.create());
+        }
+        else{
+            result.setResult(ErrorManager.createErrorResponse(
+                    ErrorManager.INVALID_API_KEY_CODE,
+                    ErrorManager.INVALID_API_KEY_MSG));
+        }
         return result;
     }
     @RequestMapping(value = "/user/{uid}/vehicle/{id}/range",method = RequestMethod.GET)
@@ -233,17 +267,24 @@ public class ApiApplication {
         }
         firebaseRepository.updateUserApiCall();
         Object range = smartCarRepository.getVehicleRange(token,id);
-        if (range instanceof VehicleBattery){
-            responseBuilder.add(ApiManager.RANGE_PERCENT,((VehicleBattery) range).getPercentRemaining());
-            responseBuilder.add(ApiManager.RANGE_RADIUS,((VehicleBattery) range).getRange());
-            responseBuilder.add(ApiManager.RANGE_AMOUNT,"Unavailable");
-        }else if(range instanceof VehicleFuel){
-            responseBuilder.add(ApiManager.RANGE_PERCENT,((VehicleFuel) range).getPercentRemaining());
-            responseBuilder.add(ApiManager.RANGE_RADIUS,((VehicleFuel) range).getRange());
-            responseBuilder.add(ApiManager.RANGE_AMOUNT,((VehicleFuel) range).getAmountRemaining());
+        if (range != null) {
+            if (range instanceof VehicleBattery) {
+                responseBuilder.add(ApiManager.RANGE_PERCENT, ((VehicleBattery) range).getPercentRemaining());
+                responseBuilder.add(ApiManager.RANGE_RADIUS, ((VehicleBattery) range).getRange());
+                responseBuilder.add(ApiManager.RANGE_AMOUNT, "Unavailable");
+            } else if (range instanceof VehicleFuel) {
+                responseBuilder.add(ApiManager.RANGE_PERCENT, ((VehicleFuel) range).getPercentRemaining());
+                responseBuilder.add(ApiManager.RANGE_RADIUS, ((VehicleFuel) range).getRange());
+                responseBuilder.add(ApiManager.RANGE_AMOUNT, ((VehicleFuel) range).getAmountRemaining());
+            }
+            responseBuilder.setSuccessfulAction(true);
+            result.setResult(responseBuilder.create());
         }
-        responseBuilder.setSuccessfulAction(true);
-        result.setResult(responseBuilder.create());
+        else{
+            result.setResult(ErrorManager.createErrorResponse(
+                    ErrorManager.INVALID_API_KEY_CODE,
+                    ErrorManager.INVALID_API_KEY_MSG));
+        }
         return result;
     }
     @RequestMapping(value = "/user/{uid}/vehicle/{id}/lock",method = RequestMethod.GET)
@@ -263,9 +304,16 @@ public class ApiApplication {
         }
         firebaseRepository.updateUserApiCall();
         ActionResponse actionResponse = smartCarRepository.lock(token,id);
-        responseBuilder.add(ApiManager.ACTION_MSG,actionResponse.getMessage());
-        responseBuilder.setSuccessfulAction(actionResponse.getStatus().equals("success"));
-        result.setResult(responseBuilder.create());
+        if (actionResponse != null) {
+            responseBuilder.add(ApiManager.ACTION_MSG, actionResponse.getMessage());
+            responseBuilder.setSuccessfulAction(actionResponse.getStatus().equals("success"));
+            result.setResult(responseBuilder.create());
+        }
+        else{
+            result.setResult(ErrorManager.createErrorResponse(
+                    ErrorManager.INVALID_API_KEY_CODE,
+                    ErrorManager.INVALID_API_KEY_MSG));
+        }
         return result;
     }
 
@@ -286,9 +334,16 @@ public class ApiApplication {
         }
         firebaseRepository.updateUserApiCall();
         ActionResponse actionResponse = smartCarRepository.unlock(token,id);
-        responseBuilder.add(ApiManager.ACTION_MSG,actionResponse.getMessage());
-        responseBuilder.setSuccessfulAction(actionResponse.getStatus().equals("success"));
-        result.setResult(responseBuilder.create());
+        if (actionResponse != null) {
+            responseBuilder.add(ApiManager.ACTION_MSG, actionResponse.getMessage());
+            responseBuilder.setSuccessfulAction(actionResponse.getStatus().equals("success"));
+            result.setResult(responseBuilder.create());
+        }
+        else{
+            result.setResult(ErrorManager.createErrorResponse(
+                    ErrorManager.INVALID_API_KEY_CODE,
+                    ErrorManager.INVALID_API_KEY_MSG));
+        }
         return result;
     }
     @RequestMapping(value = "/user/{uid}/vehicle/{id}/is_electric",method = RequestMethod.GET)
@@ -308,15 +363,22 @@ public class ApiApplication {
         }
         firebaseRepository.updateUserApiCall();
         Object range = smartCarRepository.getVehicleRange(token,id);
-        if (range instanceof VehicleBattery){
-            responseBuilder.add(ApiManager.IS_ELECTRIC,true);
+        if (range != null) {
+            if (range instanceof VehicleBattery) {
+                responseBuilder.add(ApiManager.IS_ELECTRIC, true);
 
-        }else if(range instanceof VehicleFuel){
-            responseBuilder.add(ApiManager.IS_ELECTRIC,false);
+            } else if (range instanceof VehicleFuel) {
+                responseBuilder.add(ApiManager.IS_ELECTRIC, false);
 
+            }
+            responseBuilder.setSuccessfulAction(true);
+            result.setResult(responseBuilder.create());
         }
-        responseBuilder.setSuccessfulAction(true);
-        result.setResult(responseBuilder.create());
+        else{
+            result.setResult(ErrorManager.createErrorResponse(
+                    ErrorManager.INVALID_API_KEY_CODE,
+                    ErrorManager.INVALID_API_KEY_MSG));
+        }
         return result;
     }
 
