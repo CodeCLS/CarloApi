@@ -38,7 +38,7 @@ public class ApiApplication {
     public DeferredResult<String> getVehicleAttributes(
             @RequestHeader("api-code") String apiCode,
             @RequestHeader("access-token-smart-car") String token,
-            @PathVariable String uid,
+            @PathVariable("uid") String uid,
             @PathVariable String id)
     {
         //TODO do something with uid
@@ -65,7 +65,7 @@ public class ApiApplication {
     @RequestMapping(value = "user/{uid}/exchange/auth",method = RequestMethod.GET)
     public DeferredResult<String> exchangeAuthCode(@RequestHeader("api-code") String apiCode,
                                                    @RequestHeader("access-token-smart-car") String token,
-                                                   @PathVariable String uid) {
+                                                   @PathVariable("uid") String uid) {
         ResponseBuilder responseBuilder = new ResponseBuilder();
         DeferredResult<String> result = new DeferredResult<>();
         if(manageApiCode(apiCode, responseBuilder)) {
@@ -92,7 +92,7 @@ public class ApiApplication {
     public DeferredResult<String> getLocation(
             @RequestHeader("api-code") String apiCode,
             @RequestHeader("access-token-smart-car") String token,
-            @PathVariable String uid,
+            @PathVariable("uid") String uid,
             @PathVariable String id)
     {
         //TODO do something with uid
@@ -116,7 +116,7 @@ public class ApiApplication {
     public DeferredResult<String> getLocation(
             @RequestHeader("api-code") String apiCode,
             @RequestHeader("access-token-smart-car") String token,
-            @PathVariable String uid)
+            @PathVariable("uid") String uid)
     {
         //TODO do something with uid
 
@@ -137,7 +137,7 @@ public class ApiApplication {
     public DeferredResult<String> refresh(
             @RequestHeader("api-code") String apiCode,
             @RequestHeader("access-token-smart-car") String token,
-            @PathVariable String uid,
+            @PathVariable("uid") String uid,
             @RequestParam(value = "client", defaultValue = "null") String client,
             @RequestParam(value = "auth", defaultValue = "null") String auth)
     {
@@ -163,7 +163,7 @@ public class ApiApplication {
     public DeferredResult<String> validateSmartCarToken(
             @RequestHeader("api-code") String apiCode,
             @RequestHeader("access-token-smart-car") String token,
-            @PathVariable String uid)
+            @PathVariable("uid") String uid)
     {
         //TODO do something with uid
         ResponseBuilder responseBuilder = new ResponseBuilder();
@@ -178,7 +178,7 @@ public class ApiApplication {
     public DeferredResult<String> getOdometer(
             @RequestHeader("api-code") String apiCode,
             @RequestHeader("access-token-smart-car") String token,
-            @PathVariable String uid,
+            @PathVariable("uid") String uid,
             @PathVariable String id)
     {
         //TODO do something with uid
@@ -201,7 +201,7 @@ public class ApiApplication {
     public DeferredResult<String> getVin(
             @RequestHeader("api-code") String apiCode,
             @RequestHeader("access-token-smart-car") String token,
-            @PathVariable String uid,
+            @PathVariable("uid") String uid,
             @PathVariable String id)
     {
         //TODO do something with uid
@@ -223,7 +223,7 @@ public class ApiApplication {
     public DeferredResult<String> getElectricRange(
             @RequestHeader("api-code") String apiCode,
             @RequestHeader("access-token-smart-car") String token,
-            @PathVariable String uid,
+            @PathVariable("uid") String uid,
             @PathVariable String id)
     {
         //TODO do something with uid
@@ -253,7 +253,7 @@ public class ApiApplication {
     public DeferredResult<String> lock(
             @RequestHeader("api-code") String apiCode,
             @RequestHeader("access-token-smart-car") String token,
-            @PathVariable String uid,
+            @PathVariable("uid") String uid,
             @PathVariable String id)
     {
         //TODO do something with uid
@@ -276,7 +276,7 @@ public class ApiApplication {
     public DeferredResult<String> unlock(
             @RequestHeader("api-code") String apiCode,
             @RequestHeader("access-token-smart-car") String token,
-            @PathVariable String uid,
+            @PathVariable("uid") String uid,
             @PathVariable String id)
     {
         //TODO do something with uid
@@ -298,7 +298,7 @@ public class ApiApplication {
     public DeferredResult<String> isElectric(
             @RequestHeader("api-code") String apiCode,
             @RequestHeader("access-token-smart-car") String token,
-            @PathVariable String uid,
+            @PathVariable("uid") String uid,
             @PathVariable String id)
     {
         //TODO do something with uid
