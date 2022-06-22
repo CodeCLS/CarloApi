@@ -326,9 +326,9 @@ public class ApiApplication {
             responseBuilder.setSuccessfulAction(false);
             responseBuilder.setErrorCode(ErrorManager.INVALID_API_KEY_CODE);
             responseBuilder.setErrorMsg(ErrorManager.INVALID_API_KEY_MSG);
-            return false;
+            return true;
 
         }
-        return true;
+        return false;
     }
 }
