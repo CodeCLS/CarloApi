@@ -150,10 +150,4 @@ public class ResponseBuilder {
         return obj.getClass().getSimpleName();
     }
 }
-@Target(ElementType.FIELD)
-@Retention(RetentionPolicy.RUNTIME)
-@interface Key {
-    String value() default "key";
-
-}
 
