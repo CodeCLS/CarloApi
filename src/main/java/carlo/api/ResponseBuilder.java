@@ -5,10 +5,7 @@ import com.google.gson.JsonObject;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
-import java.lang.annotation.ElementType;
-import java.lang.annotation.Retention;
-import java.lang.annotation.RetentionPolicy;
-import java.lang.annotation.Target;
+import java.lang.annotation.*;
 import java.util.HashMap;
 
 public class ResponseBuilder {
@@ -122,20 +119,21 @@ public class ResponseBuilder {
                 jsonObject.add(key,(JsonArray) val);
             }
         }
-
-        jsonObject.addProperty(isSuccessfulAction.getClass().getDeclaredAnnotation(Key.class).value(),isSuccessfulAction);
+        String annotation = isSuccessfulAction.getClass().getAnnotation(Key.class).value();
+        jsonObject.addProperty(annotation,isSuccessfulAction);
 
         if (!isSuccessfulAction) {
-            jsonObject.addProperty(errorCode.getClass().getDeclaredAnnotation(Key.class).value(), errorCode);
-            jsonObject.addProperty(errorMsg.getClass().getDeclaredAnnotation(Key.class).value(), errorMsg);
+            jsonObject.addProperty(errorCode.getClass().getAnnotation(Key.class).value(), errorCode);
+            jsonObject.addProperty(errorMsg.getClass().getAnnotation(Key.class).value(), errorMsg);
         }
 
 
         return jsonObject.toString();
     }
 }
-@Target(ElementType.FIELD)
 @Retention(RetentionPolicy.RUNTIME)
+@Documented
+@Target(ElementType.FIELD)
 @interface Key {
     String value() default "key";
 
