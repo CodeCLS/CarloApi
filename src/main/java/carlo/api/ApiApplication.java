@@ -1,19 +1,12 @@
 package carlo.api;
 
 import com.google.gson.Gson;
-import com.google.gson.JsonArray;
-import com.google.gson.JsonObject;
 import com.smartcar.sdk.*;
 import com.smartcar.sdk.data.*;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.context.request.async.DeferredResult;
-
-import javax.xml.bind.JAXBException;
-import javax.xml.stream.XMLStreamException;
-import java.util.ArrayList;
-import java.util.List;
 
 @RestController
 @SpringBootApplication
@@ -150,7 +143,7 @@ public class ApiApplication {
         }
         return result;
     }
-    @RequestMapping(value = "/user/{uid}/refresh/",method = RequestMethod.GET)
+    @RequestMapping(value = "/user/{uid}/refresh/",method = RequestMethod.POST)
     public DeferredResult<String> refresh(
             @RequestHeader("api-code") String apiCode,
             @RequestHeader("access-token-smart-car") String token,
@@ -197,6 +190,67 @@ public class ApiApplication {
             result.setResult(responseBuilder.create());
             return result;
         }
+        return result;
+    }
+    @RequestMapping(value = "/user/{uid}/vehicle/{id}/permissions",method = RequestMethod.GET)
+    public DeferredResult<String> getPermissions(
+            @RequestHeader("api-code") String apiCode,
+            @RequestHeader("access-token-smart-car") String token,
+            @PathVariable("uid") String uid,
+            @PathVariable String id)
+    {
+        //TODO do something with uid
+
+        ResponseBuilder responseBuilder = new ResponseBuilder();
+        DeferredResult<String> result = new DeferredResult<>();
+        if(manageApiCode(apiCode, responseBuilder)) {
+            result.setResult(responseBuilder.create());
+            return result;
+        }
+        firebaseRepository.updateUserApiCall();
+        ApplicationPermissions permissions = smartCarRepository.getVehiclePermissions(token,id);
+        if (permissions != null) {
+            responseBuilder.add(ApiManager.PERMISSIONS,permissions.getPermissions());
+            responseBuilder.setSuccessfulAction(true);
+            result.setResult(responseBuilder.create());
+        }
+        else{
+            result.setResult(ErrorManager.createErrorResponse(
+                    ErrorManager.INTERNAL_ERROR_KEY_CODE,
+                    ErrorManager.INTERNAL_ERROR_KEY_MSG));
+        }
+
+        return result;
+    }
+    @RequestMapping(value = "/user/{uid}/vehicle/{id}/batch",method = RequestMethod.GET)
+    public DeferredResult<String> getBatchWithPermissions(
+            @RequestHeader("api-code") String apiCode,
+            @RequestHeader("access-token-smart-car") String token,
+            @PathVariable("uid") String uid,
+            @PathVariable("id")String id,
+            @RequestBody String body)
+    {
+        //TODO do something with uid
+        String[] paths =new Converter().getListFromJson(body);
+
+        ResponseBuilder responseBuilder = new ResponseBuilder();
+        DeferredResult<String> result = new DeferredResult<>();
+        if(manageApiCode(apiCode, responseBuilder)) {
+            result.setResult(responseBuilder.create());
+            return result;
+        }
+        firebaseRepository.updateUserApiCall();
+        BatchResponse response = smartCarRepository.getBatch(token,id,paths);
+
+        if (response != null) {
+            result.setResult(responseBuilder.createBatchResponse(response));
+        }
+        else{
+            result.setResult(ErrorManager.createErrorResponse(
+                    ErrorManager.INTERNAL_ERROR_KEY_CODE,
+                    ErrorManager.INTERNAL_ERROR_KEY_MSG));
+        }
+
         return result;
     }
     @RequestMapping(value = "/user/{uid}/vehicle/{id}/odometer",method = RequestMethod.GET)
@@ -421,7 +475,7 @@ public class ApiApplication {
         });
         return result;
     }
-    @RequestMapping(value = "/user/{uid}",method = RequestMethod.POST)
+    @RequestMapping(value = "/user/",method = RequestMethod.POST)
     public DeferredResult<String> addUser(
             @RequestHeader("api-code") String apiCode,
             @RequestHeader("access-token-smart-car") String token,

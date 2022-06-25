@@ -2,6 +2,7 @@ package carlo.api;
 
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
+import com.smartcar.sdk.data.BatchResponse;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
@@ -135,5 +136,10 @@ public class ResponseBuilder {
         return jsonObject.toString();
     }
 
+    public String createBatchResponse(BatchResponse response) {
+        JsonObject jsonObject = new JsonObject();
+        jsonObject.addProperty(ApiManager.BATCH,response.toString());
+        return jsonObject.toString();
+    }
 }
 

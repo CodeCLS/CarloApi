@@ -131,4 +131,22 @@ public class SmartCarRepository {
             return null;
         }
     }
+
+    public ApplicationPermissions getVehiclePermissions(String token, String id) {
+        try {
+            return getVehicle(token,id).permissions();
+        } catch (SmartcarException e) {
+            e.printStackTrace();
+            return null;
+        }
+    }
+
+    public BatchResponse getBatch(String token, String id, String[] paths) {
+        try {
+            return getVehicle(token,id).batch(paths);
+        } catch (SmartcarException e) {
+            e.printStackTrace();
+            return null;
+        }
+    }
 }

@@ -22,4 +22,6 @@ public class ApiManager {
     public static final String ERROR_MSG = "error_msg";
     public static final String ERROR_CODE = "error_code";
     public static final String USER = "user";
+    public static final String PERMISSIONS = "permissions";
+    public static final String BATCH = "batch";
 }
