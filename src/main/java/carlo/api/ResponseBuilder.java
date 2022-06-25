@@ -12,11 +12,8 @@ import java.util.Arrays;
 import java.util.HashMap;
 
 public class ResponseBuilder {
-    @Key("is_successful_action")
     private Boolean isSuccessfulAction = true;
-    @Key("error_code")
     private Integer errorCode;
-    @Key("error_msg")
     private String errorMsg;
     private HashMap<String,Object> values = new HashMap<>();
 
