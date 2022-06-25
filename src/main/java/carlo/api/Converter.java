@@ -25,7 +25,7 @@ public class Converter implements BatchPaths {
 
     @Override
     public String[] getListFromJson(String body) {
-        JsonArray array = new JsonObject().getAsJsonArray(body);
+        JsonArray array = new Gson().fromJson(body,JsonArray.class);
         ArrayList<String> paths = new ArrayList<>();
         for (JsonElement jsonObject: array ){
             paths.add(jsonObject.getAsString());
