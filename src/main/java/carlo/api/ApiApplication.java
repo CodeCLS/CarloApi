@@ -241,7 +241,7 @@ public class ApiApplication {
         }
         firebaseRepository.updateUserApiCall();
         BatchResponse response = smartCarRepository.getBatch(token,id,paths);
-
+//test
         if (response != null) {
             result.setResult(responseBuilder.createBatchResponse(response));
         }
