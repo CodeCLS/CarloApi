@@ -31,21 +31,27 @@ public class Converter implements BatchPaths {
         String type = object.get("type").toString();
         switch (type){
             case "PERMISSIONS":
+                System.out.println("PERMISSIONS");
                 ApplicationPermissions applicationPermissions=
                         new SmartCarRepository().getVehiclePermissions(token,id);
                return applicationPermissions.getPermissions();
             case "SELECTION":
+                System.out.println("SELECTION");
+
                 ArrayList<String> paths = new ArrayList<>();
                 for (JsonElement jsonObject: object.getAsJsonArray(ApiManager.SELECTION_BATCH) ){
                     paths.add(jsonObject.getAsString());
                 }
                 return (String[])paths.toArray();
             case "ALL":
+                System.out.println("ALL");
                 return (String[])ApiManager.BATCH_ARRAY_ALL.toArray();
 
 
 
         }
+        System.out.println("NONE");
+
         return null;
     }
 }
