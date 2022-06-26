@@ -232,6 +232,7 @@ public class ApiApplication {
     {
         //TODO do something with uid
         String[] paths =new Converter().getListFromJson(body);
+        System.out.println("paths" + paths);
 
         ResponseBuilder responseBuilder = new ResponseBuilder();
         DeferredResult<String> result = new DeferredResult<>();

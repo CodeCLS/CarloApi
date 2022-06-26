@@ -144,7 +144,7 @@ public class SmartCarRepository {
     public BatchResponse getBatch(String token, String id, String[] paths) {
         try {
             return getVehicle(token,id).batch(paths);
-        } catch (SmartcarException e) {
+        } catch (Exception e) {
             e.printStackTrace();
             return null;
         }
