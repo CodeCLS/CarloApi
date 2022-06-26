@@ -29,6 +29,7 @@ public class Converter implements BatchPaths {
     public String[] getListFromJson(String token, String id,String body) {
         JsonObject object = new Gson().fromJson(body,JsonObject.class);
         String type = object.get("type").toString();
+        System.out.println("type" + type);
         switch (type){
             case "PERMISSIONS":
                 System.out.println("PERMISSIONS");
