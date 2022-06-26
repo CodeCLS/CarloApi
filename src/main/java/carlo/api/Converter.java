@@ -29,6 +29,7 @@ public class Converter implements BatchPaths {
     public String[] getListFromJson(String token, String id,String body) {
         JsonObject object = new Gson().fromJson(body,JsonObject.class);
         String type = object.get("type").toString();
+        type = type.replace("\"","");
         System.out.println("type" + type);
         if (type.equals("PERMISSIONS")) {
             System.out.println("PERMISSIONS");
@@ -50,6 +51,7 @@ public class Converter implements BatchPaths {
             return (String[]) ApiManager.BATCH_ARRAY_ALL.toArray();
         }
         else {
+            System.out.println("None");
             return null;
         }
 
