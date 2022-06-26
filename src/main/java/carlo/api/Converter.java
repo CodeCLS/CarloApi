@@ -41,7 +41,7 @@ public class Converter implements BatchPaths, PermissionsConverter {
                 paths.add(convert(s));
             }
 
-            return (String[])paths.toArray();
+            return paths.stream().toArray(size -> new String[paths.size()]);
         }
         else if(type.equals("SELECTION")) {
             System.out.println("SELECTION");
@@ -50,7 +50,7 @@ public class Converter implements BatchPaths, PermissionsConverter {
             for (JsonElement jsonObject: object.getAsJsonArray(ApiManager.SELECTION_BATCH) ){
                 paths.add(jsonObject.getAsString());
             }
-            return (String[])paths.toArray();
+            return paths.stream().toArray(size -> new String[paths.size()]);
         }
         else if(type.equals("ALL") ){
             System.out.println("ALL");
