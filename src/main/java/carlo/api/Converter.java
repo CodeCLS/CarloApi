@@ -53,6 +53,5 @@ public class Converter implements BatchPaths {
             return null;
         }
 
-        return null;
     }
 }
