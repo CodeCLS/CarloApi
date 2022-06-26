@@ -1,5 +1,12 @@
 package carlo.api;
 
+import java.awt.*;
+import java.lang.reflect.Array;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.List;
+
 public class ApiManager {
     public static final String VEHICLE_ID = "vehicle_id";
     public static final String VEHICLE_MAKE = "vehicle_make";
@@ -24,4 +31,6 @@ public class ApiManager {
     public static final String USER = "user";
     public static final String PERMISSIONS = "permissions";
     public static final String BATCH = "batch";
+    public static final List<String> BATCH_ARRAY_ALL = Arrays.asList("/location", "/odometer", "/attributes");
+    public static final String SELECTION_BATCH = "selection";
 }
