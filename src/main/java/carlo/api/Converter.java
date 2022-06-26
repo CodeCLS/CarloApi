@@ -38,7 +38,9 @@ public class Converter implements BatchPaths, PermissionsConverter {
 
             ArrayList<String> paths = new ArrayList<>();
             for(String s : applicationPermissions.getPermissions()){
-                paths.add(convert(s));
+                String i = convert(s);
+                if(i!= null)
+                    paths.add(i);
             }
 
             return paths.stream().toArray(size -> new String[paths.size()]);
