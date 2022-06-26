@@ -10,7 +10,7 @@ import com.smartcar.sdk.data.Auth;
 import java.util.ArrayList;
 import java.util.Arrays;
 
-public class Converter implements BatchPaths {
+public class Converter implements BatchPaths, PermissionsConverter {
 
     public static String doTask(Object value) {
         Gson gson = new Gson();
@@ -35,7 +35,13 @@ public class Converter implements BatchPaths {
             System.out.println("PERMISSIONS");
             ApplicationPermissions applicationPermissions=
                     new SmartCarRepository().getVehiclePermissions(token,id);
-            return applicationPermissions.getPermissions();
+
+            ArrayList<String> paths = new ArrayList<>();
+            for(String s : applicationPermissions.getPermissions()){
+                paths.add(convert(s));
+            }
+
+            return (String[])paths.toArray();
         }
         else if(type.equals("SELECTION")) {
             System.out.println("SELECTION");
@@ -55,5 +61,24 @@ public class Converter implements BatchPaths {
             return null;
         }
 
+    }
+
+    @Override
+    public String convert(String s) {
+        switch(s){
+            case "read_vehicle_info":
+                return "/";
+            case "read_location":
+                return "/location";
+            case "read_vin":
+                return "/vin";
+            case "read_odometer":
+                return "/odometer";
+            case "control_security":
+                break;
+            case "read_fuel":
+                return "/fuel";
+        }
+        return null;
     }
 }
