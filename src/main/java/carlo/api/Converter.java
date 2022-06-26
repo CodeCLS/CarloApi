@@ -33,9 +33,9 @@ public class Converter implements BatchPaths {
                 for (JsonElement jsonObject: object.getAsJsonArray(ApiManager.SELECTION_BATCH) ){
                     paths.add(jsonObject.getAsString());
                 }
-                return paths.toArray(new String[0]);
+                return (String[])paths.toArray();
             case "ALL":
-                return ApiManager.BATCH_ARRAY_ALL.toArray(new String[0]);
+                return (String[])ApiManager.BATCH_ARRAY_ALL.toArray();
 
 
 
