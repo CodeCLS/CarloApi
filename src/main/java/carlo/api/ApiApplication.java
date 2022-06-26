@@ -8,6 +8,8 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.context.request.async.DeferredResult;
 
+import java.util.Arrays;
+
 @RestController
 @SpringBootApplication
 public class ApiApplication {
@@ -232,7 +234,7 @@ public class ApiApplication {
     {
         //TODO do something with uid
         String[] paths =new Converter().getListFromJson(body);
-        System.out.println("paths" + paths);
+        System.out.println("paths" + Arrays.toString(paths));
 
         ResponseBuilder responseBuilder = new ResponseBuilder();
         DeferredResult<String> result = new DeferredResult<>();
