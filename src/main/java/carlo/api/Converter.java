@@ -4,9 +4,11 @@ import com.google.gson.Gson;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
+import com.smartcar.sdk.data.ApplicationPermissions;
 import com.smartcar.sdk.data.Auth;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 
 public class Converter implements BatchPaths {
 
@@ -24,10 +26,14 @@ public class Converter implements BatchPaths {
     }
 
     @Override
-    public String[] getListFromJson(String body) {
+    public String[] getListFromJson(String token, String id,String body) {
         JsonObject object = new Gson().fromJson(body,JsonObject.class);
         String type = object.get("type").toString();
         switch (type){
+            case "PERMISSIONS":
+                ApplicationPermissions applicationPermissions=
+                        new SmartCarRepository().getVehiclePermissions(token,id);
+               return applicationPermissions.getPermissions();
             case "SELECTION":
                 ArrayList<String> paths = new ArrayList<>();
                 for (JsonElement jsonObject: object.getAsJsonArray(ApiManager.SELECTION_BATCH) ){

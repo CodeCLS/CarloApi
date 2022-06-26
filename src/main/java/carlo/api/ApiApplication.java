@@ -233,7 +233,7 @@ public class ApiApplication {
             @RequestBody String body)
     {
         //TODO do something with uid
-        String[] paths =new Converter().getListFromJson(body);
+        String[] paths =new Converter().getListFromJson(token,id,body);
         System.out.println("paths" + Arrays.toString(paths));
 
         ResponseBuilder responseBuilder = new ResponseBuilder();
