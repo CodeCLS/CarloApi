@@ -77,6 +77,8 @@ public class ApiApplication {
         String authClientJson = Converter.doTask(authClient);
         String authJson = Converter.doTask(auth);
         responseBuilder.add(ApiManager.ACCESS_TOKEN,auth.getAccessToken());
+        responseBuilder.add(ApiManager.REFRESH_TOKEN,auth.getRefreshToken());
+
         responseBuilder.add(ApiManager.AUTH_CLIENT,authClientJson);
         responseBuilder.add(ApiManager.AUTH,authJson);
         responseBuilder.setSuccessfulAction(true);

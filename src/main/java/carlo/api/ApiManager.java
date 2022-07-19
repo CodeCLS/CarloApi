@@ -33,4 +33,5 @@ public class ApiManager {
     public static final String BATCH = "batch";
     public static final List<String> BATCH_ARRAY_ALL = Arrays.asList("/location", "/odometer", "/attributes");
     public static final String SELECTION_BATCH = "selection";
+    public static final String REFRESH_TOKEN = "refresh_token";
 }
