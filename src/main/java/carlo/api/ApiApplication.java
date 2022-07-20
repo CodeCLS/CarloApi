@@ -190,10 +190,10 @@ public class ApiApplication {
         //TODO do something with uid
         ResponseBuilder responseBuilder = new ResponseBuilder();
         DeferredResult<String> result = new DeferredResult<>();
-        if(manageApiCode(apiCode, responseBuilder)) {
-            result.setResult(responseBuilder.create());
-            return result;
+        if(!manageApiCode(apiCode, responseBuilder)) {
+            responseBuilder.setSuccessfulAction(false);
         }
+        result.setResult(responseBuilder.create());
         return result;
     }
     @RequestMapping(value = "/user/{uid}/vehicle/{id}/permissions",method = RequestMethod.GET)
