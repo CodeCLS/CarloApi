@@ -490,7 +490,6 @@ public class ApiApplication {
     public DeferredResult<String> addUser(
             @RequestHeader("api-code") String apiCode,
             @RequestHeader("access-token-smart-car") String token,
-            @PathVariable("uid") String uid,
             @RequestBody String body)
     {
         //TODO do something with uid
@@ -502,7 +501,7 @@ public class ApiApplication {
             return result;
         }
         firebaseRepository.updateUserApiCall();
-        firebaseRepository.addUser((User)Converter.convertJson(body,User.class), new Callback<User>() {
+        firebaseRepository.addUser((User)Converter.convertUser(body), new Callback<User>() {
             @Override
             public void value(User value) {
                 if (value != null){

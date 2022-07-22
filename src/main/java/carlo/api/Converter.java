@@ -25,6 +25,16 @@ public class Converter implements BatchPaths, PermissionsConverter {
         return gson.fromJson(body,userClass);
     }
 
+    public static User convertUser(String body) {
+        JsonObject jsonObject = (JsonObject) convertJson(body, JsonObject.class);
+        User user = new User();
+        user.setFirstName(jsonObject.get(ApiManager.FIRST_NAME).getAsString());
+        user.setSecondName(jsonObject.get(ApiManager.SECOND_NAME).getAsString());
+        user.setPhone(jsonObject.get(ApiManager.PHONE).getAsString());
+        user.setEmail(jsonObject.get(ApiManager.EMAIL).getAsString());
+        return user;
+    }
+
     @Override
     public String[] getListFromJson(String token, String id,String body) {
         JsonObject object = new Gson().fromJson(body,JsonObject.class);
