@@ -191,8 +191,15 @@ public class ApiApplication {
         ResponseBuilder responseBuilder = new ResponseBuilder();
         DeferredResult<String> result = new DeferredResult<>();
         if(!manageApiCode(apiCode, responseBuilder)) {
-            responseBuilder.setSuccessfulAction(false);
+            try {
+                Smartcar.getUser(token);
+            } catch (SmartcarException e) {
+                e.printStackTrace();
+                responseBuilder.setSuccessfulAction(false);
+            }
         }
+        else
+            responseBuilder.setSuccessfulAction(false);
         result.setResult(responseBuilder.create());
         return result;
     }
