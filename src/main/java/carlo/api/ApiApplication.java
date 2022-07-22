@@ -55,8 +55,8 @@ public class ApiApplication {
         }
         else{
             result.setResult(ErrorManager.createErrorResponse(
-                    ErrorManager.INTERNAL_ERROR_KEY_CODE,
-                    ErrorManager.INTERNAL_ERROR_KEY_MSG));
+                    ErrorManager.SMART_CAR_ERROR_KEY_CODE,
+                    ErrorManager.SMART_CAR_ERROR_KEY_MSG));
         }
         return result;
     }
