@@ -2,6 +2,7 @@ package carlo.api;
 
 import com.google.firebase.database.DataSnapshot;
 import com.google.gson.Gson;
+import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 
 import java.util.ArrayList;
@@ -128,6 +129,22 @@ public class User implements JsonAble, HashAble {
 
     @Override
     public String toJson() {
+        JsonObject jsonObject = new JsonObject();
+        jsonObject.addProperty(FirebaseManager.UID,uid);
+        jsonObject.addProperty(FirebaseManager.FIRST_NAME,firstName);
+        jsonObject.addProperty(FirebaseManager.SECOND_NAME,secondName);
+        jsonObject.addProperty(FirebaseManager.EMAIL,email);
+        jsonObject.addProperty(FirebaseManager.PHONE,phone);
+        jsonObject.addProperty(FirebaseManager.BILLING_TYPE,billingType);
+        jsonObject.addProperty(FirebaseManager.BIRTHDAY,birthday);
+        JsonArray jsonArray = new JsonArray();
+        for (String i: vehicleIds){
+            jsonArray.add(i);
+        }
+        jsonObject.add(FirebaseManager.VEHICLE_IDS,jsonArray);
+        jsonObject.addProperty(FirebaseManager.SMARTCAR_ID,smartCarId);
+
+
         return Converter.doTask(this);
     }
     @Override
