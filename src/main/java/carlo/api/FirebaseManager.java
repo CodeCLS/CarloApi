@@ -179,7 +179,7 @@ public class FirebaseManager {
     }
 
     public void createUserDb(User convertJson, Callback<User> callback) {
-        userRef.child(convertJson.getUid()).setValue(convertJson.toJson(), new DatabaseReference.CompletionListener() {
+        userRef.child(convertJson.getUid()).setValue(convertJson.toHash(), new DatabaseReference.CompletionListener() {
             @Override
             public void onComplete(DatabaseError error, DatabaseReference ref) {
                 if (error == null){
