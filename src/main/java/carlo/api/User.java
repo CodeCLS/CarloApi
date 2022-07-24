@@ -138,8 +138,10 @@ public class User implements JsonAble, HashAble {
         jsonObject.addProperty(FirebaseManager.BILLING_TYPE,billingType);
         jsonObject.addProperty(FirebaseManager.BIRTHDAY,birthday);
         JsonArray jsonArray = new JsonArray();
-        for (String i: vehicleIds){
-            jsonArray.add(i);
+        if (vehicleIds != null) {
+            for (String i : vehicleIds) {
+                jsonArray.add(i);
+            }
         }
         jsonObject.add(FirebaseManager.VEHICLE_IDS,jsonArray);
         jsonObject.addProperty(FirebaseManager.SMARTCAR_ID,smartCarId);
