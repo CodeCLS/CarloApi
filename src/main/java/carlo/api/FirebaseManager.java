@@ -171,7 +171,7 @@ public class FirebaseManager {
 
             @Override
             public void onCancelled(DatabaseError error) {
-                callback.value(null);
+                callback.exception(error.toException());
 
             }
         });
@@ -186,7 +186,7 @@ public class FirebaseManager {
                     callback.value(convertJson);
                 }
                 else{
-                    callback.value(null);
+                    callback.exception(error.toException());
                 }
             }
         });
@@ -201,7 +201,7 @@ public class FirebaseManager {
                     callback.value(convertJson);
                 }
                 else{
-                    callback.value(null);
+                    callback.exception(error.toException());
                 }
             }
         });

@@ -20,14 +20,18 @@ public class FirebaseRepository {
             public void value(String uid) {
                 convertJson.setUid(uid);
                 if (uid != null){
-                    convertJson.setUid(uid);
                     manager.createUserDb(convertJson,callback);
                 }
                 else{
-                    callback.value(null);
+                    callback.exception(new Exception("Failed to create uid"));
 
                 }
 
+            }
+
+            @Override
+            public void exception(Exception e) {
+                callback.exception(e);
             }
         });
 

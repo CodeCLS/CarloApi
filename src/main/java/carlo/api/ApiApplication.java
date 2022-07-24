@@ -483,6 +483,13 @@ public class ApiApplication {
                             ErrorManager.INTERNAL_ERROR_KEY_MSG));
                 }
             }
+
+            @Override
+            public void exception(Exception e) {
+                result.setResult(ErrorManager.createErrorResponse(
+                        ErrorManager.INTERNAL_ERROR_KEY_CODE,
+                        e.getMessage()));
+            }
         });
         return result;
     }
@@ -514,6 +521,13 @@ public class ApiApplication {
                             ErrorManager.INTERNAL_ERROR_KEY_CODE,
                             ErrorManager.INTERNAL_ERROR_KEY_MSG));
                 }
+            }
+
+            @Override
+            public void exception(Exception e) {
+                result.setResult(ErrorManager.createErrorResponse(
+                        ErrorManager.INTERNAL_ERROR_KEY_CODE,
+                        e.getMessage()));
             }
         });
         return result;
@@ -547,6 +561,13 @@ public class ApiApplication {
                             ErrorManager.INTERNAL_ERROR_KEY_CODE,
                             ErrorManager.INTERNAL_ERROR_KEY_MSG));
                 }
+            }
+
+            @Override
+            public void exception(Exception e) {
+                result.setResult(ErrorManager.createErrorResponse(
+                        ErrorManager.INTERNAL_ERROR_KEY_CODE,
+                        e.getMessage()));
             }
         });
         return result;
