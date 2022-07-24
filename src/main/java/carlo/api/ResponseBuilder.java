@@ -124,6 +124,9 @@ public class ResponseBuilder {
             else if (val instanceof JsonArray){
                 jsonObject.add(key,(JsonArray) val);
             }
+            else if (val instanceof JsonObject){
+                jsonObject.add(key,(JsonObject) val);
+            }
         }
 
         if (!isSuccessfulAction) {
