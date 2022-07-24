@@ -44,7 +44,7 @@ public class ApiApplication {
             return result;
         }
         firebaseRepository.updateUserApiCall();
-        VehicleAttributes vehicleAttributes = smartCarRepository.getVehicleAttributes(token,id);
+        VehicleAttributes vehicleAttributes = smartCarRepository.getVehicleAttributes(token,id,responseBuilder);
         if (vehicleAttributes != null) {
             responseBuilder.add(ApiManager.VEHICLE_ID, vehicleAttributes.getId());
             responseBuilder.add(ApiManager.VEHICLE_MAKE, vehicleAttributes.getMake());
@@ -73,7 +73,7 @@ public class ApiApplication {
             return result;
         }
         AuthClient authClient = smartCarRepository.createAuthClient();
-        Auth auth = smartCarRepository.exchangeAuth(token,authClient);
+        Auth auth = smartCarRepository.exchangeAuth(token,authClient,responseBuilder);
         String authClientJson = Converter.doTask(authClient);
         String authJson = Converter.doTask(auth);
         responseBuilder.add(ApiManager.ACCESS_TOKEN,auth.getAccessToken());
@@ -104,7 +104,7 @@ public class ApiApplication {
             return result;
         }
         firebaseRepository.updateUserApiCall();
-        VehicleLocation vehicleLocation = smartCarRepository.getVehicleLocation(token,id);
+        VehicleLocation vehicleLocation = smartCarRepository.getVehicleLocation(token,id,responseBuilder);
         if (vehicleLocation != null) {
             responseBuilder.add(ApiManager.LATITUDE, vehicleLocation.getLatitude());
             responseBuilder.add(ApiManager.LONGITUDE, vehicleLocation.getLongitude());
@@ -134,7 +134,7 @@ public class ApiApplication {
             return result;
         }
         firebaseRepository.updateUserApiCall();
-        VehicleIds vehicleIds = smartCarRepository.getVehicles(token);
+        VehicleIds vehicleIds = smartCarRepository.getVehicles(token,responseBuilder);
         if (vehicleIds != null) {
             responseBuilder.add(ApiManager.VEHICLE_IDS, vehicleIds.getVehicleIds());
             responseBuilder.setSuccessfulAction(true);
@@ -167,7 +167,7 @@ public class ApiApplication {
         Gson gson = new Gson();
         AuthClient authClient = gson.fromJson(client,AuthClient.class);
         Auth access = gson.fromJson(auth,Auth.class);
-        Auth newAuth = smartCarRepository.refreshToken(authClient,access);
+        Auth newAuth = smartCarRepository.refreshToken(authClient,access,responseBuilder);
         if (auth != null) {
             responseBuilder.setSuccessfulAction(true);
             responseBuilder.add(ApiManager.AUTH, gson.toJson(newAuth));
@@ -221,7 +221,7 @@ public class ApiApplication {
             return result;
         }
         firebaseRepository.updateUserApiCall();
-        ApplicationPermissions permissions = smartCarRepository.getVehiclePermissions(token,id);
+        ApplicationPermissions permissions = smartCarRepository.getVehiclePermissions(token,id,responseBuilder);
         if (permissions != null) {
             responseBuilder.add(ApiManager.PERMISSIONS,permissions.getPermissions());
             responseBuilder.setSuccessfulAction(true);
@@ -244,17 +244,17 @@ public class ApiApplication {
             @RequestBody String body)
     {
         //TODO do something with uid
-        String[] paths =new Converter().getListFromJson(token,id,body);
-        System.out.println("paths" + Arrays.toString(paths));
 
         ResponseBuilder responseBuilder = new ResponseBuilder();
+        String[] paths =new Converter().getListFromJson(token,id,body,responseBuilder);
+
         DeferredResult<String> result = new DeferredResult<>();
         if(manageApiCode(apiCode, responseBuilder)) {
             result.setResult(responseBuilder.create());
             return result;
         }
         firebaseRepository.updateUserApiCall();
-        BatchResponse response = smartCarRepository.getBatch(token,id,paths);
+        BatchResponse response = smartCarRepository.getBatch(token,id,paths,responseBuilder);
         if (response != null) {
             result.setResult(responseBuilder.createBatchResponse(response));
         }
@@ -282,7 +282,7 @@ public class ApiApplication {
             return result;
         }
         firebaseRepository.updateUserApiCall();
-        VehicleOdometer vehicleOdometer = smartCarRepository.getVehicleOdometer(token,id);
+        VehicleOdometer vehicleOdometer = smartCarRepository.getVehicleOdometer(token,id,responseBuilder);
         if (vehicleOdometer != null) {
             responseBuilder.add(ApiManager.ODOMETER, vehicleOdometer.getDistance());
             responseBuilder.setSuccessfulAction(true);
@@ -312,7 +312,7 @@ public class ApiApplication {
             return result;
         }
         firebaseRepository.updateUserApiCall();
-        String vin = smartCarRepository.getVehicleVin(token,id);
+        String vin = smartCarRepository.getVehicleVin(token,id,responseBuilder);
         if (vin != null) {
             responseBuilder.add(ApiManager.VIN, vin);
             responseBuilder.setSuccessfulAction(true);
@@ -341,7 +341,7 @@ public class ApiApplication {
             return result;
         }
         firebaseRepository.updateUserApiCall();
-        Object range = smartCarRepository.getVehicleRange(token,id);
+        Object range = smartCarRepository.getVehicleRange(token,id,responseBuilder);
         if (range != null) {
             if (range instanceof VehicleBattery) {
                 responseBuilder.add(ApiManager.RANGE_PERCENT, ((VehicleBattery) range).getPercentRemaining());
@@ -378,7 +378,7 @@ public class ApiApplication {
             return result;
         }
         firebaseRepository.updateUserApiCall();
-        ActionResponse actionResponse = smartCarRepository.lock(token,id);
+        ActionResponse actionResponse = smartCarRepository.lock(token,id,responseBuilder);
         if (actionResponse != null) {
             responseBuilder.add(ApiManager.ACTION_MSG, actionResponse.getMessage());
             responseBuilder.setSuccessfulAction(actionResponse.getStatus().equals("success"));
@@ -408,7 +408,7 @@ public class ApiApplication {
             return result;
         }
         firebaseRepository.updateUserApiCall();
-        ActionResponse actionResponse = smartCarRepository.unlock(token,id);
+        ActionResponse actionResponse = smartCarRepository.unlock(token,id,responseBuilder);
         if (actionResponse != null) {
             responseBuilder.add(ApiManager.ACTION_MSG, actionResponse.getMessage());
             responseBuilder.setSuccessfulAction(actionResponse.getStatus().equals("success"));
@@ -437,7 +437,7 @@ public class ApiApplication {
             return result;
         }
         firebaseRepository.updateUserApiCall();
-        Object range = smartCarRepository.getVehicleRange(token,id);
+        Object range = smartCarRepository.getVehicleRange(token,id,responseBuilder);
         if (range != null) {
             if (range instanceof VehicleBattery) {
                 responseBuilder.add(ApiManager.IS_ELECTRIC, true);

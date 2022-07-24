@@ -40,7 +40,7 @@ public class Converter implements BatchPaths, PermissionsConverter {
     }
 
     @Override
-    public String[] getListFromJson(String token, String id,String body) {
+    public String[] getListFromJson(String token, String id,String body,ResponseBuilder responseBuilder) {
         JsonObject object = new Gson().fromJson(body,JsonObject.class);
         String type = object.get("type").toString();
         type = type.replace("\"","");
@@ -48,7 +48,7 @@ public class Converter implements BatchPaths, PermissionsConverter {
         if (type.equals("PERMISSIONS")) {
             System.out.println("PERMISSIONS");
             ApplicationPermissions applicationPermissions=
-                    new SmartCarRepository().getVehiclePermissions(token,id);
+                    new SmartCarRepository().getVehiclePermissions(token,id,null);
 
             ArrayList<String> paths = new ArrayList<>();
             for(String s : applicationPermissions.getPermissions()){

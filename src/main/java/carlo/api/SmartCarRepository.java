@@ -20,20 +20,25 @@ public class SmartCarRepository {
         return new Vehicle(id,accessToken);
     }
 
-    public VehicleAttributes getVehicleAttributes(String token, String vehicleId) {
+    public VehicleAttributes getVehicleAttributes(String token, String vehicleId, ResponseBuilder responseBuilder) {
         try {
             return getVehicle(token,vehicleId).attributes();
         } catch (SmartcarException e) {
             e.printStackTrace();
+            responseBuilder.setErrorMsg(e.getMessage());
+            responseBuilder.setErrorCode(ErrorManager.INTERNAL_ERROR_KEY_CODE);
             return null;
         }
     }
 
-    public Auth exchangeAuth(String token,AuthClient authClient) {
+    public Auth exchangeAuth(String token,AuthClient authClient, ResponseBuilder responseBuilder) {
         try {
             return authClient.exchangeCode(token);
         } catch (SmartcarException e) {
             e.printStackTrace();
+
+            responseBuilder.setErrorMsg(e.getMessage());
+            responseBuilder.setErrorCode(ErrorManager.INTERNAL_ERROR_KEY_CODE);
             return null;
         }
     }
@@ -55,53 +60,63 @@ public class SmartCarRepository {
     }
 
 
-    public VehicleLocation getVehicleLocation(String token, String id) {
+    public VehicleLocation getVehicleLocation(String token, String id, ResponseBuilder responseBuilder) {
         try {
             return getVehicle(token,id).location();
         } catch (SmartcarException e) {
             e.printStackTrace();
+            responseBuilder.setErrorMsg(e.getMessage());
+            responseBuilder.setErrorCode(ErrorManager.INTERNAL_ERROR_KEY_CODE);
             return null;
         }
 }
 
-    public VehicleIds getVehicles(String access) {
+    public VehicleIds getVehicles(String access, ResponseBuilder responseBuilder) {
         try {
             return Smartcar.getVehicles(access);
         } catch (SmartcarException e) {
             e.printStackTrace();
+            responseBuilder.setErrorMsg(e.getMessage());
+            responseBuilder.setErrorCode(ErrorManager.INTERNAL_ERROR_KEY_CODE);
             return null;
         }
 
     }
 
-    public Auth refreshToken(AuthClient authClient, Auth access) {
+    public Auth refreshToken(AuthClient authClient, Auth access, ResponseBuilder responseBuilder) {
         try {
             return authClient.exchangeRefreshToken(access.getRefreshToken());
         } catch (SmartcarException e) {
             e.printStackTrace();
+            responseBuilder.setErrorMsg(e.getMessage());
+            responseBuilder.setErrorCode(ErrorManager.INTERNAL_ERROR_KEY_CODE);
             return null;
         }
     }
 
-    public VehicleOdometer getVehicleOdometer(String token, String id) {
+    public VehicleOdometer getVehicleOdometer(String token, String id, ResponseBuilder responseBuilder) {
         try {
             return getVehicle(token,id).odometer();
         } catch (SmartcarException e) {
             e.printStackTrace();
+            responseBuilder.setErrorMsg(e.getMessage());
+            responseBuilder.setErrorCode(ErrorManager.INTERNAL_ERROR_KEY_CODE);
             return null;
         }
 }
 
-    public String getVehicleVin(String token, String id) {
+    public String getVehicleVin(String token, String id, ResponseBuilder responseBuilder) {
         try {
             return getVehicle(token,id).vin().getVin();
         } catch (SmartcarException e) {
             e.printStackTrace();
+            responseBuilder.setErrorMsg(e.getMessage());
+            responseBuilder.setErrorCode(ErrorManager.INTERNAL_ERROR_KEY_CODE);
             return null;
         }
 }
 
-    public Object getVehicleRange(String token, String id) {
+    public Object getVehicleRange(String token, String id, ResponseBuilder responseBuilder) {
         try {
             return getVehicle(token,id).fuel();
         } catch (SmartcarException e) {
@@ -110,42 +125,51 @@ public class SmartCarRepository {
             }
             catch (Exception e2){
                 e2.printStackTrace();
+                responseBuilder.setErrorMsg(e.getMessage());
+                responseBuilder.setErrorCode(ErrorManager.INTERNAL_ERROR_KEY_CODE);
             }
             return null;
         }
     }
 
-    public ActionResponse lock(String token, String id) {
+    public ActionResponse lock(String token, String id, ResponseBuilder responseBuilder) {
         try {
             return getVehicle(token,id).lock();
         } catch (SmartcarException e) {
             e.printStackTrace();
+            responseBuilder.setErrorMsg(e.getMessage());
+            responseBuilder.setErrorCode(ErrorManager.INTERNAL_ERROR_KEY_CODE);
             return null;
         }
     }
-    public ActionResponse unlock(String token, String id) {
+    public ActionResponse unlock(String token, String id, ResponseBuilder responseBuilder) {
         try {
             return getVehicle(token,id).unlock();
         } catch (SmartcarException e) {
             e.printStackTrace();
+            responseBuilder.setErrorMsg(e.getMessage());
+            responseBuilder.setErrorCode(ErrorManager.INTERNAL_ERROR_KEY_CODE);
             return null;
         }
     }
 
-    public ApplicationPermissions getVehiclePermissions(String token, String id) {
+    public ApplicationPermissions getVehiclePermissions(String token, String id, ResponseBuilder responseBuilder) {
         try {
             return getVehicle(token,id).permissions();
         } catch (SmartcarException e) {
-            e.printStackTrace();
+            responseBuilder.setErrorMsg(e.getMessage());
+            responseBuilder.setErrorCode(ErrorManager.INTERNAL_ERROR_KEY_CODE);
             return null;
         }
     }
 
-    public BatchResponse getBatch(String token, String id, String[] paths) {
+    public BatchResponse getBatch(String token, String id, String[] paths, ResponseBuilder responseBuilder) {
         try {
             return getVehicle(token,id).batch(paths);
         } catch (Exception e) {
             e.printStackTrace();
+            responseBuilder.setErrorMsg(e.getMessage());
+            responseBuilder.setErrorCode(ErrorManager.INTERNAL_ERROR_KEY_CODE);
             return null;
         }
     }
