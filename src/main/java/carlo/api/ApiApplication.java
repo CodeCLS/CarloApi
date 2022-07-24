@@ -511,7 +511,7 @@ public class ApiApplication {
         firebaseRepository.addUser((User)Converter.convertUser(body), new Callback<User>() {
             @Override
             public void value(User value) {
-                System.out.println("TEST I" + value.toJson());
+                System.out.println("TEST IFINAL" + value.toJson());
                 if (value != null){
                     System.out.println("TEST II");
                     responseBuilder.add(ApiManager.USER,value.toJson());

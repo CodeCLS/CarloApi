@@ -65,7 +65,7 @@ public class FirebaseManager {
             callback.value(userRecord.getUid());
         } catch (FirebaseAuthException e) {
             e.printStackTrace();
-            callback.value(userRecord.getUid());
+            callback.exception(e);
         }
         return userRecord;
 
