@@ -147,7 +147,7 @@ public class User implements JsonAble, HashAble {
         jsonObject.addProperty(FirebaseManager.SMARTCAR_ID,smartCarId);
 
 
-        return jsonObject.toString();
+        return jsonObject.getAsString();
     }
     @Override
     public HashMap<String, Object> toHash() {
