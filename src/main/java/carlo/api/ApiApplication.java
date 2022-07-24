@@ -116,6 +116,7 @@ public class ApiApplication {
                     ErrorManager.INTERNAL_ERROR_KEY_CODE,
                     ErrorManager.INTERNAL_ERROR_KEY_MSG));
         }
+        result.setResult(responseBuilder.create());
 
         return result;
     }
@@ -145,6 +146,8 @@ public class ApiApplication {
                     ErrorManager.INTERNAL_ERROR_KEY_CODE,
                     ErrorManager.INTERNAL_ERROR_KEY_MSG));
         }
+        result.setResult(responseBuilder.create());
+
         return result;
     }
     @RequestMapping(value = "/user/{uid}/refresh/",method = RequestMethod.POST)
@@ -180,6 +183,7 @@ public class ApiApplication {
                     ErrorManager.INTERNAL_ERROR_KEY_CODE,
                     ErrorManager.INTERNAL_ERROR_KEY_MSG));
         }
+        result.setResult(responseBuilder.create());
 
         return result;
     }
@@ -232,6 +236,7 @@ public class ApiApplication {
                     ErrorManager.INTERNAL_ERROR_KEY_CODE,
                     ErrorManager.INTERNAL_ERROR_KEY_MSG));
         }
+        result.setResult(responseBuilder.create());
 
         return result;
     }
@@ -263,6 +268,7 @@ public class ApiApplication {
                     ErrorManager.INTERNAL_ERROR_KEY_CODE,
                     ErrorManager.INTERNAL_ERROR_KEY_MSG));
         }
+        result.setResult(responseBuilder.create());
 
         return result;
     }
@@ -293,6 +299,8 @@ public class ApiApplication {
                     ErrorManager.INTERNAL_ERROR_KEY_CODE,
                     ErrorManager.INTERNAL_ERROR_KEY_MSG));
         }
+        result.setResult(responseBuilder.create());
+
         return result;
     }
 
@@ -323,6 +331,8 @@ public class ApiApplication {
                     ErrorManager.INTERNAL_ERROR_KEY_CODE,
                     ErrorManager.INTERNAL_ERROR_KEY_MSG));
         }
+        result.setResult(responseBuilder.create());
+
         return result;
     }
     @RequestMapping(value = "/user/{uid}/vehicle/{id}/range",method = RequestMethod.GET)
@@ -360,6 +370,7 @@ public class ApiApplication {
                     ErrorManager.INTERNAL_ERROR_KEY_CODE,
                     ErrorManager.INTERNAL_ERROR_KEY_MSG));
         }
+        result.setResult(responseBuilder.create());
         return result;
     }
     @RequestMapping(value = "/user/{uid}/vehicle/{id}/lock",method = RequestMethod.POST)
@@ -389,6 +400,8 @@ public class ApiApplication {
                     ErrorManager.INTERNAL_ERROR_KEY_CODE,
                     ErrorManager.INTERNAL_ERROR_KEY_MSG));
         }
+        result.setResult(responseBuilder.create());
+
         return result;
     }
 
@@ -419,6 +432,8 @@ public class ApiApplication {
                     ErrorManager.INTERNAL_ERROR_KEY_CODE,
                     ErrorManager.INTERNAL_ERROR_KEY_MSG));
         }
+        result.setResult(responseBuilder.create());
+
         return result;
     }
     @RequestMapping(value = "/user/{uid}/vehicle/{id}/is_electric",method = RequestMethod.GET)
@@ -454,6 +469,8 @@ public class ApiApplication {
                     ErrorManager.INTERNAL_ERROR_KEY_CODE,
                     ErrorManager.INTERNAL_ERROR_KEY_MSG));
         }
+        result.setResult(responseBuilder.create());
+
         return result;
     }
     @RequestMapping(value = "/user/{uid}",method = RequestMethod.GET)
