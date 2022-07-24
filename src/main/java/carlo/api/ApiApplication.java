@@ -171,6 +171,8 @@ public class ApiApplication {
         if (auth != null) {
             responseBuilder.setSuccessfulAction(true);
             responseBuilder.add(ApiManager.AUTH, gson.toJson(newAuth));
+            responseBuilder.add(ApiManager.AUTH_CLIENT, gson.toJson(authClient));
+
             result.setResult(responseBuilder.create());
         }
         else{
@@ -512,25 +514,21 @@ public class ApiApplication {
             @Override
             public void value(User value) {
                 if (value != null){
-                    System.out.println("TEST II");
                     responseBuilder.add(ApiManager.USER,value.toJson());
                     responseBuilder.setSuccessfulAction(true);
                     result.setResult(responseBuilder.create());
                 }
                 else{
-                    System.out.println("TEST III");
 
                     result.setResult(ErrorManager.createErrorResponse(
                             ErrorManager.INTERNAL_ERROR_KEY_CODE,
                             ErrorManager.INTERNAL_ERROR_KEY_MSG));
                 }
-                System.out.println("TEST IFINAL" + value.toJson() + " " +result.getResult());
 
             }
 
             @Override
             public void exception(Exception e) {
-                System.out.println("TEST IIII");
 
                 result.setResult(ErrorManager.createErrorResponse(
                         ErrorManager.INTERNAL_ERROR_KEY_CODE,

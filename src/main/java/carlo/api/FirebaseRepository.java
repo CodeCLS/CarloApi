@@ -18,19 +18,12 @@ public class FirebaseRepository {
         manager.createUserAuth(convertJson.getEmail(), convertJson.getFirstName(), convertJson.getSecondName(), new Callback<String>() {
             @Override
             public void value(String uid) {
-                System.out.println("TEST IIIIIIIV" + uid);
-
                 convertJson.setUid(uid);
                 if (uid != null){
-                    System.out.println("TEST IIIIIIIVV" + uid);
-
                     manager.createUserDb(convertJson,callback);
                 }
                 else{
-                    System.out.println("TEST IIIIIIIVVV" + uid);
-
                     callback.exception(new Exception("Failed to create uid"));
-
                 }
 
             }
