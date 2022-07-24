@@ -88,6 +88,11 @@ public class ResponseBuilder {
         return this;
 
     }
+    public ResponseBuilder add(String key , JsonObject value){
+        values.put(key,value);
+        return this;
+
+    }
 
 
 
