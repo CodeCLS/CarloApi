@@ -53,10 +53,10 @@ public class ApiApplication {
             responseBuilder.setSuccessfulAction(true);
             result.setResult(responseBuilder.create());
         }
-        else{
+        else if (responseBuilder.getErrorMsg() == null){
             result.setResult(ErrorManager.createErrorResponse(
-                    ErrorManager.SMART_CAR_ERROR_KEY_CODE,
-                    ErrorManager.SMART_CAR_ERROR_KEY_MSG));
+                    ErrorManager.INTERNAL_ERROR_KEY_CODE,
+                    ErrorManager.INTERNAL_ERROR_KEY_MSG));
         }
         return result;
     }
@@ -111,7 +111,7 @@ public class ApiApplication {
             responseBuilder.setSuccessfulAction(true);
             result.setResult(responseBuilder.create());
         }
-        else{
+        else if (responseBuilder.getErrorMsg() == null){
             result.setResult(ErrorManager.createErrorResponse(
                     ErrorManager.INTERNAL_ERROR_KEY_CODE,
                     ErrorManager.INTERNAL_ERROR_KEY_MSG));
@@ -140,7 +140,7 @@ public class ApiApplication {
             responseBuilder.setSuccessfulAction(true);
             result.setResult(responseBuilder.create());
         }
-        else{
+        else if (responseBuilder.getErrorMsg() == null){
             result.setResult(ErrorManager.createErrorResponse(
                     ErrorManager.INTERNAL_ERROR_KEY_CODE,
                     ErrorManager.INTERNAL_ERROR_KEY_MSG));
@@ -175,7 +175,7 @@ public class ApiApplication {
 
             result.setResult(responseBuilder.create());
         }
-        else{
+        else if (responseBuilder.getErrorMsg() == null){
             result.setResult(ErrorManager.createErrorResponse(
                     ErrorManager.INTERNAL_ERROR_KEY_CODE,
                     ErrorManager.INTERNAL_ERROR_KEY_MSG));
@@ -227,7 +227,7 @@ public class ApiApplication {
             responseBuilder.setSuccessfulAction(true);
             result.setResult(responseBuilder.create());
         }
-        else{
+        else if (responseBuilder.getErrorMsg() == null){
             result.setResult(ErrorManager.createErrorResponse(
                     ErrorManager.INTERNAL_ERROR_KEY_CODE,
                     ErrorManager.INTERNAL_ERROR_KEY_MSG));
@@ -258,7 +258,7 @@ public class ApiApplication {
         if (response != null) {
             result.setResult(responseBuilder.createBatchResponse(response));
         }
-        else{
+        else if (responseBuilder.getErrorMsg() == null){
             result.setResult(ErrorManager.createErrorResponse(
                     ErrorManager.INTERNAL_ERROR_KEY_CODE,
                     ErrorManager.INTERNAL_ERROR_KEY_MSG));
@@ -288,7 +288,7 @@ public class ApiApplication {
             responseBuilder.setSuccessfulAction(true);
             result.setResult(responseBuilder.create());
         }
-        else{
+        else if (responseBuilder.getErrorMsg() == null){
             result.setResult(ErrorManager.createErrorResponse(
                     ErrorManager.INTERNAL_ERROR_KEY_CODE,
                     ErrorManager.INTERNAL_ERROR_KEY_MSG));
@@ -318,7 +318,7 @@ public class ApiApplication {
             responseBuilder.setSuccessfulAction(true);
             result.setResult(responseBuilder.create());
         }
-        else{
+        else if (responseBuilder.getErrorMsg() == null){
             result.setResult(ErrorManager.createErrorResponse(
                     ErrorManager.INTERNAL_ERROR_KEY_CODE,
                     ErrorManager.INTERNAL_ERROR_KEY_MSG));
@@ -355,7 +355,7 @@ public class ApiApplication {
             responseBuilder.setSuccessfulAction(true);
             result.setResult(responseBuilder.create());
         }
-        else{
+        else if (responseBuilder.getErrorMsg() == null){
             result.setResult(ErrorManager.createErrorResponse(
                     ErrorManager.INTERNAL_ERROR_KEY_CODE,
                     ErrorManager.INTERNAL_ERROR_KEY_MSG));
@@ -384,7 +384,7 @@ public class ApiApplication {
             responseBuilder.setSuccessfulAction(actionResponse.getStatus().equals("success"));
             result.setResult(responseBuilder.create());
         }
-        else{
+        else if (responseBuilder.getErrorMsg() == null){
             result.setResult(ErrorManager.createErrorResponse(
                     ErrorManager.INTERNAL_ERROR_KEY_CODE,
                     ErrorManager.INTERNAL_ERROR_KEY_MSG));
@@ -414,7 +414,7 @@ public class ApiApplication {
             responseBuilder.setSuccessfulAction(actionResponse.getStatus().equals("success"));
             result.setResult(responseBuilder.create());
         }
-        else{
+        else if (responseBuilder.getErrorMsg() == null){
             result.setResult(ErrorManager.createErrorResponse(
                     ErrorManager.INTERNAL_ERROR_KEY_CODE,
                     ErrorManager.INTERNAL_ERROR_KEY_MSG));
@@ -449,7 +449,7 @@ public class ApiApplication {
             responseBuilder.setSuccessfulAction(true);
             result.setResult(responseBuilder.create());
         }
-        else{
+        else if (responseBuilder.getErrorMsg() == null){
             result.setResult(ErrorManager.createErrorResponse(
                     ErrorManager.INTERNAL_ERROR_KEY_CODE,
                     ErrorManager.INTERNAL_ERROR_KEY_MSG));
