@@ -20,6 +20,7 @@ public class FirebaseRepository {
             public void value(String uid) {
                 convertJson.setUid(uid);
                 if (uid != null){
+                    convertJson.setUid(uid);
                     manager.createUserDb(convertJson,callback);
                 }
                 else{
