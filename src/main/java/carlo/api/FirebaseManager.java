@@ -182,10 +182,16 @@ public class FirebaseManager {
         userRef.child(convertJson.getUid()).setValue(convertJson.toHash(), new DatabaseReference.CompletionListener() {
             @Override
             public void onComplete(DatabaseError error, DatabaseReference ref) {
+                System.out.println("TEST IIIIIVVIIV" + error + ref);
+
                 if (error == null){
+                    System.out.println("TEST IIIIIIIVVCXXX" );
+
                     callback.value(convertJson);
                 }
                 else{
+                    System.out.println("TEST IIIIIIIVXXX");
+
                     callback.exception(error.toException());
                 }
             }

@@ -26,12 +26,16 @@ public class Converter implements BatchPaths, PermissionsConverter {
     }
 
     public static User convertUser(String body) {
+        System.out.println("TEST IIIII");
+
         JsonObject jsonObject = (JsonObject) convertJson(body, JsonObject.class);
         User user = new User();
         user.setFirstName(jsonObject.get(ApiManager.FIRST_NAME).getAsString());
         user.setSecondName(jsonObject.get(ApiManager.SECOND_NAME).getAsString());
         user.setPhone(jsonObject.get(ApiManager.PHONE).getAsString());
         user.setEmail(jsonObject.get(ApiManager.EMAIL).getAsString());
+        System.out.println("TEST IIIIII" + user.toJson());
+
         return user;
     }
 

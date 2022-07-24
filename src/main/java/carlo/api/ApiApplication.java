@@ -511,12 +511,16 @@ public class ApiApplication {
         firebaseRepository.addUser((User)Converter.convertUser(body), new Callback<User>() {
             @Override
             public void value(User value) {
+                System.out.println("TEST I" + value.toJson());
                 if (value != null){
+                    System.out.println("TEST II");
                     responseBuilder.add(ApiManager.USER,value.toJson());
                     responseBuilder.setSuccessfulAction(true);
                     result.setResult(responseBuilder.create());
                 }
                 else{
+                    System.out.println("TEST III");
+
                     result.setResult(ErrorManager.createErrorResponse(
                             ErrorManager.INTERNAL_ERROR_KEY_CODE,
                             ErrorManager.INTERNAL_ERROR_KEY_MSG));
@@ -525,6 +529,8 @@ public class ApiApplication {
 
             @Override
             public void exception(Exception e) {
+                System.out.println("TEST IIII");
+
                 result.setResult(ErrorManager.createErrorResponse(
                         ErrorManager.INTERNAL_ERROR_KEY_CODE,
                         e.getMessage()));
