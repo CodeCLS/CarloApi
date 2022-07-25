@@ -27,6 +27,8 @@ public class SmartCarRepository {
             e.printStackTrace();
             responseBuilder.setErrorMsg(e.getMessage());
             responseBuilder.setErrorCode(ErrorManager.INTERNAL_ERROR_KEY_CODE);
+            responseBuilder.setSuccessfulAction(false);
+
             return null;
         }
     }
@@ -39,6 +41,8 @@ public class SmartCarRepository {
 
             responseBuilder.setErrorMsg(e.getMessage());
             responseBuilder.setErrorCode(ErrorManager.INTERNAL_ERROR_KEY_CODE);
+            responseBuilder.setSuccessfulAction(false);
+
             return null;
         }
     }
@@ -67,6 +71,8 @@ public class SmartCarRepository {
             e.printStackTrace();
             responseBuilder.setErrorMsg(e.getMessage());
             responseBuilder.setErrorCode(ErrorManager.INTERNAL_ERROR_KEY_CODE);
+            responseBuilder.setSuccessfulAction(false);
+
             return null;
         }
 }
@@ -78,6 +84,8 @@ public class SmartCarRepository {
             e.printStackTrace();
             responseBuilder.setErrorMsg(e.getMessage());
             responseBuilder.setErrorCode(ErrorManager.INTERNAL_ERROR_KEY_CODE);
+            responseBuilder.setSuccessfulAction(false);
+
             return null;
         }
 
@@ -90,6 +98,8 @@ public class SmartCarRepository {
             e.printStackTrace();
             responseBuilder.setErrorMsg(e.getMessage());
             responseBuilder.setErrorCode(ErrorManager.INTERNAL_ERROR_KEY_CODE);
+            responseBuilder.setSuccessfulAction(false);
+
             return null;
         }
     }
@@ -101,6 +111,8 @@ public class SmartCarRepository {
             e.printStackTrace();
             responseBuilder.setErrorMsg(e.getMessage());
             responseBuilder.setErrorCode(ErrorManager.INTERNAL_ERROR_KEY_CODE);
+            responseBuilder.setSuccessfulAction(false);
+
             return null;
         }
 }
@@ -112,6 +124,8 @@ public class SmartCarRepository {
             e.printStackTrace();
             responseBuilder.setErrorMsg(e.getMessage());
             responseBuilder.setErrorCode(ErrorManager.INTERNAL_ERROR_KEY_CODE);
+            responseBuilder.setSuccessfulAction(false);
+
             return null;
         }
 }
@@ -127,6 +141,8 @@ public class SmartCarRepository {
                 e2.printStackTrace();
                 responseBuilder.setErrorMsg(e.getMessage());
                 responseBuilder.setErrorCode(ErrorManager.INTERNAL_ERROR_KEY_CODE);
+                responseBuilder.setSuccessfulAction(false);
+
             }
             return null;
         }
@@ -139,6 +155,8 @@ public class SmartCarRepository {
             e.printStackTrace();
             responseBuilder.setErrorMsg(e.getMessage());
             responseBuilder.setErrorCode(ErrorManager.INTERNAL_ERROR_KEY_CODE);
+            responseBuilder.setSuccessfulAction(false);
+
             return null;
         }
     }
@@ -149,6 +167,8 @@ public class SmartCarRepository {
             e.printStackTrace();
             responseBuilder.setErrorMsg(e.getMessage());
             responseBuilder.setErrorCode(ErrorManager.INTERNAL_ERROR_KEY_CODE);
+            responseBuilder.setSuccessfulAction(false);
+
             return null;
         }
     }
@@ -159,6 +179,8 @@ public class SmartCarRepository {
         } catch (SmartcarException e) {
             responseBuilder.setErrorMsg(e.getMessage());
             responseBuilder.setErrorCode(ErrorManager.INTERNAL_ERROR_KEY_CODE);
+            responseBuilder.setSuccessfulAction(false);
+
             return null;
         }
     }
@@ -170,6 +192,8 @@ public class SmartCarRepository {
             e.printStackTrace();
             responseBuilder.setErrorMsg(e.getMessage());
             responseBuilder.setErrorCode(ErrorManager.INTERNAL_ERROR_KEY_CODE);
+            responseBuilder.setSuccessfulAction(false);
+
             return null;
         }
     }

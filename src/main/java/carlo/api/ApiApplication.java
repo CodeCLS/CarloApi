@@ -116,6 +116,7 @@ public class ApiApplication {
                     ErrorManager.INTERNAL_ERROR_KEY_CODE,
                     ErrorManager.INTERNAL_ERROR_KEY_MSG));
         }
+
         result.setResult(responseBuilder.create());
 
         return result;
