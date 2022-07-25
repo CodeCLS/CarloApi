@@ -206,7 +206,7 @@ public class ApiApplication {
         Auth access = gson.fromJson(auth,Auth.class);
         Auth newAuth = smartCarRepository.refreshToken(authClient,access,responseBuilder);
         System.out.print("NEWAUTH" + newAuth);
-        if (auth != null) {
+        if (newAuth != null) {
             responseBuilder.setSuccessfulAction(true);
             responseBuilder.add(ApiManager.AUTH, gson.toJson(newAuth));
             responseBuilder.add(ApiManager.AUTH_CLIENT, gson.toJson(authClient));
