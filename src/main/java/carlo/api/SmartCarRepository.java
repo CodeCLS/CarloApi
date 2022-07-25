@@ -197,4 +197,17 @@ public class SmartCarRepository {
             return null;
         }
     }
+
+    public VehicleEngineOil getVehicleOil(String token, String id, ResponseBuilder responseBuilder) {
+        try {
+            return getVehicle(token,id).engineOil();
+        } catch (SmartcarException e) {
+            e.printStackTrace();
+            responseBuilder.setErrorMsg(e.getMessage());
+            responseBuilder.setErrorCode(ErrorManager.INTERNAL_ERROR_KEY_CODE);
+            responseBuilder.setSuccessfulAction(false);
+
+            return null;
+        }
+    }
 }

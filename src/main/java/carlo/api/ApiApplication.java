@@ -122,6 +122,38 @@ public class ApiApplication {
 
         return result;
     }
+    @RequestMapping(value = "/user/{uid}/vehicle/{id}/oil",method = RequestMethod.GET)
+    public DeferredResult<String> getOil(
+            @RequestHeader("api-code") String apiCode,
+            @RequestHeader("access-token-smart-car") String token,
+            @PathVariable("uid") String uid,
+            @PathVariable String id)
+    {
+        //TODO do something with uid
+
+        ResponseBuilder responseBuilder = new ResponseBuilder();
+        DeferredResult<String> result = new DeferredResult<>();
+        if(manageApiCode(apiCode, responseBuilder)) {
+            result.setResult(responseBuilder.create());
+            return result;
+        }
+        firebaseRepository.updateUserApiCall();
+        VehicleEngineOil vehicleEngineOil = smartCarRepository.getVehicleOil(token,id,responseBuilder);
+        if (vehicleEngineOil != null) {
+            responseBuilder.add(ApiManager.OIL, vehicleEngineOil.getLifeRemaining());
+            responseBuilder.setSuccessfulAction(true);
+            result.setResult(responseBuilder.create());
+        }
+        else if (responseBuilder.getErrorMsg() == null){
+            result.setResult(ErrorManager.createErrorResponse(
+                    ErrorManager.INTERNAL_ERROR_KEY_CODE,
+                    ErrorManager.INTERNAL_ERROR_KEY_MSG));
+        }
+
+        result.setResult(responseBuilder.create());
+
+        return result;
+    }
     @RequestMapping(value = "/user/{uid}/vehicle/",method = RequestMethod.GET)
     public DeferredResult<String> getLocation(
             @RequestHeader("api-code") String apiCode,
