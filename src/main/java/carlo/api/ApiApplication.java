@@ -189,8 +189,8 @@ public class ApiApplication {
             @RequestHeader("api-code") String apiCode,
             @RequestHeader("access-token-smart-car") String token,
             @PathVariable("uid") String uid,
-            @RequestParam(value = "client", defaultValue = "null") String client,
-            @RequestParam(value = "auth", defaultValue = "null") String auth)
+            @RequestParam(value = "auth", defaultValue = "null") String auth,
+            @RequestParam(value = "client", defaultValue = "null") String client)
     {
         //TODO do something with uid
 
