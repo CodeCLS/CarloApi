@@ -93,6 +93,7 @@ public class SmartCarRepository {
 
     public Auth refreshToken(AuthClient authClient, Auth access, ResponseBuilder responseBuilder) {
         try {
+            System.out.println("REFRESHTOKEN; " + access.getRefreshToken());
             return authClient.exchangeRefreshToken(access.getRefreshToken());
         } catch (SmartcarException e) {
             e.printStackTrace();
