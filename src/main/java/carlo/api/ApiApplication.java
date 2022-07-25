@@ -50,6 +50,7 @@ public class ApiApplication {
             responseBuilder.add(ApiManager.VEHICLE_MAKE, vehicleAttributes.getMake());
             responseBuilder.add(ApiManager.VEHICLE_MODEL, vehicleAttributes.getModel());
             responseBuilder.add(ApiManager.VEHICLE_YEAR, vehicleAttributes.getYear());
+            responseBuilder.add(ApiManager.VIN, smartCarRepository.getVehicleVin(token,id,responseBuilder));
             responseBuilder.setSuccessfulAction(true);
             result.setResult(responseBuilder.create());
         }
