@@ -205,11 +205,11 @@ public class ApiApplication {
         AuthClient authClient = gson.fromJson(client,AuthClient.class);
         Auth access = gson.fromJson(auth,Auth.class);
         Auth newAuth = smartCarRepository.refreshToken(authClient,access,responseBuilder);
+        System.out.print("NEWAUTH" + newAuth);
         if (auth != null) {
             responseBuilder.setSuccessfulAction(true);
             responseBuilder.add(ApiManager.AUTH, gson.toJson(newAuth));
             responseBuilder.add(ApiManager.AUTH_CLIENT, gson.toJson(authClient));
-
             result.setResult(responseBuilder.create());
         }
         else if (responseBuilder.getErrorMsg() == null){
