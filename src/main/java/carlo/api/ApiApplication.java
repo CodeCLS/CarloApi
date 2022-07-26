@@ -207,9 +207,9 @@ public class ApiApplication {
         Auth newAuth = null;
         try {
             AuthClient client1 = new AuthClient.Builder()
-                    .redirectUri(authClient.getRedirectUri())
-                    .clientId(authClient.getClientId())
-                    .clientSecret(authClient.getClientSecret())
+                    .redirectUri("sc3b683bb7-48a3-4b4c-8a2f-7337a8a0ee19://myapp.com/callback")
+                    .clientId("3b683bb7-48a3-4b4c-8a2f-7337a8a0ee19")
+                    .clientSecret("bdefd1ee-de23-4df5-aa61-c9ef1d6ac724")
                     .testMode(true)
                     .build();
             newAuth= smartCarRepository.refreshToken(client1,access.getRefreshToken(),responseBuilder);
