@@ -204,7 +204,20 @@ public class ApiApplication {
         Gson gson = new Gson();
         AuthClient authClient = gson.fromJson(client,AuthClient.class);
         Auth access = gson.fromJson(auth,Auth.class);
-        Auth newAuth = smartCarRepository.refreshToken(authClient,access,responseBuilder);
+        Auth newAuth = null;
+        try {
+            AuthClient client1 = new AuthClient.Builder()
+                    .redirectUri(authClient.getRedirectUri())
+                    .clientId(authClient.getClientId())
+                    .clientSecret(authClient.getClientSecret())
+                    .testMode(true)
+                    .build();
+            newAuth= smartCarRepository.refreshToken(client1,access.getRefreshToken(),responseBuilder);
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
         System.out.print("NEWAUTH" + newAuth);
         if (newAuth != null) {
             responseBuilder.setSuccessfulAction(true);
