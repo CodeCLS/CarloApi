@@ -3,6 +3,7 @@ package carlo.api;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 import com.smartcar.sdk.data.BatchResponse;
+import org.json.JSONObject;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
@@ -54,6 +55,11 @@ public class ResponseBuilder {
         return this;
     }
     public ResponseBuilder add(String key , String value){
+        values.put(key,value);
+        return this;
+
+    }
+    public ResponseBuilder add(String key , JSONObject value){
         values.put(key,value);
         return this;
 
@@ -124,6 +130,7 @@ public class ResponseBuilder {
             else if (val instanceof JsonArray){
                 jsonObject.add(key,(JsonArray) val);
             }
+
             else if (val instanceof JsonObject){
                 jsonObject.add(key,(JsonObject) val);
             }
