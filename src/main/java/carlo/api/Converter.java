@@ -107,6 +107,8 @@ public class Converter implements BatchPaths, PermissionsConverter {
             JSONObject jsonObject = new JSONObject(body);
             String vin = jsonObject.getString("vin");
             boolean success = jsonObject.getBoolean("success");
+            carMarketValue.setVin(vin);
+            carMarketValue.setSuccess(success);
             try {
                 Long retail = jsonObject.getLong("retail");
                 Long tradeIn = jsonObject.getLong("tradeIn");
@@ -114,8 +116,6 @@ public class Converter implements BatchPaths, PermissionsConverter {
                 Long averageTradeIn = jsonObject.getLong("averageTradeIn");
                 Long loanValue = jsonObject.getLong("loanValue");
                 Long msrp = jsonObject.getLong("msrp");
-                carMarketValue.setVin(vin);
-                carMarketValue.setSuccess(success);
                 carMarketValue.setRetail(retail);
                 carMarketValue.setTradeIn(tradeIn);
                 carMarketValue.setRoughTradeIn(roughTradeIn);
