@@ -508,6 +508,8 @@ public class ApiApplication {
                         System.out.println("CODES" + ((CarMarketValue)result1.getValue()).toJson().toString());
                         responseBuilder.add(ApiManager.CAR_MARKET_VALUE, ((CarMarketValue)result1.getValue()).toJson().toString());
                         responseBuilder.setSuccessfulAction(true);
+                        result.setResult(responseBuilder.create());
+
 
 
                     }
@@ -515,21 +517,26 @@ public class ApiApplication {
                         result.setResult(ErrorManager.createErrorResponse(
                                 ErrorManager.INTERNAL_ERROR_KEY_CODE,
                                 result1.getException().getMessage()));
+                        result.setResult(responseBuilder.create());
+
                     }
                     else{
                         result.setResult(ErrorManager.createErrorResponse(
                                 ErrorManager.INTERNAL_ERROR_KEY_CODE,
                                 ErrorManager.INTERNAL_ERROR_KEY_MSG));
+                        result.setResult(responseBuilder.create());
+
                     }
                 }
                 else{
                     result.setResult(ErrorManager.createErrorResponse(
                             ErrorManager.INTERNAL_ERROR_KEY_CODE,
                             ErrorManager.INTERNAL_ERROR_KEY_MSG));
+                    result.setResult(responseBuilder.create());
+
                 }
             }
         });
-        result.setResult(responseBuilder.create());
 
         return result;
     }
