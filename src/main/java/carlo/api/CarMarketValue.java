@@ -114,14 +114,14 @@ public class CarMarketValue {
 
     public JSONObject toJson() {
         JSONObject jsonObject = new JSONObject();
-        for (Field i : CarMarketValue.class.getDeclaredFields()){
-            try {
-                jsonObject.put(i.getName(),i.get(String.class));
-            } catch (IllegalAccessException e) {
-                e.printStackTrace();
-            }
-
-        }
+        jsonObject.put("vin" , vin);
+        jsonObject.put("success" , success);
+        jsonObject.put("retail" , retail);
+        jsonObject.put("tradeIn" , tradeIn);
+        jsonObject.put("roughTradeIn" , roughTradeIn);
+        jsonObject.put("averageTradeIn" , averageTradeIn);
+        jsonObject.put("loanValue" , loanValue);
+        jsonObject.put("msrp" , msrp);
         return jsonObject;
     }
 }
