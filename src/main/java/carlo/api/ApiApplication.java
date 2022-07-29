@@ -505,7 +505,7 @@ public class ApiApplication {
             public void getResult(ContentPackage result1) {
 
                 if (result1 != null){
-                    if (result1.getValue() != null){
+                    if (result1.getValue() != null && result1.getValue() instanceof CarMarketValue){
                         System.out.println("CODES" + ((CarMarketValue)result1.getValue()).toJson().toString());
                         responseBuilder.add(ApiManager.CAR_MARKET_VALUE, ((CarMarketValue)result1.getValue()).toJson().toString());
                         responseBuilder.setSuccessfulAction(true);
@@ -514,19 +514,10 @@ public class ApiApplication {
 
 
                     }
-                    else if (result1.getException() != null){
+                    if (result1.getException() != null){
                         result.setResult(ErrorManager.createErrorResponse(
                                 ErrorManager.INTERNAL_ERROR_KEY_CODE,
                                 result1.getException().getMessage()));
-                        result.setResult(responseBuilder.create());
-
-                    }
-                    else{
-                        result.setResult(ErrorManager.createErrorResponse(
-                                ErrorManager.INTERNAL_ERROR_KEY_CODE,
-                                ErrorManager.INTERNAL_ERROR_KEY_MSG));
-                        result.setResult(responseBuilder.create());
-
                     }
                 }
                 else{
