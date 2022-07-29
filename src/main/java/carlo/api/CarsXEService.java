@@ -8,6 +8,6 @@ import retrofit2.http.Query;
 
 public interface CarsXEService {
     ///marketvalue?key=<CarsXE_API_Key>&format=json
-    @GET("marketvalue?key={key}&vin=1FT8X3BT0BEA61538&format=json")
-    Call<ResponseBody> getMarketValue(@Path("key") String key, @Query("vin") String vin);
+    @GET("marketvalue?format=json")
+    Call<ResponseBody> getMarketValue(@Query("key") String key, @Query("vin") String vin);
 }
