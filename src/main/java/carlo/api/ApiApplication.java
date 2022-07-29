@@ -503,6 +503,8 @@ public class ApiApplication {
         CarsXERepository.getInstance().getMarketValue(vin, new CarsXERepository.CallbackCars() {
             @Override
             public void getResult(ContentPackage result1) {
+                System.out.println("CODES1" + ((CarMarketValue)result1.getValue()).toJson().toString());
+
                 if (result1 != null){
                     if (result1.getValue() != null && result1.getValue() instanceof CarMarketValue){
                         System.out.println("CODES" + ((CarMarketValue)result1.getValue()).toJson().toString());
