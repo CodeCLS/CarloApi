@@ -59,6 +59,10 @@ public class CarsXERepository {
                         callback.getResult(contentPackage);
                     }
                 }
+                else{
+                    contentPackage.setException(new Exception("CarsXE failure"));
+                    callback.getResult(contentPackage);
+                }
             }
 
             @Override
