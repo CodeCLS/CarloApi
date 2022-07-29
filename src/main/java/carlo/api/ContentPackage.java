@@ -2,7 +2,7 @@ package carlo.api;
 
 public class ContentPackage {
     private Object value;
-    private Exception exception =new Exception("not successfull");
+    private Exception exception =new Exception("not successful");
 
     public ContentPackage() {
     }
