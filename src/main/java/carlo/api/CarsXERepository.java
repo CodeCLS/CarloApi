@@ -43,6 +43,7 @@ public class CarsXERepository {
                         String body = null;
                         if (response.body() != null) {
                             body = response.body().string();
+                            System.out.println("body1" + body);
                         }
                         if (body != null){
                             ContentPackage contentPackage1 = new Converter().convertMarketValueCar(body);
