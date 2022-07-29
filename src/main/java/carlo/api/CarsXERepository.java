@@ -45,8 +45,7 @@ public class CarsXERepository {
                             body = response.body().string();
                         }
                         if (body != null){
-                            CarMarketValue value = new Converter().convertMarketValueCar(body);
-                            contentPackage.setValue(value);
+                            contentPackage.setValue(new Converter().convertMarketValueCar(body));
                             callback.getResult(contentPackage);
 
                         }

@@ -510,6 +510,11 @@ public class ApiApplication {
 
 
                     }
+                    else if (result1.getException() != null){
+                        result.setResult(ErrorManager.createErrorResponse(
+                                ErrorManager.INTERNAL_ERROR_KEY_CODE,
+                                result1.getException().getMessage()));
+                    }
                     else{
                         result.setResult(ErrorManager.createErrorResponse(
                                 ErrorManager.INTERNAL_ERROR_KEY_CODE,

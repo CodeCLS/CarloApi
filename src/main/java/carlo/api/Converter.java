@@ -100,26 +100,32 @@ public class Converter implements BatchPaths, PermissionsConverter {
         return null;
     }
 
-    public CarMarketValue convertMarketValueCar(String body){
+    public ContentPackage convertMarketValueCar(String body){
         CarMarketValue carMarketValue = new CarMarketValue();
-        JSONObject jsonObject = new JSONObject(body);
-        String vin = jsonObject.getString("vin");
-        boolean success = jsonObject.getBoolean("success");
-        Long retail = jsonObject.getLong("retail");
-        Long tradeIn = jsonObject.getLong("tradeIn");
-        Long roughTradeIn = jsonObject.getLong("roughTradeIn");
-        Long averageTradeIn = jsonObject.getLong("averageTradeIn");
-        Long loanValue = jsonObject.getLong("loanValue");
-        Long msrp = jsonObject.getLong("msrp");
-        carMarketValue.setVin(vin);
-        carMarketValue.setSuccess(success);
-        carMarketValue.setRetail(retail);
-        carMarketValue.setTradeIn(tradeIn);
-        carMarketValue.setRoughTradeIn(roughTradeIn);
-        carMarketValue.setAverageTradeIn(averageTradeIn);
-        carMarketValue.setLoanValue(loanValue);
-        carMarketValue.setMsrp(msrp);
-        return carMarketValue;
+        ContentPackage contentPackage = new ContentPackage();
+        try {
+            JSONObject jsonObject = new JSONObject(body);
+            String vin = jsonObject.getString("vin");
+            boolean success = jsonObject.getBoolean("success");
+            Long retail = jsonObject.getLong("retail");
+            Long tradeIn = jsonObject.getLong("tradeIn");
+            Long roughTradeIn = jsonObject.getLong("roughTradeIn");
+            Long averageTradeIn = jsonObject.getLong("averageTradeIn");
+            Long loanValue = jsonObject.getLong("loanValue");
+            Long msrp = jsonObject.getLong("msrp");
+            carMarketValue.setVin(vin);
+            carMarketValue.setSuccess(success);
+            carMarketValue.setRetail(retail);
+            carMarketValue.setTradeIn(tradeIn);
+            carMarketValue.setRoughTradeIn(roughTradeIn);
+            carMarketValue.setAverageTradeIn(averageTradeIn);
+            carMarketValue.setLoanValue(loanValue);
+            carMarketValue.setMsrp(msrp);
+            contentPackage.setValue(carMarketValue);
+        }catch (Exception e){
+            contentPackage.setException(e);
+        }
+        return contentPackage;
 
             //JSONArray tradeInValues = jsonObject.getJSONArray("tradeInValues");
 
