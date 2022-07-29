@@ -46,7 +46,7 @@ public class CarsXERepository {
                         }
                         if (body != null){
                             ContentPackage contentPackage1 = new Converter().convertMarketValueCar(body);
-                            if (contentPackage1.getException() == null) {
+                            if (contentPackage1.getException() == null && ((CarMarketValue)contentPackage1.getValue()).isSuccess() ) {
                                 contentPackage.setValue(contentPackage1.getValue());
                             }
                             else{
