@@ -50,7 +50,7 @@ public class CarsXERepository {
                                 contentPackage.setValue(contentPackage1.getValue());
                             }
                             else{
-                                contentPackage.setValue(contentPackage1.getException());
+                                contentPackage.setException(contentPackage1.getException());
 
                             }
                             callback.getResult(contentPackage);
