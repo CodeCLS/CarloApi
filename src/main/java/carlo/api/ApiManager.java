@@ -40,4 +40,5 @@ public class ApiManager {
     public static final String PHONE = "phone";
 
     public static final String OIL = "oil";
+    public static final String CAR_MARKET_VALUE = "car_market_value";
 }

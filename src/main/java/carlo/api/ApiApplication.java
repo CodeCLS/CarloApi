@@ -483,6 +483,50 @@ public class ApiApplication {
 
         return result;
     }
+    @RequestMapping(value = "/user/{uid}/vehicle/{id}/car_market_value",method = RequestMethod.GET)
+    public DeferredResult<String> getMarketValue(
+            @RequestHeader("api-code") String apiCode,
+            @RequestHeader("access-token-smart-car") String token,
+            @PathVariable("uid") String uid,
+            @PathVariable String id)
+    {
+        //TODO do something with uid
+
+        ResponseBuilder responseBuilder = new ResponseBuilder();
+        DeferredResult<String> result = new DeferredResult<>();
+        if(manageApiCode(apiCode, responseBuilder)) {
+            result.setResult(responseBuilder.create());
+            return result;
+        }
+        firebaseRepository.updateUserApiCall();
+        String vin =smartCarRepository.getVehicleVin(token,id,responseBuilder);
+        CarsXERepository.getInstance().getMarketValue(vin, new CarsXERepository.CallbackCars() {
+            @Override
+            public void getResult(ContentPackage result1) {
+                if (result1 != null){
+                    if (result1.getValue() != null && result1.getValue() instanceof CarMarketValue){
+                        responseBuilder.add(ApiManager.CAR_MARKET_VALUE, ((CarMarketValue)result1.getValue()).toJson().toString());
+                        responseBuilder.setSuccessfulAction(true);
+
+
+                    }
+                    else{
+                        result.setResult(ErrorManager.createErrorResponse(
+                                ErrorManager.INTERNAL_ERROR_KEY_CODE,
+                                ErrorManager.INTERNAL_ERROR_KEY_MSG));
+                    }
+                }
+                else{
+                    result.setResult(ErrorManager.createErrorResponse(
+                            ErrorManager.INTERNAL_ERROR_KEY_CODE,
+                            ErrorManager.INTERNAL_ERROR_KEY_MSG));
+                }
+            }
+        });
+        result.setResult(responseBuilder.create());
+
+        return result;
+    }
     @RequestMapping(value = "/user/{uid}/vehicle/{id}/is_electric",method = RequestMethod.GET)
     public DeferredResult<String> isElectric(
             @RequestHeader("api-code") String apiCode,
