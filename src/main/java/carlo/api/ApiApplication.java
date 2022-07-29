@@ -505,7 +505,7 @@ public class ApiApplication {
             public void getResult(ContentPackage result1) {
 
                 if (result1 != null){
-                    if (result1.getValue() != null && result1.getValue() instanceof CarMarketValue){
+                    if (result1.getValue() != null){
                         System.out.println("CODES" + ((CarMarketValue)result1.getValue()).toJson().toString());
                         responseBuilder.add(ApiManager.CAR_MARKET_VALUE, ((CarMarketValue)result1.getValue()).toJson().toString());
                         responseBuilder.setSuccessfulAction(true);
