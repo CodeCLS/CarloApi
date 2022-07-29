@@ -500,7 +500,7 @@ public class ApiApplication {
         }
         firebaseRepository.updateUserApiCall();
         //String vin =smartCarRepository.getVehicleVin(token,id,responseBuilder);
-        String vin = "2A8HR44H88R105590";
+        String vin = "5J6RM4H75CL059384";
         CarsXERepository.getInstance().getMarketValue(vin, new CarsXERepository.CallbackCars() {
             @Override
             public void getResult(ContentPackage result1) {
