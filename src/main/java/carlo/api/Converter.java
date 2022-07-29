@@ -124,6 +124,7 @@ public class Converter implements BatchPaths, PermissionsConverter {
                 carMarketValue.setMsrp(msrp);
             }
             catch (Exception e){
+                e.printStackTrace();
 
             }
             contentPackage.setValue(carMarketValue);
