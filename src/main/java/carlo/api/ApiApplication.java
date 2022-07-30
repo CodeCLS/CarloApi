@@ -7,7 +7,6 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.context.request.async.DeferredResult;
-import org.springframework.web.multipart.MultipartFile;
 
 import java.util.Arrays;
 
@@ -190,7 +189,6 @@ public class ApiApplication {
             @RequestHeader("api-code") String apiCode,
             @RequestHeader("access-token-smart-car") String token,
             @PathVariable("uid") String uid,
-            @RequestParam("document") MultipartFile document,
             @RequestParam(value = "auth", defaultValue = "null") String auth,
             @RequestParam(value = "client", defaultValue = "null") String client)
     {
