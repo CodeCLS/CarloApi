@@ -184,7 +184,7 @@ public class ApiApplication {
 
         return result;
     }
-    @RequestMapping(value = "/user/{uid}/refresh/",method = RequestMethod.POST)
+    @PostMapping(value = "/user/{uid}/refresh/")
     public DeferredResult<String> refresh(
             @RequestHeader("api-code") String apiCode,
             @RequestHeader("access-token-smart-car") String token,
