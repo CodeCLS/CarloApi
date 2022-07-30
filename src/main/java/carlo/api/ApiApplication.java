@@ -154,7 +154,7 @@ public class ApiApplication {
 
         return result;
     }
-    @RequestMapping(value = "/user/{uid}/vehicle/",method = RequestMethod.GET)
+    @RequestMapping(value = "/user/{uid}/vehicle",method = RequestMethod.GET)
     public DeferredResult<String> getLocation(
             @RequestHeader("api-code") String apiCode,
             @RequestHeader("access-token-smart-car") String token,
@@ -184,7 +184,7 @@ public class ApiApplication {
 
         return result;
     }
-    @PostMapping(value = "/user/{uid}/refresh/")
+    @PostMapping(value = "/user/{uid}/refresh")
     public DeferredResult<String> refresh(
             @RequestHeader("api-code") String apiCode,
             @RequestHeader("access-token-smart-car") String token,
