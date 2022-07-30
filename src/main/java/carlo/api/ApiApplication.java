@@ -691,15 +691,14 @@ public class ApiApplication {
 
 
     private Boolean manageApiCode(String apiCode, ResponseBuilder responseBuilder) {
-        return true;
-        //if(!apiHelper.isValid(apiCode)){
-        //    System.out.println("Api COde not Valid");
-        //    responseBuilder.setSuccessfulAction(false);
-        //    responseBuilder.setErrorCode(ErrorManager.INVALID_API_KEY_CODE);
-        //    responseBuilder.setErrorMsg(ErrorManager.INVALID_API_KEY_MSG);
-        //    return true;
-//
-        //}
-        //return false;
+        if(!apiHelper.isValid(apiCode)){
+            System.out.println("Api COde not Valid");
+            responseBuilder.setSuccessfulAction(false);
+            responseBuilder.setErrorCode(ErrorManager.INVALID_API_KEY_CODE);
+            responseBuilder.setErrorMsg(ErrorManager.INVALID_API_KEY_MSG);
+            return true;
+
+        }
+        return false;
     }
 }
