@@ -201,6 +201,9 @@ public class ApiApplication {
             return result;
         }
         firebaseRepository.updateUserApiCall();
+        System.out.println("AUTH: " + auth);
+        System.out.println("CLIENT: " + client);
+
         Gson gson = new Gson();
         AuthClient authClient = gson.fromJson(client,AuthClient.class);
         Auth access = gson.fromJson(auth,Auth.class);
