@@ -248,9 +248,6 @@ public class FirebaseManager {
     }
 
     public void getUserApiCallAmount(String uid, String apiCallType, ValueEventListener listener) {
-        if (activityRef.child(uid) == null){
-            listener.onCancelled(DatabaseError.fromCode(DatabaseError.UNAVAILABLE));
-        }
         activityRef.child(uid).child(apiCallType).addListenerForSingleValueEvent(listener);
     }
 }

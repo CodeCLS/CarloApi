@@ -78,8 +78,13 @@ public class ApiApplication {
         firebaseRepository.getUserApiCallAmount(uid, carAttributeEndpoint, new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
-                val[0] = (int)dataSnapshot.getValue();
-                System.out.println("1: " + val[0]);
+                if (dataSnapshot.getValue() == null){
+                    val[0] = -1;
+
+                }
+                else{
+                    val[0] = (int)dataSnapshot.getValue();
+                }
                 semaphore.release();
             }
 
