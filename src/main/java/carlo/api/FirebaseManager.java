@@ -247,7 +247,13 @@ public class FirebaseManager {
         activityRef.child(uid).child(apiCallType).addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
-                activityRef.child(uid).child(apiCallType).setValueAsync(Integer.parseInt(dataSnapshot.getValue().toString())+1);
+                if (dataSnapshot.getValue() == null)
+                {
+                    activityRef.child(uid).child(apiCallType).setValueAsync(1);
+
+                }
+                else
+                    activityRef.child(uid).child(apiCallType).setValueAsync(Integer.parseInt(dataSnapshot.getValue().toString())+1);
             }
 
             @Override
