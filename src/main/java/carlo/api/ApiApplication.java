@@ -48,7 +48,7 @@ public class ApiApplication {
         ResponseBuilder responseBuilder = new ResponseBuilder();
         DeferredResult<String> result = new DeferredResult<>();
         firebaseRepository.updateUserApiCall(uid,ApiManager.CAR_ATTRIBUTE_ENDPOINT);
-        if(manageApiCode(apiCode, responseBuilder) && canRequest(uid,ApiManager.CAR_ATTRIBUTE_ENDPOINT)) {
+        if(manageApiCode(apiCode, responseBuilder) || canRequest(uid,ApiManager.CAR_ATTRIBUTE_ENDPOINT)) {
             result.setResult(responseBuilder.create());
             return result;
         }
@@ -107,7 +107,7 @@ public class ApiApplication {
         ResponseBuilder responseBuilder = new ResponseBuilder();
         DeferredResult<String> result = new DeferredResult<>();
         firebaseRepository.updateUserApiCall(uid,ApiManager.GET_ACCESS_TOKEN);
-        if(manageApiCode(apiCode, responseBuilder) && canRequest(uid,ApiManager.GET_ACCESS_TOKEN)) {
+        if(manageApiCode(apiCode, responseBuilder) || canRequest(uid,ApiManager.GET_ACCESS_TOKEN)) {
             result.setResult(responseBuilder.create());
             return result;
         }
@@ -140,7 +140,7 @@ public class ApiApplication {
         ResponseBuilder responseBuilder = new ResponseBuilder();
         DeferredResult<String> result = new DeferredResult<>();
         firebaseRepository.updateUserApiCall(uid,ApiManager.LOCATION_ENDPOINT);
-        if(manageApiCode(apiCode, responseBuilder) && canRequest(uid,ApiManager.LOCATION_ENDPOINT)) {
+        if(manageApiCode(apiCode, responseBuilder) || canRequest(uid,ApiManager.LOCATION_ENDPOINT)) {
             result.setResult(responseBuilder.create());
             return result;
         }
@@ -173,7 +173,7 @@ public class ApiApplication {
         ResponseBuilder responseBuilder = new ResponseBuilder();
         DeferredResult<String> result = new DeferredResult<>();
         firebaseRepository.updateUserApiCall(uid,ApiManager.OIL_ENDPOINT);
-        if(manageApiCode(apiCode, responseBuilder) && canRequest(uid,ApiManager.OIL_ENDPOINT)) {
+        if(manageApiCode(apiCode, responseBuilder) || canRequest(uid,ApiManager.OIL_ENDPOINT)) {
             result.setResult(responseBuilder.create());
             return result;
         }
@@ -204,7 +204,7 @@ public class ApiApplication {
         ResponseBuilder responseBuilder = new ResponseBuilder();
         DeferredResult<String> result = new DeferredResult<>();
         firebaseRepository.updateUserApiCall(uid,ApiManager.GET_VEHICLES_ENDPOINT);
-        if(manageApiCode(apiCode, responseBuilder) && canRequest(uid,ApiManager.GET_VEHICLES_ENDPOINT)) {
+        if(manageApiCode(apiCode, responseBuilder) || canRequest(uid,ApiManager.GET_VEHICLES_ENDPOINT)) {
             result.setResult(responseBuilder.create());
             return result;
         }
@@ -236,7 +236,7 @@ public class ApiApplication {
         ResponseBuilder responseBuilder = new ResponseBuilder();
         DeferredResult<String> result = new DeferredResult<>();
         firebaseRepository.updateUserApiCall(uid,ApiManager.REFRESH_TOKEN_ENDPOINT);
-        if(manageApiCode(apiCode, responseBuilder) && canRequest(uid,ApiManager.REFRESH_TOKEN_ENDPOINT)) {
+        if(manageApiCode(apiCode, responseBuilder) || canRequest(uid,ApiManager.REFRESH_TOKEN_ENDPOINT)) {
             result.setResult(responseBuilder.create());
             return result;
         }
@@ -282,7 +282,7 @@ public class ApiApplication {
 
         firebaseRepository.updateUserApiCall(uid,ApiManager.VALIDATE_ENDPOINT);
 
-        if(!manageApiCode(apiCode, responseBuilder) && canRequest(uid,ApiManager.VALIDATE_ENDPOINT)) {
+        if(!manageApiCode(apiCode, responseBuilder) || canRequest(uid,ApiManager.VALIDATE_ENDPOINT)) {
             try {
                 Smartcar.getUser(token);
             } catch (SmartcarException e) {
@@ -307,7 +307,7 @@ public class ApiApplication {
         ResponseBuilder responseBuilder = new ResponseBuilder();
         DeferredResult<String> result = new DeferredResult<>();
         firebaseRepository.updateUserApiCall(uid,ApiManager.PERMISSIONS_ENDPOINT);
-        if(manageApiCode(apiCode, responseBuilder) && canRequest(uid,ApiManager.PERMISSIONS_ENDPOINT)) {
+        if(manageApiCode(apiCode, responseBuilder) || canRequest(uid,ApiManager.PERMISSIONS_ENDPOINT)) {
             result.setResult(responseBuilder.create());
             return result;
         }
@@ -341,7 +341,7 @@ public class ApiApplication {
 
         DeferredResult<String> result = new DeferredResult<>();
         firebaseRepository.updateUserApiCall(uid,ApiManager.BATCH_ENDPOINT);
-        if(manageApiCode(apiCode, responseBuilder) && canRequest(uid,ApiManager.BATCH_ENDPOINT)) {
+        if(manageApiCode(apiCode, responseBuilder) || canRequest(uid,ApiManager.BATCH_ENDPOINT)) {
             result.setResult(responseBuilder.create());
             return result;
         }
@@ -370,7 +370,7 @@ public class ApiApplication {
         ResponseBuilder responseBuilder = new ResponseBuilder();
         DeferredResult<String> result = new DeferredResult<>();
         firebaseRepository.updateUserApiCall(uid,ApiManager.ODOMETER_ENDPOINT);
-        if(manageApiCode(apiCode, responseBuilder) && canRequest(uid,ApiManager.ODOMETER_ENDPOINT)) {
+        if(manageApiCode(apiCode, responseBuilder) || canRequest(uid,ApiManager.ODOMETER_ENDPOINT)) {
             result.setResult(responseBuilder.create());
             return result;
         }
@@ -402,7 +402,7 @@ public class ApiApplication {
         ResponseBuilder responseBuilder = new ResponseBuilder();
         DeferredResult<String> result = new DeferredResult<>();
         firebaseRepository.updateUserApiCall(uid,ApiManager.VIN_ENDPOINT);
-        if(manageApiCode(apiCode, responseBuilder) && canRequest(uid,ApiManager.VIN_ENDPOINT)) {
+        if(manageApiCode(apiCode, responseBuilder) || canRequest(uid,ApiManager.VIN_ENDPOINT)) {
             result.setResult(responseBuilder.create());
             return result;
         }
@@ -433,7 +433,7 @@ public class ApiApplication {
         ResponseBuilder responseBuilder = new ResponseBuilder();
         DeferredResult<String> result = new DeferredResult<>();
         firebaseRepository.updateUserApiCall(uid,ApiManager.VEHICLE_RANGE_ENDPOINT);
-        if(manageApiCode(apiCode, responseBuilder) && canRequest(uid,ApiManager.VEHICLE_RANGE_ENDPOINT)) {
+        if(manageApiCode(apiCode, responseBuilder) || canRequest(uid,ApiManager.VEHICLE_RANGE_ENDPOINT)) {
             result.setResult(responseBuilder.create());
             return result;
         }
@@ -471,7 +471,7 @@ public class ApiApplication {
         ResponseBuilder responseBuilder = new ResponseBuilder();
         DeferredResult<String> result = new DeferredResult<>();
         firebaseRepository.updateUserApiCall(uid,ApiManager.LOCK_ENDPOINT);
-        if(manageApiCode(apiCode, responseBuilder) && canRequest(uid,ApiManager.LOCK_ENDPOINT)) {
+        if(manageApiCode(apiCode, responseBuilder) || canRequest(uid,ApiManager.LOCK_ENDPOINT)) {
             result.setResult(responseBuilder.create());
             return result;
         }
@@ -503,7 +503,7 @@ public class ApiApplication {
         ResponseBuilder responseBuilder = new ResponseBuilder();
         DeferredResult<String> result = new DeferredResult<>();
         firebaseRepository.updateUserApiCall(uid,ApiManager.UNLOCK_ENDPOINT);
-        if(manageApiCode(apiCode, responseBuilder) && canRequest(uid,ApiManager.UNLOCK_ENDPOINT)) {
+        if(manageApiCode(apiCode, responseBuilder) || canRequest(uid,ApiManager.UNLOCK_ENDPOINT)) {
             result.setResult(responseBuilder.create());
             return result;
         }
@@ -538,7 +538,7 @@ public class ApiApplication {
         ResponseBuilder responseBuilder = new ResponseBuilder();
         DeferredResult<String> result = new DeferredResult<>();
         firebaseRepository.updateUserApiCall(uid,ApiManager.MARKET_VALUE_ENDPOINT);
-        if(manageApiCode(apiCode, responseBuilder) && canRequest(uid,ApiManager.MARKET_VALUE_ENDPOINT)) {
+        if(manageApiCode(apiCode, responseBuilder) || canRequest(uid,ApiManager.MARKET_VALUE_ENDPOINT)) {
             result.setResult(responseBuilder.create());
             return result;
         }
@@ -587,7 +587,7 @@ public class ApiApplication {
         ResponseBuilder responseBuilder = new ResponseBuilder();
         DeferredResult<String> result = new DeferredResult<>();
         firebaseRepository.updateUserApiCall(uid,ApiManager.IS_ELECTRIC_ENDPOINT);
-        if(manageApiCode(apiCode, responseBuilder) && canRequest(uid,ApiManager.CAR_ATTRIBUTE_ENDPOINT)) {
+        if(manageApiCode(apiCode, responseBuilder) || canRequest(uid,ApiManager.CAR_ATTRIBUTE_ENDPOINT)) {
             result.setResult(responseBuilder.create());
             return result;
         }
@@ -623,7 +623,7 @@ public class ApiApplication {
         ResponseBuilder responseBuilder = new ResponseBuilder();
         DeferredResult<String> result = new DeferredResult<>();
         firebaseRepository.updateUserApiCall(uid,ApiManager.GET_USER_ENDPOINT);
-        if(manageApiCode(apiCode, responseBuilder) && canRequest(uid,ApiManager.GET_USER_ENDPOINT)) {
+        if(manageApiCode(apiCode, responseBuilder) || canRequest(uid,ApiManager.GET_USER_ENDPOINT)) {
             result.setResult(responseBuilder.create());
             return result;
         }
@@ -704,7 +704,7 @@ public class ApiApplication {
         ResponseBuilder responseBuilder = new ResponseBuilder();
         DeferredResult<String> result = new DeferredResult<>();
         firebaseRepository.updateUserApiCall(uid,ApiManager.MARKET_VALUE_ENDPOINT);
-        if(manageApiCode(apiCode, responseBuilder) && canRequest(uid,ApiManager.MARKET_VALUE_ENDPOINT)) {
+        if(manageApiCode(apiCode, responseBuilder) || canRequest(uid,ApiManager.MARKET_VALUE_ENDPOINT)) {
             result.setResult(responseBuilder.create());
             return result;
         }
