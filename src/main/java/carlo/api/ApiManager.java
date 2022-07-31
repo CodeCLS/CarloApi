@@ -40,5 +40,22 @@ public class ApiManager {
     public static final String PHONE = "phone";
 
     public static final String OIL = "oil";
-    public static final String CAR_MARKET_VALUE = "car_market_value";
+    public static final String CAR_MARKET_VALUE_ENDPOINT = "car_market_value";
+    public static final String MARKET_VALUE_ENDPOINT = "endpoint_market_value";
+    public static final String CAR_ATTRIBUTE_ENDPOINT = "endpoint_car_attribute";
+    public static final String GET_USER_ENDPOINT = "endpoint_get_user";
+    public static final String IS_ELECTRIC_ENDPOINT = "endpoint_is_electric";
+    public static final String UNLOCK_ENDPOINT = "endpoint_unlock";
+    public static final String LOCK_ENDPOINT = "endpoint_lock";
+    public static final String VEHICLE_RANGE_ENDPOINT = "endpoint_vehicle_range";
+    public static final String VIN_ENDPOINT = "endpoint_vin";
+    public static final String ODOMETER_ENDPOINT = "endpoint_odometer";
+    public static final String BATCH_ENDPOINT = "endpoint_batch";
+    public static final String PERMISSIONS_ENDPOINT = "endpoint_permissions";
+    public static final String VALIDATE_ENDPOINT = "endpoint_validate";
+    public static final String REFRESH_TOKEN_ENDPOINT = "endpoint_refresh_token";
+    public static final String GET_VEHICLES_ENDPOINT = "endpoint_get_vehicles";
+    public static final String OIL_ENDPOINT = "endpoint_oil";
+    public static final String LOCATION_ENDPOINT = "endpoint_location";
+    public static final String GET_ACCESS_TOKEN = "endpoint_get_access";
 }

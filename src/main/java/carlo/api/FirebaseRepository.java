@@ -1,13 +1,19 @@
 package carlo.api;
 
+import com.google.firebase.database.ValueEventListener;
+
 public class FirebaseRepository {
     private FirebaseManager manager = new FirebaseManager();
 
     public FirebaseRepository() {
     }
 
-    public void updateUserApiCall() {
+    public void updateUserApiCall(String uid, String apiCallType) {
+        manager.noteApiCall(uid,apiCallType);
 
+    }
+    public void getUserApiCallAmount(String uid, String apiCallType, ValueEventListener callback){
+        manager.getUserApiCallAmount(uid, apiCallType,callback);
     }
 
     public void getUserViaId(String uid, Callback<User> callback) {
@@ -40,5 +46,9 @@ public class FirebaseRepository {
 
     public void updateUser(User convertJson, Callback<User> callback) {
         manager.updateUserDb(convertJson,callback);
+    }
+
+    public void resetAllUserRequests() {
+        manager.resetUserRequestsDatabase();
     }
 }

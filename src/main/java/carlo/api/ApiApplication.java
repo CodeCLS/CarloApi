@@ -1,17 +1,25 @@
 package carlo.api;
 
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.ValueEventListener;
 import com.google.gson.Gson;
 import com.smartcar.sdk.*;
 import com.smartcar.sdk.data.*;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.context.annotation.Configuration;
+import org.springframework.scheduling.annotation.EnableScheduling;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.context.request.async.DeferredResult;
 
-import java.util.Arrays;
+import java.util.concurrent.Semaphore;
 
 @RestController
 @SpringBootApplication
+@Configuration
+@EnableScheduling
 public class ApiApplication {
 
     private ApiHelper apiHelper = new ApiHelper();
@@ -39,11 +47,11 @@ public class ApiApplication {
 
         ResponseBuilder responseBuilder = new ResponseBuilder();
         DeferredResult<String> result = new DeferredResult<>();
-        if(manageApiCode(apiCode, responseBuilder)) {
+        firebaseRepository.updateUserApiCall(uid,ApiManager.CAR_ATTRIBUTE_ENDPOINT);
+        if(manageApiCode(apiCode, responseBuilder) && canRequest(uid,ApiManager.CAR_ATTRIBUTE_ENDPOINT)) {
             result.setResult(responseBuilder.create());
             return result;
         }
-        firebaseRepository.updateUserApiCall();
         VehicleAttributes vehicleAttributes = smartCarRepository.getVehicleAttributes(token,id,responseBuilder);
         if (vehicleAttributes != null) {
             responseBuilder.add(ApiManager.VEHICLE_ID, vehicleAttributes.getId());
@@ -62,6 +70,35 @@ public class ApiApplication {
         return result;
     }
 
+    private boolean canRequest(String uid, String carAttributeEndpoint) {
+        final Semaphore semaphore = new Semaphore(0);
+        final int[] val = {0};
+        firebaseRepository.getUserApiCallAmount(uid, carAttributeEndpoint, new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                val[0] = (int)dataSnapshot.getValue();
+                semaphore.release();
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+        });
+        try {
+            semaphore.acquire();
+            if (ApiManager.MARKET_VALUE_ENDPOINT.equals(carAttributeEndpoint)) {
+                return val[0] < 1;
+            }
+            return val[0] < 20;
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+        return false;
+
+
+    }
+
 
     @RequestMapping(value = "user/{uid}/exchange/auth",method = RequestMethod.GET)
     public DeferredResult<String> exchangeAuthCode(@RequestHeader("api-code") String apiCode,
@@ -69,7 +106,8 @@ public class ApiApplication {
                                                    @PathVariable("uid") String uid) {
         ResponseBuilder responseBuilder = new ResponseBuilder();
         DeferredResult<String> result = new DeferredResult<>();
-        if(manageApiCode(apiCode, responseBuilder)) {
+        firebaseRepository.updateUserApiCall(uid,ApiManager.GET_ACCESS_TOKEN);
+        if(manageApiCode(apiCode, responseBuilder) && canRequest(uid,ApiManager.GET_ACCESS_TOKEN)) {
             result.setResult(responseBuilder.create());
             return result;
         }
@@ -89,6 +127,7 @@ public class ApiApplication {
 
     }
 
+
     @RequestMapping(value = "/user/{uid}/vehicle/{id}/location",method = RequestMethod.GET)
     public DeferredResult<String> getLocation(
             @RequestHeader("api-code") String apiCode,
@@ -100,11 +139,11 @@ public class ApiApplication {
 
         ResponseBuilder responseBuilder = new ResponseBuilder();
         DeferredResult<String> result = new DeferredResult<>();
-        if(manageApiCode(apiCode, responseBuilder)) {
+        firebaseRepository.updateUserApiCall(uid,ApiManager.LOCATION_ENDPOINT);
+        if(manageApiCode(apiCode, responseBuilder) && canRequest(uid,ApiManager.LOCATION_ENDPOINT)) {
             result.setResult(responseBuilder.create());
             return result;
         }
-        firebaseRepository.updateUserApiCall();
         VehicleLocation vehicleLocation = smartCarRepository.getVehicleLocation(token,id,responseBuilder);
         if (vehicleLocation != null) {
             responseBuilder.add(ApiManager.LATITUDE, vehicleLocation.getLatitude());
@@ -133,11 +172,11 @@ public class ApiApplication {
 
         ResponseBuilder responseBuilder = new ResponseBuilder();
         DeferredResult<String> result = new DeferredResult<>();
-        if(manageApiCode(apiCode, responseBuilder)) {
+        firebaseRepository.updateUserApiCall(uid,ApiManager.OIL_ENDPOINT);
+        if(manageApiCode(apiCode, responseBuilder) && canRequest(uid,ApiManager.OIL_ENDPOINT)) {
             result.setResult(responseBuilder.create());
             return result;
         }
-        firebaseRepository.updateUserApiCall();
         VehicleEngineOil vehicleEngineOil = smartCarRepository.getVehicleOil(token,id,responseBuilder);
         if (vehicleEngineOil != null) {
             responseBuilder.add(ApiManager.OIL, vehicleEngineOil.getLifeRemaining());
@@ -164,11 +203,11 @@ public class ApiApplication {
 
         ResponseBuilder responseBuilder = new ResponseBuilder();
         DeferredResult<String> result = new DeferredResult<>();
-        if(manageApiCode(apiCode, responseBuilder)) {
+        firebaseRepository.updateUserApiCall(uid,ApiManager.GET_VEHICLES_ENDPOINT);
+        if(manageApiCode(apiCode, responseBuilder) && canRequest(uid,ApiManager.GET_VEHICLES_ENDPOINT)) {
             result.setResult(responseBuilder.create());
             return result;
         }
-        firebaseRepository.updateUserApiCall();
         VehicleIds vehicleIds = smartCarRepository.getVehicles(token,responseBuilder);
         if (vehicleIds != null) {
             responseBuilder.add(ApiManager.VEHICLE_IDS, vehicleIds.getVehicleIds());
@@ -196,11 +235,11 @@ public class ApiApplication {
 
         ResponseBuilder responseBuilder = new ResponseBuilder();
         DeferredResult<String> result = new DeferredResult<>();
-        if(manageApiCode(apiCode, responseBuilder)) {
+        firebaseRepository.updateUserApiCall(uid,ApiManager.REFRESH_TOKEN_ENDPOINT);
+        if(manageApiCode(apiCode, responseBuilder) && canRequest(uid,ApiManager.REFRESH_TOKEN_ENDPOINT)) {
             result.setResult(responseBuilder.create());
             return result;
         }
-        firebaseRepository.updateUserApiCall();
         System.out.println("AUTH: " + auth);
         System.out.println("CLIENT: " + client);
 
@@ -240,7 +279,10 @@ public class ApiApplication {
         //TODO do something with uid
         ResponseBuilder responseBuilder = new ResponseBuilder();
         DeferredResult<String> result = new DeferredResult<>();
-        if(!manageApiCode(apiCode, responseBuilder)) {
+
+        firebaseRepository.updateUserApiCall(uid,ApiManager.VALIDATE_ENDPOINT);
+
+        if(!manageApiCode(apiCode, responseBuilder) && canRequest(uid,ApiManager.VALIDATE_ENDPOINT)) {
             try {
                 Smartcar.getUser(token);
             } catch (SmartcarException e) {
@@ -264,11 +306,11 @@ public class ApiApplication {
 
         ResponseBuilder responseBuilder = new ResponseBuilder();
         DeferredResult<String> result = new DeferredResult<>();
-        if(manageApiCode(apiCode, responseBuilder)) {
+        firebaseRepository.updateUserApiCall(uid,ApiManager.PERMISSIONS_ENDPOINT);
+        if(manageApiCode(apiCode, responseBuilder) && canRequest(uid,ApiManager.PERMISSIONS_ENDPOINT)) {
             result.setResult(responseBuilder.create());
             return result;
         }
-        firebaseRepository.updateUserApiCall();
         ApplicationPermissions permissions = smartCarRepository.getVehiclePermissions(token,id,responseBuilder);
         if (permissions != null) {
             responseBuilder.add(ApiManager.PERMISSIONS,permissions.getPermissions());
@@ -298,11 +340,11 @@ public class ApiApplication {
         String[] paths =new Converter().getListFromJson(token,id,body,responseBuilder);
 
         DeferredResult<String> result = new DeferredResult<>();
-        if(manageApiCode(apiCode, responseBuilder)) {
+        firebaseRepository.updateUserApiCall(uid,ApiManager.BATCH_ENDPOINT);
+        if(manageApiCode(apiCode, responseBuilder) && canRequest(uid,ApiManager.BATCH_ENDPOINT)) {
             result.setResult(responseBuilder.create());
             return result;
         }
-        firebaseRepository.updateUserApiCall();
         BatchResponse response = smartCarRepository.getBatch(token,id,paths,responseBuilder);
         if (response != null) {
             result.setResult(responseBuilder.createBatchResponse(response));
@@ -327,11 +369,11 @@ public class ApiApplication {
 
         ResponseBuilder responseBuilder = new ResponseBuilder();
         DeferredResult<String> result = new DeferredResult<>();
-        if(manageApiCode(apiCode, responseBuilder)) {
+        firebaseRepository.updateUserApiCall(uid,ApiManager.ODOMETER_ENDPOINT);
+        if(manageApiCode(apiCode, responseBuilder) && canRequest(uid,ApiManager.ODOMETER_ENDPOINT)) {
             result.setResult(responseBuilder.create());
             return result;
         }
-        firebaseRepository.updateUserApiCall();
         VehicleOdometer vehicleOdometer = smartCarRepository.getVehicleOdometer(token,id,responseBuilder);
         if (vehicleOdometer != null) {
             responseBuilder.add(ApiManager.ODOMETER, vehicleOdometer.getDistance());
@@ -359,11 +401,11 @@ public class ApiApplication {
 
         ResponseBuilder responseBuilder = new ResponseBuilder();
         DeferredResult<String> result = new DeferredResult<>();
-        if(manageApiCode(apiCode, responseBuilder)) {
+        firebaseRepository.updateUserApiCall(uid,ApiManager.VIN_ENDPOINT);
+        if(manageApiCode(apiCode, responseBuilder) && canRequest(uid,ApiManager.VIN_ENDPOINT)) {
             result.setResult(responseBuilder.create());
             return result;
         }
-        firebaseRepository.updateUserApiCall();
         String vin = smartCarRepository.getVehicleVin(token,id,responseBuilder);
         if (vin != null) {
             responseBuilder.add(ApiManager.VIN, vin);
@@ -390,11 +432,11 @@ public class ApiApplication {
 
         ResponseBuilder responseBuilder = new ResponseBuilder();
         DeferredResult<String> result = new DeferredResult<>();
-        if(manageApiCode(apiCode, responseBuilder)) {
+        firebaseRepository.updateUserApiCall(uid,ApiManager.VEHICLE_RANGE_ENDPOINT);
+        if(manageApiCode(apiCode, responseBuilder) && canRequest(uid,ApiManager.VEHICLE_RANGE_ENDPOINT)) {
             result.setResult(responseBuilder.create());
             return result;
         }
-        firebaseRepository.updateUserApiCall();
         Object range = smartCarRepository.getVehicleRange(token,id,responseBuilder);
         if (range != null) {
             if (range instanceof VehicleBattery) {
@@ -428,11 +470,11 @@ public class ApiApplication {
 
         ResponseBuilder responseBuilder = new ResponseBuilder();
         DeferredResult<String> result = new DeferredResult<>();
-        if(manageApiCode(apiCode, responseBuilder)) {
+        firebaseRepository.updateUserApiCall(uid,ApiManager.LOCK_ENDPOINT);
+        if(manageApiCode(apiCode, responseBuilder) && canRequest(uid,ApiManager.LOCK_ENDPOINT)) {
             result.setResult(responseBuilder.create());
             return result;
         }
-        firebaseRepository.updateUserApiCall();
         ActionResponse actionResponse = smartCarRepository.lock(token,id,responseBuilder);
         if (actionResponse != null) {
             responseBuilder.add(ApiManager.ACTION_MSG, actionResponse.getMessage());
@@ -460,11 +502,11 @@ public class ApiApplication {
 
         ResponseBuilder responseBuilder = new ResponseBuilder();
         DeferredResult<String> result = new DeferredResult<>();
-        if(manageApiCode(apiCode, responseBuilder)) {
+        firebaseRepository.updateUserApiCall(uid,ApiManager.UNLOCK_ENDPOINT);
+        if(manageApiCode(apiCode, responseBuilder) && canRequest(uid,ApiManager.UNLOCK_ENDPOINT)) {
             result.setResult(responseBuilder.create());
             return result;
         }
-        firebaseRepository.updateUserApiCall();
         ActionResponse actionResponse = smartCarRepository.unlock(token,id,responseBuilder);
         if (actionResponse != null) {
             responseBuilder.add(ApiManager.ACTION_MSG, actionResponse.getMessage());
@@ -480,6 +522,10 @@ public class ApiApplication {
 
         return result;
     }
+    @Scheduled(cron="0 0 0 * * ?", zone="Europe/Berlin")
+    public void methodC() {
+        firebaseRepository.resetAllUserRequests();
+    }
     @RequestMapping(value = "/user/{uid}/vehicle/{id}/car_market_value",method = RequestMethod.GET)
     public DeferredResult<String> getMarketValue(
             @RequestHeader("api-code") String apiCode,
@@ -491,11 +537,11 @@ public class ApiApplication {
 
         ResponseBuilder responseBuilder = new ResponseBuilder();
         DeferredResult<String> result = new DeferredResult<>();
-        if(manageApiCode(apiCode, responseBuilder)) {
+        firebaseRepository.updateUserApiCall(uid,ApiManager.MARKET_VALUE_ENDPOINT);
+        if(manageApiCode(apiCode, responseBuilder) && canRequest(uid,ApiManager.MARKET_VALUE_ENDPOINT)) {
             result.setResult(responseBuilder.create());
             return result;
         }
-        firebaseRepository.updateUserApiCall();
         String vin =smartCarRepository.getVehicleVin(token,id,responseBuilder);
         CarsXERepository.getInstance().getMarketValue(vin, new CarsXERepository.CallbackCars() {
             @Override
@@ -504,7 +550,7 @@ public class ApiApplication {
                 if (result1 != null){
                     if (result1.getValue() != null && result1.getValue() instanceof CarMarketValue){
                         System.out.println("CODES" + ((CarMarketValue)result1.getValue()).toJson().toString());
-                        responseBuilder.add(ApiManager.CAR_MARKET_VALUE, ((CarMarketValue)result1.getValue()).toJson().toString());
+                        responseBuilder.add(ApiManager.CAR_MARKET_VALUE_ENDPOINT, ((CarMarketValue)result1.getValue()).toJson().toString());
                         responseBuilder.setSuccessfulAction(true);
                         result.setResult(responseBuilder.create());
 
@@ -540,11 +586,11 @@ public class ApiApplication {
 
         ResponseBuilder responseBuilder = new ResponseBuilder();
         DeferredResult<String> result = new DeferredResult<>();
-        if(manageApiCode(apiCode, responseBuilder)) {
+        firebaseRepository.updateUserApiCall(uid,ApiManager.IS_ELECTRIC_ENDPOINT);
+        if(manageApiCode(apiCode, responseBuilder) && canRequest(uid,ApiManager.CAR_ATTRIBUTE_ENDPOINT)) {
             result.setResult(responseBuilder.create());
             return result;
         }
-        firebaseRepository.updateUserApiCall();
         Object range = smartCarRepository.getVehicleRange(token,id,responseBuilder);
         if (range != null) {
             if (range instanceof VehicleBattery) {
@@ -576,11 +622,11 @@ public class ApiApplication {
 
         ResponseBuilder responseBuilder = new ResponseBuilder();
         DeferredResult<String> result = new DeferredResult<>();
-        if(manageApiCode(apiCode, responseBuilder)) {
+        firebaseRepository.updateUserApiCall(uid,ApiManager.GET_USER_ENDPOINT);
+        if(manageApiCode(apiCode, responseBuilder) && canRequest(uid,ApiManager.GET_USER_ENDPOINT)) {
             result.setResult(responseBuilder.create());
             return result;
         }
-        firebaseRepository.updateUserApiCall();
         firebaseRepository.getUserViaId(uid, new Callback<User>() {
             @Override
             public void value(User value) {
@@ -619,7 +665,6 @@ public class ApiApplication {
             result.setResult(responseBuilder.create());
             return result;
         }
-        firebaseRepository.updateUserApiCall();
         firebaseRepository.addUser((User)Converter.convertUser(body), new Callback<User>() {
             @Override
             public void value(User value) {
@@ -658,11 +703,11 @@ public class ApiApplication {
 
         ResponseBuilder responseBuilder = new ResponseBuilder();
         DeferredResult<String> result = new DeferredResult<>();
-        if(manageApiCode(apiCode, responseBuilder)) {
+        firebaseRepository.updateUserApiCall(uid,ApiManager.MARKET_VALUE_ENDPOINT);
+        if(manageApiCode(apiCode, responseBuilder) && canRequest(uid,ApiManager.MARKET_VALUE_ENDPOINT)) {
             result.setResult(responseBuilder.create());
             return result;
         }
-        firebaseRepository.updateUserApiCall();
         firebaseRepository.updateUser((User)Converter.convertJson(body,User.class), new Callback<User>() {
             @Override
             public void value(User value) {

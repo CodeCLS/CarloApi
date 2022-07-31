@@ -12,6 +12,7 @@ import com.google.firebase.database.*;
 import java.io.IOException;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
+import java.util.function.Consumer;
 
 public class FirebaseManager {
     public static final String UID = "uid";
@@ -28,8 +29,10 @@ public class FirebaseManager {
     FirebaseApp defaultApp;
     FirebaseAuth userAuth;
     FirebaseDatabase userDatabase;
+    FirebaseDatabase activityDatabase;
     private DatabaseReference userRef;
     ExecutorService executors = Executors.newFixedThreadPool(4);
+    private DatabaseReference activityRef;
 
     public FirebaseManager() {
         try {
@@ -37,6 +40,7 @@ public class FirebaseManager {
                     .setCredentials(GoogleCredentials.getApplicationDefault())
                     .setDatabaseUrl("https://simplecar-users.europe-west1.firebasedatabase.app/")
                     .build();
+
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -49,6 +53,10 @@ public class FirebaseManager {
         userAuth = FirebaseAuth.getInstance(defaultApp);
         userDatabase = FirebaseDatabase.getInstance("https://simplecar-users.europe-west1.firebasedatabase.app/");
         userRef = userDatabase.getReference();
+        activityDatabase = FirebaseDatabase.getInstance("https://simple-user-activity.europe-west1.firebasedatabase.app/");
+        activityRef = activityDatabase.getReference();
+
+
 
     }
 
@@ -211,5 +219,35 @@ public class FirebaseManager {
                 }
             }
         });
+    }
+
+    public void resetUserRequestsDatabase() {
+        activityRef.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                dataSnapshot.getChildren().forEach(new Consumer<DataSnapshot>() {
+                    @Override
+                    public void accept(DataSnapshot snapshot) {
+                        int marketValueRequestAmount = (int)snapshot.child(ApiManager.MARKET_VALUE_ENDPOINT).getValue();
+                        activityRef.child(snapshot.getKey()).setValue(ApiManager.MARKET_VALUE_ENDPOINT, null);
+                        activityRef.child(snapshot.getKey()).child(ApiManager.MARKET_VALUE_ENDPOINT).setValueAsync(marketValueRequestAmount);
+                    }
+                });
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+                System.out.println(databaseError.toString());
+
+            }
+        });
+    }
+
+    public void noteApiCall(String uid, String apiCallType) {
+        activityRef.child(uid).child(apiCallType);
+    }
+
+    public void getUserApiCallAmount(String uid, String apiCallType, ValueEventListener listener) {
+        activityRef.child(uid).child(apiCallType).addListenerForSingleValueEvent(listener);
     }
 }
