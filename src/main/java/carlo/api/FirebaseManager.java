@@ -248,12 +248,11 @@ public class FirebaseManager {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 activityRef.child(uid).child(apiCallType).setValueAsync(Integer.parseInt(dataSnapshot.getValue().toString())+1);
-
             }
 
             @Override
             public void onCancelled(DatabaseError databaseError) {
-
+                System.out.println(databaseError.toString());
             }
         });
     }
