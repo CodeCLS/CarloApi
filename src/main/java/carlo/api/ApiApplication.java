@@ -308,15 +308,19 @@ public class ApiApplication {
         firebaseRepository.updateUserApiCall(uid,ApiManager.VALIDATE_ENDPOINT);
 
         if(!manageApiCode(apiCode, responseBuilder) || !canRequest(uid,ApiManager.VALIDATE_ENDPOINT,responseBuilder)) {
+            result.setResult(responseBuilder.create());
+            return result;
+        }
+        else{
             try {
                 Smartcar.getUser(token);
             } catch (SmartcarException e) {
                 e.printStackTrace();
-                responseBuilder.setSuccessfulAction(false);
+                result.setResult(ErrorManager.createErrorResponse(
+                        ErrorManager.INTERNAL_ERROR_KEY_CODE,
+                        e.getMessage()));
             }
         }
-        else
-            responseBuilder.setSuccessfulAction(false);
         result.setResult(responseBuilder.create());
         return result;
     }
