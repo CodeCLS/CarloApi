@@ -77,23 +77,30 @@ public class ApiApplication {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 val[0] = (int)dataSnapshot.getValue();
+                System.out.println("1: " + val[0]);
                 semaphore.release();
             }
 
             @Override
             public void onCancelled(DatabaseError databaseError) {
+                System.out.println("2: " + val[0]);
+
                 semaphore.release();
 
             }
         });
         try {
             semaphore.acquire();
+            System.out.println("4: " + val[0]);
+
             if (ApiManager.MARKET_VALUE_ENDPOINT.equals(carAttributeEndpoint)) {
                 return val[0] < 1;
             }
             return val[0] < 20;
         } catch (InterruptedException e) {
             e.printStackTrace();
+            System.out.println("5: " + val[0]);
+
             return false;
         }
 
