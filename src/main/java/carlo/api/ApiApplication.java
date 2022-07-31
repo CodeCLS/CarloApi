@@ -73,8 +73,6 @@ public class ApiApplication {
     private boolean canRequest(String uid, String carAttributeEndpoint,ResponseBuilder responseBuilder) {
         final Semaphore semaphore = new Semaphore(0);
         final int[] val = {0};
-        System.out.println("0: " + val[0]);
-
         firebaseRepository.getUserApiCallAmount(uid, carAttributeEndpoint, new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
@@ -88,39 +86,31 @@ public class ApiApplication {
                 semaphore.release();
             }
 
+
             @Override
             public void onCancelled(DatabaseError databaseError) {
                 System.out.println("2: " + val[0]);
-
                 semaphore.release();
 
             }
         });
         try {
-            semaphore.acquire();
-            System.out.println("4: " + val[0]);
-
-            if (ApiManager.MARKET_VALUE_ENDPOINT.equals(carAttributeEndpoint)) {
-                boolean result = val[0] < 1;
-                if (!result){
-                    createGeneralError(responseBuilder);
-                }
-                return result;
-            }
-            boolean result = val[0] < 20;
+            wait(1000);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+        if (ApiManager.MARKET_VALUE_ENDPOINT.equals(carAttributeEndpoint)) {
+            boolean result = val[0] < 1;
             if (!result){
                 createGeneralError(responseBuilder);
             }
             return result;
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-            System.out.println("5: " + val[0]);
-            createGeneralError(responseBuilder);
-
-
-            return false;
         }
-
+        boolean result = val[0] < 20;
+        if (!result){
+            createGeneralError(responseBuilder);
+        }
+        return result;
 
     }
 
@@ -142,7 +132,6 @@ public class ApiApplication {
         String authJson = Converter.doTask(auth);
         responseBuilder.add(ApiManager.ACCESS_TOKEN,auth.getAccessToken());
         responseBuilder.add(ApiManager.REFRESH_TOKEN,auth.getRefreshToken());
-
         responseBuilder.add(ApiManager.AUTH_CLIENT,authClientJson);
         responseBuilder.add(ApiManager.AUTH,authJson);
         responseBuilder.setSuccessfulAction(true);
