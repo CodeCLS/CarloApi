@@ -82,6 +82,7 @@ public class ApiApplication {
 
             @Override
             public void onCancelled(DatabaseError databaseError) {
+                semaphore.release();
 
             }
         });
@@ -93,8 +94,8 @@ public class ApiApplication {
             return val[0] < 20;
         } catch (InterruptedException e) {
             e.printStackTrace();
+            return false;
         }
-        return false;
 
 
     }
