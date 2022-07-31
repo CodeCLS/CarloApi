@@ -244,7 +244,18 @@ public class FirebaseManager {
     }
 
     public void noteApiCall(String uid, String apiCallType) {
-        activityRef.child(uid).child(apiCallType);
+        activityRef.child(uid).child(apiCallType).addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                activityRef.child(uid).child(apiCallType).setValueAsync(Integer.parseInt(dataSnapshot.getValue().toString())+1);
+
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+        });
     }
 
     public void getUserApiCallAmount(String uid, String apiCallType, ValueEventListener listener) {
