@@ -538,6 +538,36 @@ public class ApiApplication {
 
         return result;
     }
+    @RequestMapping(value = "/user/{uid}",method = RequestMethod.POST)
+    public DeferredResult<String> getUser(
+            @RequestHeader("api-code") String apiCode,
+            @RequestHeader("access-token-smart-car") String token,
+            @PathVariable("uid") String uid)
+    {
+        //TODO do something with uid
+
+        ResponseBuilder responseBuilder = new ResponseBuilder();
+        DeferredResult<String> result = new DeferredResult<>();
+        firebaseRepository.updateUserApiCall(uid,ApiManager.GET_USER_ENDPOINT);
+        if(!manageApiCode(apiCode, responseBuilder) || !canRequest(uid,ApiManager.UNLOCK_ENDPOINT,responseBuilder)) {
+            result.setResult(responseBuilder.create());
+            return result;
+        }
+        String smartUid = smartCarRepository.getUser(token,responseBuilder);
+        if (smartUid != null) {
+            responseBuilder.add(ApiManager.UID, smartUid);
+            responseBuilder.setSuccessfulAction(true);
+            result.setResult(responseBuilder.create());
+        }
+        else if (responseBuilder.getErrorMsg() == null){
+            result.setResult(ErrorManager.createErrorResponse(
+                    ErrorManager.INTERNAL_ERROR_KEY_CODE,
+                    ErrorManager.INTERNAL_ERROR_KEY_MSG));
+        }
+        result.setResult(responseBuilder.create());
+
+        return result;
+    }
     @Scheduled(cron="0 0 0 * * ?", zone="Europe/Berlin")
     public void methodC() {
         firebaseRepository.resetAllUserRequests();
@@ -628,45 +658,45 @@ public class ApiApplication {
 
         return result;
     }
-    @RequestMapping(value = "/user/{uid}",method = RequestMethod.GET)
-    public DeferredResult<String> getUser(
-            @RequestHeader("api-code") String apiCode,
-            @RequestHeader("access-token-smart-car") String token,
-            @PathVariable("uid") String uid)
-    {
-        //TODO do something with uid
-
-        ResponseBuilder responseBuilder = new ResponseBuilder();
-        DeferredResult<String> result = new DeferredResult<>();
-        firebaseRepository.updateUserApiCall(uid,ApiManager.GET_USER_ENDPOINT);
-        if(!manageApiCode(apiCode, responseBuilder) || !canRequest(uid,ApiManager.GET_USER_ENDPOINT,responseBuilder)) {
-            result.setResult(responseBuilder.create());
-            return result;
-        }
-        firebaseRepository.getUserViaId(uid, new Callback<User>() {
-            @Override
-            public void value(User value) {
-                if (value != null){
-                    responseBuilder.add(ApiManager.USER,value.toJson());
-                    responseBuilder.setSuccessfulAction(true);
-                    result.setResult(responseBuilder.create());
-                }
-                else{
-                    result.setResult(ErrorManager.createErrorResponse(
-                            ErrorManager.INTERNAL_ERROR_KEY_CODE,
-                            ErrorManager.INTERNAL_ERROR_KEY_MSG));
-                }
-            }
-
-            @Override
-            public void exception(Exception e) {
-                result.setResult(ErrorManager.createErrorResponse(
-                        ErrorManager.INTERNAL_ERROR_KEY_CODE,
-                        e.getMessage()));
-            }
-        });
-        return result;
-    }
+    //@RequestMapping(value = "/user/{uid}",method = RequestMethod.GET)
+    //public DeferredResult<String> getUser(
+    //        @RequestHeader("api-code") String apiCode,
+    //        @RequestHeader("access-token-smart-car") String token,
+    //        @PathVariable("uid") String uid)
+    //{
+    //    //TODO do something with uid
+//
+    //    ResponseBuilder responseBuilder = new ResponseBuilder();
+    //    DeferredResult<String> result = new DeferredResult<>();
+    //    firebaseRepository.updateUserApiCall(uid,ApiManager.GET_USER_ENDPOINT);
+    //    if(!manageApiCode(apiCode, responseBuilder) || !canRequest(uid,ApiManager.GET_USER_ENDPOINT,responseBuilder)) {
+    //        result.setResult(responseBuilder.create());
+    //        return result;
+    //    }
+    //    firebaseRepository.getUserViaId(uid, new Callback<User>() {
+    //        @Override
+    //        public void value(User value) {
+    //            if (value != null){
+    //                responseBuilder.add(ApiManager.USER,value.toJson());
+    //                responseBuilder.setSuccessfulAction(true);
+    //                result.setResult(responseBuilder.create());
+    //            }
+    //            else{
+    //                result.setResult(ErrorManager.createErrorResponse(
+    //                        ErrorManager.INTERNAL_ERROR_KEY_CODE,
+    //                        ErrorManager.INTERNAL_ERROR_KEY_MSG));
+    //            }
+    //        }
+//
+    //        @Override
+    //        public void exception(Exception e) {
+    //            result.setResult(ErrorManager.createErrorResponse(
+    //                    ErrorManager.INTERNAL_ERROR_KEY_CODE,
+    //                    e.getMessage()));
+    //        }
+    //    });
+    //    return result;
+    //}
     @RequestMapping(value = "/user/",method = RequestMethod.POST)
     public DeferredResult<String> addUser(
             @RequestHeader("api-code") String apiCode,

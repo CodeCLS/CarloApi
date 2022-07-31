@@ -58,4 +58,5 @@ public class ApiManager {
     public static final String OIL_ENDPOINT = "endpoint_oil";
     public static final String LOCATION_ENDPOINT = "endpoint_location";
     public static final String GET_ACCESS_TOKEN = "endpoint_get_access";
+    public static final String UID = "smartcar_uid";
 }

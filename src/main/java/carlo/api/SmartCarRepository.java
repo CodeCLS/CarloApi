@@ -211,4 +211,16 @@ public class SmartCarRepository {
             return null;
         }
     }
+    public String getUser(String token, ResponseBuilder responseBuilder) {
+        try {
+            return Smartcar.getUser(token).getId();
+        } catch (SmartcarException e) {
+            e.printStackTrace();
+            responseBuilder.setErrorMsg(e.getMessage());
+            responseBuilder.setErrorCode(ErrorManager.INTERNAL_ERROR_KEY_CODE);
+            responseBuilder.setSuccessfulAction(false);
+
+            return null;
+        }
+    }
 }
