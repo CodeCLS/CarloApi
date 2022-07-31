@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.context.request.async.DeferredResult;
 
 import java.util.concurrent.Semaphore;
+import java.util.concurrent.TimeUnit;
 
 @RestController
 @SpringBootApplication
@@ -92,7 +93,7 @@ public class ApiApplication {
             }
         });
         try {
-            wait(1000);
+            TimeUnit.SECONDS.sleep(5);
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
