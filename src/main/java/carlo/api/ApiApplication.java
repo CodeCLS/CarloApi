@@ -73,6 +73,8 @@ public class ApiApplication {
     private boolean canRequest(String uid, String carAttributeEndpoint) {
         final Semaphore semaphore = new Semaphore(0);
         final int[] val = {0};
+        System.out.println("0: " + val[0]);
+
         firebaseRepository.getUserApiCallAmount(uid, carAttributeEndpoint, new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
